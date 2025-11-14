@@ -13,7 +13,7 @@ function UpdateProduct() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const product = {id,name,price: parseInt(price, 10),description,image}
-        axios.put("http://localhost:8080/api/products", product,{headers: { "Content-Type": "application/json" }})
+        axios.post("http://localhost:8080/updateProduct", product,{headers: { "Content-Type": "application/json" }})
         .then(res => {
         console.log("Update Product")
         console.log(res.data);
