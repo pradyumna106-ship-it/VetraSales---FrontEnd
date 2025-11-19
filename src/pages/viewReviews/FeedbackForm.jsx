@@ -25,16 +25,16 @@ function FeedbackForm() {
             return;
         }
 
-        const dto = {
-            username: username,
+        const review = {
+            reviewerName: username,   // FIXED!
             productId: productId,
             rating: parseInt(rating),
             comment: comment,
-            createdAt: new Date().toISOString()
         };
 
+
         try {
-            await axios.post("http://localhost:8080/addReview", dto, {
+            await axios.post("http://localhost:8080/addReview", review, {
                 headers: {
                     'Content-Type': 'application/json'
                 }

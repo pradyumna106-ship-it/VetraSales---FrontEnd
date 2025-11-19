@@ -24,21 +24,15 @@ function ProductReviews() {
 
     // 2. Fetch product reviews
     axios
-      .get(`http://localhost:8080/product/${id}`)
-      .then(res => {
-        const data = res.data;
-        if (Array.isArray(data)) {
-          setReviews(data);
-        } else if (data) {
-          setReviews([data]);
-        } else {
-          setReviews([]);
-        }
-      })
-      .catch(err => {
-        console.error("Error fetching reviews", err);
-        setReviews([]);
-      });
+  .get(`http://localhost:8080/listOfReview`, {
+    params: { productId: id }
+  })
+  .then(res => setReviews(res.data || []))
+  .catch(err => {
+    console.error("Error fetching reviews", err);
+    setReviews([]);
+  });
+
   }, [id, currentUser]);
 
   const back = () => {
@@ -53,6 +47,17 @@ function ProductReviews() {
     navigate(`/review/${id}`);
   };
 
+  const deleteReview = (reviewId) => {
+    axios.delete("http://localhost:8080/deleteReview", {
+    params: {
+      reviewId,
+      username:currentUser,
+      admin: role === "admin"
+    }
+  });
+
+};
+
   function getAverageStars(reviews) {
     if (!Array.isArray(reviews) || reviews.length === 0) return 'No ratings yet ⭐';
     const total = reviews.reduce((sum, r) => sum + (r.rating || 0), 0);
@@ -61,10 +66,23 @@ function ProductReviews() {
     return '⭐'.repeat(fullStars) + '✩'.repeat(5 - fullStars);
   }
 
+  const deleteByProduct = (productId) => {
+  axios.delete("http://localhost:8080/deleteReviewsByProduct", {
+    params: { productId }
+  })
+  .then(() => {
+    alert("Reviews deleted");
+    setReviews([]);
+  })
+  .catch(err => console.error("Failed to delete", err));
+};
+
+
+
   return (
     <>
       <button onClick={back}>Back</button>
-      {role === "Customer" && (
+      {role === "customer" && (
         <button onClick={addFeedback}>Give FeedBack</button>
       )}
       <h1>Product Reviews</h1>
@@ -73,10 +91,11 @@ function ProductReviews() {
       <div className="reviews-list">
         {reviews.map((r, index) => (
           <div key={r.id || index}>
-            <p>Customer name: {r.username === currentUser ? "You" : r.username}</p>
-            <p>Email: {r.username === currentUser ? "Your Email" : r.email}</p>
+            <p>Customer name: {r.reviewerName === currentUser ? "You" : r.reviewerName}</p>
+            <p>Email: {r.reviewerName === currentUser ? "Your Email" : r.email}</p>
             <p>Rating: {r.rating}/5</p>
             <p>Comment: {r.comment}</p>
+            <button onClick={() => deleteReview(r.id)}> Delete </button>
             <hr style={{ borderColor: "#444" }} />
           </div>
         ))}

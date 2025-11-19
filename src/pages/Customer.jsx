@@ -164,9 +164,8 @@ return (
                         ) : (
                       <button onClick={() => handleAddClick(p.id)}>Add to Cart</button>
                         )}
-  </td>
-</tr>
-
+                      </td>
+                </tr>
               ))
             ) : (
               <tr>

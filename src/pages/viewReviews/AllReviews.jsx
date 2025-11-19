@@ -20,9 +20,15 @@ function AllReviews() {
     const back = () => {
         navigate('/admin_page')
     }
+    const deleteAllReviews = () => {
+        axios.delete("http://localhost:8080/deleteAllReviews").then(() => {
+            setReviews([]);
+        }).catch(err => console.error("Failed to delete all", err));
+};
     return (<>
     <button onClick={back}>Back</button>
     <Excel reviews={reviews} />
+    <button onClick={deleteAllReviews}>Delete all review</button>
         <h1>All Products Reviews</h1>
         <hr />
         <div className="reviews-list">
