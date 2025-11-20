@@ -46,13 +46,6 @@ export default function ViewCart() {
       .catch(err => console.error('❌ Update cart failed:', err));
   };
 
-  const openOrderTab = () => {
-    const productIds = items.map(item => item.productId);
-    localStorage.setItem("orderUser", username);
-    localStorage.setItem("orderProductIds", JSON.stringify(productIds));
-    localStorage.setItem("cartItems", JSON.stringify(items));
-    window.open("/order_tracking_page", "_blank");
-  };
     const calculateTotal = () => {
     return items.reduce((total, item) => total + item.price * item.quantity, 0);
   };
@@ -75,9 +68,20 @@ const makePayment = async () => {
       description: "Test Transaction",
       order_id: order.id,
       handler: function (response) {
-        alert(`✅ Payment successful: ${response.razorpay_payment_id}`);
-        openOrderTab();
-      },
+
+  const orderId = order.id;
+  const paymentId = response.razorpay_payment_id;
+  const cartItems = items;
+
+  navigate("/payment_success", {
+    state: {
+      orderId:orderId,
+      paymentId:paymentId,
+      items: cartItems,
+      total: calculateTotal()
+    }
+  });
+},
       prefill: {
         name: "Test User",
         email: "test@example.com",

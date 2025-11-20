@@ -16,6 +16,7 @@ import OrderTracking from './pages/order/OrderTracking';
 import OrderHistory from './pages/order/OrderHistory';
 import OrderLists from './pages/order/OrderLists'
 import ManageOrders from './pages/order/ManageOrders'
+import PaymentSuccess from "./pages/customerCart/PaymentSuccess";
 function App() {
 
 
@@ -41,6 +42,7 @@ function App() {
         <Route path='/order_history_page' element={<OrderHistory/>}/>
         <Route path='/order_lists_page' element={<OrderLists/>}/>
         <Route path='/order_manager_page' element={<ManageOrders/>}/>
+        <Route path="/payment_success" element={<PaymentSuccess />} />
       </Routes>
     </BrowserRouter>
   )
