@@ -80,9 +80,9 @@ function UserManagement() {
         </thead>
 
         <tbody>
-          {users.map((u) => (
-            <tr key={u.id}>
-              <td>{u.id}</td>
+          {users.map((u,indx) => (
+            <tr key={indx}>
+              <td>{indx+1}</td>
               <td>{u.username}</td>
               <td>{u.email}</td>
               <td>{u.dob}</td>
