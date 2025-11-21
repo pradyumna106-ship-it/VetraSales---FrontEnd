@@ -36,7 +36,6 @@ function Admin() {
   return (
     <div className="admin-page">
         <h2>Admin Dashboard</h2>
-        <button onClick={() => navigate('/sign_in_page')}>Log Out</button>
         <button onClick={() => navigate('/add_product_page')}> Add New Product</button>
         <button onClick={() => navigate('/all_reviews_page')}> Customer Reviews</button>
         <button onClick={() => navigate('/user_profile_page')} className="user-profile">User Profile</button>

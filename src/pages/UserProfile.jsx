@@ -19,7 +19,7 @@ function UserProfile() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/userData?username=${username}`)
+      .get(`http://localhost:8080/api/user/userData?username=${username}`)
       .then((res) => {
         const data = res.data;
         setId(data.id);
@@ -192,6 +192,18 @@ function UserProfile() {
         &nbsp;
         <button type="button" onClick={handleDelete}>Delete Profile</button>
       </form>
+      <button
+  onClick={() => {
+    const confirmLogout = window.confirm("Are you sure you want to log out?");
+    if (confirmLogout) {
+      localStorage.clear();
+      navigate('/sign_in_page');
+    }
+  }}
+>
+  Log Out
+</button>
+
     </>
   );
 }
