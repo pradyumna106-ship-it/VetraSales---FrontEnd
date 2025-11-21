@@ -41,6 +41,7 @@ function Admin() {
         <button onClick={() => navigate('/all_reviews_page')}> Customer Reviews</button>
         <button onClick={() => navigate('/user_profile_page')} className="user-profile">User Profile</button>
         <button onClick={() => navigate('/order_lists_page')}>Orders</button>
+        <button onClick={() => navigate('/user_management_page')}>User Management</button>
         <table border="1" cellPadding="5" style={{ marginTop: '1em' }}>
         <thead>
             <tr>

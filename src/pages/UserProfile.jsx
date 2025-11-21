@@ -56,7 +56,7 @@ function UserProfile() {
 
   const updatedUser = { id, username, password, email, gender, dob, role };
 
-  axios.post(`http://localhost:8080/updateUser`, updatedUser)
+  axios.post(`http://localhost:8080/api/user/updateUser`, updatedUser)
     .then(() => {
       setEditMode(false);
       setOriginalData({ password, email, gender, dob, role });
@@ -68,7 +68,7 @@ function UserProfile() {
   const handleDelete = () => {
     if (!window.confirm("Are you sure you want to delete your profile?")) return;
     axios
-      .get(`http://localhost:8080/deleteUser?id=${id}`)
+      .get(`http://localhost:8080/api/user/delete?id=${id}`)
       .then(() => {
         alert("Profile Deleted");
         localStorage.clear();

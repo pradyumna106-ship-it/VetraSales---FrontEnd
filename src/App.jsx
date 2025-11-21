@@ -17,7 +17,8 @@ import OrderHistory from './pages/order/OrderHistory';
 import OrderLists from './pages/order/OrderLists'
 import ManageOrders from './pages/order/ManageOrders'
 import PaymentSuccess from "./pages/customerCart/PaymentSuccess";
-import OrderStatus from './pages/order/OrderStatus'
+import OrderStatus from './pages/order/OrderStatus';
+import UserManagement from './pages/crudPages/UserManagement'
 function App() {
 
 
@@ -45,7 +46,7 @@ function App() {
         <Route path='/order_manager_page' element={<ManageOrders/>}/>
         <Route path="/payment_success" element={<PaymentSuccess />} />
         <Route path="/order_status/:orderId" element={<OrderStatus />} />
-
+        <Route path="/user_management_page" element={<UserManagement/>}/>
       </Routes>
     </BrowserRouter>
   )
