@@ -8,18 +8,22 @@ const Checkout = () => {
     const stored = localStorage.getItem("cartItems");
     return stored ? JSON.parse(stored) : [];
   });
+
   const navigate = useNavigate();
   const username = localStorage.getItem("orderUser");
 
   const request = {
     username: username,
-    shippingAddress: "Bangalore",
+    status: "PAID",
+    address: "Bangalore",
+    totalAmount: totalAmount,
     items: cart.map(item => ({
       productId: item.productId,
+      productName: item.name,   // snapshot
+      price: item.price,
       quantity: item.quantity,
-      price: item.price
-    })),
-    total: totalAmount
+      subtotal: item.price * item.quantity
+    }))
   };
 
   console.log("🟢 Sending order request:", request);
@@ -28,6 +32,14 @@ const Checkout = () => {
     try {
       await placeOrder(request);
       alert("Order placed successfully");
+      navigate("/payment_success", {
+        state: {
+          orderId: 123,     // you can return from backend later
+          paymentId: "xxx",
+          items: cart,
+          total: totalAmount
+        }
+      });
     } catch (error) {
       console.error("❌ Order failed", error.response?.data || error.message);
       alert("Something went wrong");
@@ -37,16 +49,15 @@ const Checkout = () => {
   return (
     <div>
       <h2>Checkout</h2>
+
       <button onClick={() => navigate('/admin_page')}>Back</button>
       <button onClick={handleCheckout}>Place Order</button>
-      <hr />
-
-      {/* Action Buttons after placing order */}
-
 
       <hr />
+
       <h2>Requests</h2>
       <p>Name: {username}</p>
+
       <ul>
         {cart.map((item, index) => (
           <li key={item.productId ?? index}>
@@ -54,6 +65,7 @@ const Checkout = () => {
           </li>
         ))}
       </ul>
+
       <hr />
     </div>
   );

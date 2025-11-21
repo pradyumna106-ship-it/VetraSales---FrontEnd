@@ -33,16 +33,31 @@ function OrderLists() {
                 </thead>
                 <tbody>
   {orders.map(order => (
-    <tr key={order.orderId}>
+    <tr key={order.id}>
       <td>{order.items.map(item => item.productName).join(", ")}</td>
-      <td>{order.shippingAddress}</td>
+      <td>{order.address}</td>
       <td>{order.status}</td>
-      <td>{order.userId}</td>
-      <td><button onClick={() => navigate('/order_history_page', { state: { userId: order.userId } })}> Order History </button></td>
-      <td><button onClick={() => navigate('/order_manager_page', { state: { orderId: order.orderId } })}> Manage Order </button> </td>
+      <td>{order.username}</td>
+
+      <td>
+        <button onClick={() => navigate('/order_history_page', {
+          state: { userId: order.username }
+        })}>
+          Order History
+        </button>
+      </td>
+
+      <td>
+        <button onClick={() => navigate('/order_manager_page', {
+          state: { orderId: order.id }
+        })}>
+          Manage Order
+        </button>
+      </td>
     </tr>
   ))}
 </tbody>
+
 
             </table>
         </>
