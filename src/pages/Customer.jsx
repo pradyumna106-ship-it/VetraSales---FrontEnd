@@ -97,7 +97,6 @@ function getStars(avg) {
 
 return (
   <>
-  <button onClick={() => navigate('/sign_in_page')}>Log Out</button>
   <button onClick={() => navigate('/user_profile_page')} className="user-profile">User Profile</button>
   <div className="customer-container">
     <h1>Welcome, {username}</h1>
