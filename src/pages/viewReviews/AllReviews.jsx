@@ -7,7 +7,7 @@ function AllReviews() {
     const navigate = useNavigate()
     const [reviews, setReviews] = useState([]);
     useEffect(() => {
-        axios.get("http://localhost:8080/allReviews")
+        axios.get("https://vetrasales-backend-production.up.railway.app/allReviews")
         .then(response => {
             setReviews(response.data);
         })

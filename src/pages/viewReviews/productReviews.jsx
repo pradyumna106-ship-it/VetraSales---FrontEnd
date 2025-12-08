@@ -13,7 +13,7 @@ function ProductReviews() {
     // 1. Fetch user role (assuming you have userData API)
     if (currentUser) {
       axios
-        .get(`http://localhost:8080/userData?username=${currentUser}`)
+        .get(`https://vetrasales-backend-production.up.railway.app/userData?username=${currentUser}`)
         .then(res => {
           setRole(res.data.role);
         })
@@ -24,7 +24,7 @@ function ProductReviews() {
 
     // 2. Fetch product reviews
     axios
-  .get(`http://localhost:8080/listOfReview`, {
+  .get(`https://vetrasales-backend-production.up.railway.app/listOfReview`, {
     params: { productId: id }
   })
   .then(res => setReviews(res.data || []))
@@ -48,7 +48,7 @@ function ProductReviews() {
   };
 
   const deleteReview = (reviewId) => {
-    axios.delete("http://localhost:8080/deleteReview", {
+    axios.delete("https://vetrasales-backend-production.up.railway.app/deleteReview", {
     params: {
       reviewId,
       username:currentUser,

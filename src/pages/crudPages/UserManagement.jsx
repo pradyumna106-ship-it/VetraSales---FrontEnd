@@ -15,7 +15,7 @@ function UserManagement() {
 
   const loadUsers = () => {
     axios
-      .get("http://localhost:8080/api/user/getAllUser")
+      .get("https://vetrasales-backend-production.up.railway.app/api/user/getAllUser")
       .then((res) => setUsers(res.data))
       .catch((err) => console.error("Failed to load users:", err));
   };
@@ -26,7 +26,7 @@ function UserManagement() {
       return;
     }
     axios
-      .get("http://localhost:8080/api/user/searchUser", {
+      .get("https://vetrasales-backend-production.up.railway.app/api/user/searchUser", {
         params: { name: search },
       })
       .then((res) => setUsers(res.data))
@@ -35,7 +35,7 @@ function UserManagement() {
 
   const deleteUser = (id) => {
     axios
-      .get("http://localhost:8080/api/user/delete", { params: { id } })
+      .get("https://vetrasales-backend-production.up.railway.app/api/user/delete", { params: { id } })
       .then(() => loadUsers())
       .catch((err) => console.error("Delete failed:", err));
   };

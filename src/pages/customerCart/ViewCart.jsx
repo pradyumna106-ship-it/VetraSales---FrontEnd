@@ -21,13 +21,13 @@ export default function ViewCart() {
 
 
   const fetchCart = () => {
-    axios.get('http://localhost:8080/api/viewCart', { params: { username } })
+    axios.get('https://vetrasales-backend-production.up.railway.app/api/viewCart', { params: { username } })
       .then(res => setItems(res.data || []))
       .catch(err => console.error('Fetch cart failed:', err));
   };
 
   const removeItem = (id) => {
-    axios.get(`http://localhost:8080/removeItem?prod_id=${id}`)
+    axios.get(`https://vetrasales-backend-production.up.railway.app/removeItem?prod_id=${id}`)
       .then(res => {() => setItems(items => items.filter(item => item.productId !== id))
   console.info(res.data)
 })
@@ -41,7 +41,7 @@ export default function ViewCart() {
       return;
     }
     const payload = { username, productId, quantity: newQty };
-    axios.post('http://localhost:8080/api/updateCartItem', payload)
+    axios.post('https://vetrasales-backend-production.up.railway.app/api/updateCartItem', payload)
       .then(() => fetchCart())
       .catch(err => console.error('❌ Update cart failed:', err));
   };

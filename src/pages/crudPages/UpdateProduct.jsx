@@ -13,7 +13,7 @@ function UpdateProduct() {
     const handleSubmit = (event) => {
         event.preventDefault();
         const product = {id:id,name:name,price:price,description:description,image:image}
-        axios.post("http://localhost:8080/updateProduct", product,{headers: { "Content-Type": "application/json" }})
+        axios.post("https://vetrasales-backend-production.up.railway.app/updateProduct", product,{headers: { "Content-Type": "application/json" }})
         .then(res => {
         console.log("Update Product")
         console.log(res.data);

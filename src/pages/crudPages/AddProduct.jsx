@@ -14,7 +14,7 @@ function AddProduct() {
         if ("" in product) {
             alert("Please fill all fields")
         }
-        axios.post("http://localhost:8080/addProduct", product,{headers: { "Content-Type": "application/json" }})
+        axios.post("https://vetrasales-backend-production.up.railway.app/addProduct", product,{headers: { "Content-Type": "application/json" }})
         .then(res => {
         console.log("Add Product")
         console.log(res.data);

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = 'http://localhost:8080/api/orders';
+const API = 'https://vetrasales-backend-production.up.railway.app/api/orders';
 
 export const placeOrder = (orderData) => 
   axios.post(`${API}/create`, orderData);

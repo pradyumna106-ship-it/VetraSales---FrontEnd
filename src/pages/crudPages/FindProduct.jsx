@@ -7,7 +7,7 @@ function FindProduct({ productId }) {
   useEffect(() => {
     if (!productId) return;
     axios
-      .get("http://localhost:8080/searchProductById", {
+      .get("https://vetrasales-backend-production.up.railway.app/searchProductById", {
         params: { productId:productId }
       })
       .then((response) => {
