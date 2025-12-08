@@ -30,7 +30,7 @@ useEffect(() => {
         navigate(`/product/${productId}/reviews`);
       };
     const fetchProducts = () => {
-        axios.get('http://localhost:8080/getAllProducts')
+        axios.get('https://vetrasales-backend-production.up.railway.app/api/product/getAllProducts')
             .then(res => {
                 setProducts(res.data)
                 
@@ -39,7 +39,7 @@ useEffect(() => {
     };
     const fetchReviews = (products) => {
       products.forEach(product => {
-        axios.get(`http://localhost:8080/listOfReview?productId=${product.id}`)
+        axios.get(`https://vetrasales-backend-production.up.railway.app/api/review/listOfReview?productId=${product.id}`)
         .then(response => {
           let reviews = response.data;
           if (!Array.isArray(reviews)) {

@@ -19,7 +19,7 @@ function UserProfile() {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/api/user/userData?username=${username}`)
+      .get(`https://vetrasales-backend-production.up.railway.app/api/user/userData?username=${username}`)
       .then((res) => {
         const data = res.data;
         setId(data.id);
@@ -56,7 +56,7 @@ function UserProfile() {
 
   const updatedUser = { id, username, password, email, gender, dob, role };
 
-  axios.post(`http://localhost:8080/api/user/updateUser`, updatedUser)
+  axios.post(`https://vetrasales-backend-production.up.railway.app/api/user/updateUser`, updatedUser)
     .then(() => {
       setEditMode(false);
       setOriginalData({ password, email, gender, dob, role });
@@ -68,7 +68,7 @@ function UserProfile() {
   const handleDelete = () => {
     if (!window.confirm("Are you sure you want to delete your profile?")) return;
     axios
-      .get(`http://localhost:8080/api/user/delete?id=${id}`)
+      .get(`https://vetrasales-backend-production.up.railway.app/api/user/delete?id=${id}`)
       .then(() => {
         alert("Profile Deleted");
         localStorage.clear();

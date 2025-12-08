@@ -7,7 +7,7 @@ function AllReviews() {
     const navigate = useNavigate()
     const [reviews, setReviews] = useState([]);
     useEffect(() => {
-        axios.get("https://vetrasales-backend-production.up.railway.app/allReviews")
+        axios.get("https://vetrasales-backend-production.up.railway.app/api/review/allReviews")
         .then(response => {
             setReviews(response.data);
         })
@@ -21,7 +21,7 @@ function AllReviews() {
         navigate('/admin_page')
     }
     const deleteAllReviews = () => {
-        axios.delete("http://localhost:8080/deleteAllReviews").then(() => {
+        axios.delete("https://vetrasales-backend-production.up.railway.app/api/review/deleteAllReviews").then(() => {
             setReviews([]);
         }).catch(err => console.error("Failed to delete all", err));
 };

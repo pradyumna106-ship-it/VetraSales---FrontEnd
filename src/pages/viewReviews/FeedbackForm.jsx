@@ -34,7 +34,7 @@ function FeedbackForm() {
 
 
         try {
-            await axios.post("https://vetrasales-backend-production.up.railway.app/addReview", review, {
+            await axios.post("https://vetrasales-backend-production.up.railway.app/api/product/addReview", review, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
