@@ -139,7 +139,7 @@ return (
               <th>Operations</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className='table-grid'>
             {products.length > 0 ? (
               products.map(p => (
                 <tr key={p.id}>

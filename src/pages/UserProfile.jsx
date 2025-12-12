@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 function UserProfile() {
   const navigate = useNavigate();
-  const [username] = useState(localStorage.getItem("username") || "");
+  const [username,setUsername] = useState(localStorage.getItem("username") || "");
     const [password, setPassword] = useState("");
   // controlled inputs
   const [email, setEmail] = useState("");
@@ -23,6 +23,7 @@ function UserProfile() {
       .then((res) => {
         const data = res.data;
         setId(data.id);
+        setUsername(data.username|| "");
         setPassword(data.password || "");
         setEmail(data.email || "");
         setGender(data.gender || "");
@@ -43,6 +44,7 @@ function UserProfile() {
   e.preventDefault();
 
   const isChanged =
+    username !== originalData.username ||
     password !== originalData.password ||
     email !== originalData.email ||
     gender !== originalData.gender ||
@@ -59,7 +61,8 @@ function UserProfile() {
   axios.post(`https://vetrasales-backend-production.up.railway.app/api/user/updateUser`, updatedUser)
     .then(() => {
       setEditMode(false);
-      setOriginalData({ password, email, gender, dob, role });
+      localStorage.setItem("username", username);
+      setOriginalData({ username ,password, email, gender, dob, role });
       alert("Profile Updated!");
     })
     .catch((err) => console.error("Update failed:", err));
@@ -78,7 +81,7 @@ function UserProfile() {
   };
 
   return (
-    <>
+    <div>
     <button
   type="button"
   onClick={() => {
@@ -91,11 +94,12 @@ function UserProfile() {
 >
   Back
 </button>
+      <div  className='form-container'>
       <h2>User Profile</h2>
-      <form onSubmit={handleUpdate}>
+      <form>
         <label>Username: </label>
-        <input type="text" value={username} disabled />
-        <br /><br />
+        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} disabled={!editMode}/>
+        <br />
         <label>Password: </label>
         <input
             type="password"
@@ -103,8 +107,7 @@ function UserProfile() {
             onChange={(e) => setPassword(e.target.value)}
             disabled={!editMode}
         />
-        <br /><br />
-
+        <br />
         <label>Email: </label>
         <input
             type="email"
@@ -112,8 +115,7 @@ function UserProfile() {
             onChange={(e) => setEmail(e.target.value)}
             disabled={!editMode}
         />
-        <br /><br />
-
+        <br />
         <label>Gender: </label>
         <label>
           <input
@@ -148,8 +150,7 @@ function UserProfile() {
           />
           Other
         </label>
-        <br /><br />
-
+        <br />
         <label>Date of Birth: </label>
         <input
           type="date"
@@ -157,8 +158,7 @@ function UserProfile() {
           onChange={(e) => setDob(e.target.value)}
           disabled={!editMode}
         />
-        <br /><br />
-
+        <br />
         <label>Role: </label>
         <label>
           <input
@@ -182,15 +182,25 @@ function UserProfile() {
           />
           Customer
         </label>
-        <br /><br />
+        <br />
+        {!editMode ? (
+  // EDIT MODE OFF → Show Edit button
+  <button type="button" onClick={() => setEditMode(true)}>
+    Edit Profile
+  </button>
+) : (
+  // EDIT MODE ON → Show Update + Disable Edit buttons
+  <>
+    <button type="button" onClick={handleUpdate}>
+      Update Profile
+    </button>
 
-        {editMode ? (
-          <button type="submit">Update Profile</button>
-        ) : (
-          <button type="button" onClick={() => setEditMode(true)}>Edit Profile</button>
-        )}
-        &nbsp;
-        <button type="button" onClick={handleDelete}>Delete Profile</button>
+    <button type="button" onClick={() => setEditMode(false)} style={{ marginLeft: "10px" }}>
+      Disable Edit
+    </button>
+  </>
+)}
+
       </form>
       <button
   onClick={() => {
@@ -203,8 +213,8 @@ function UserProfile() {
 >
   Log Out
 </button>
-
-    </>
+</div>
+    </div>
   );
 }
 

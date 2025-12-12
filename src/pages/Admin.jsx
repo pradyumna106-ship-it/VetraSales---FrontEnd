@@ -51,7 +51,7 @@ function Admin() {
                 <th>Operations</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody className='table-grid'>
             {products.map(p => (
                 <tr key={p.id}>
                 <td>

@@ -35,7 +35,7 @@ const LogOut = () => {
 }
 
 return (
-    <>
+    <div className='form-container'>
         <h2>Sign In</h2>
             <form onSubmit={handleSubmit}>
                 <label>Username: </label>
@@ -54,7 +54,7 @@ return (
                 <br /><br />
                 <button type="submit">Sign In</button>
             </form>
-    </>
+    </div>
 );
 }
 

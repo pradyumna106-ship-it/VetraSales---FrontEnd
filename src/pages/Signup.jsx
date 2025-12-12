@@ -30,16 +30,16 @@ function Signup() {
     };
 
     return (
-    <>
+    <div className='form-container'>
         <h2>Sign Up</h2>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} >
         <label>Username: </label>
         <input
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
-        <br /><br />
+        <br />
 
         <label>Password: </label>
         <input
@@ -47,15 +47,14 @@ function Signup() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <br /><br />
-
+        <br />
         <label>Email: </label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <br /><br />
+        <br />
         <label>Gender: </label>
         <label>
           <input
@@ -87,8 +86,7 @@ function Signup() {
           />
           Other
         </label>
-        <br /><br />
-
+        <br />
         <label>Date of Birth: </label>
         <input
           type="date"
@@ -96,8 +94,7 @@ function Signup() {
           onChange={(e) => setDob(e.target.value)}
           required
         />
-        <br /><br />
-
+        <br />
         <label>Role: </label>
         
 <label>
@@ -121,10 +118,10 @@ function Signup() {
   />
   Customer
 </label>
-        <br /><br />
+        <br />
         <button type="submit">SIGN UP</button>
       </form>
-    </>
+    </div>
   );
 }
 
