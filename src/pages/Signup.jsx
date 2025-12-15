@@ -9,7 +9,20 @@ function Signup() {
     const [gender, setGender] = useState('');
     const [dob, setDob] = useState('');
     const [role, setRole] = useState('');
-
+    const [customerEmails,setCustomerEmails] = useState([])
+        const [customerPhones,setCustomerPhones] = useState([])
+    useEffect(() =>{
+        axios.post("https://vetrasales-backend-production.up.railway.app/api/user/emails")
+        .then(res => {
+            console.log("retived emails")
+            setCustomerEmails(res.data)
+        })
+        axios.post("https://vetrasales-backend-production.up.railway.app/api/user/phones")
+        .then(res => {
+            console.log("retived phone numbers")
+            setCustomerPhones(res.data)
+        })
+    },[])
     const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -27,6 +40,37 @@ function Signup() {
         .catch(err => {
         console.error(err);
         });
+        customerEmails.map(email =>
+                sendEmail({
+                    receiver: email,
+                    subject: "Greetings for new Customer 🙏",
+                    body:
+                        `Dear Customer,
+                  🎉 We are excited to welcome you to our e-commerce platform!
+                  Thank you for registering with **Vetra Sales**.  
+                  We’re glad to have you as part of our community.
+                  Explore a wide range of products, exciting offers, and seamless shopping
+                  experience designed just for you.
+                  Visit Vetra Sales now and start shopping today!
+                  Regards,
+                  Vetra Sales Team`
+                })
+            );
+            customerPhones.map(phone =>
+                    sendSMS({
+                        phoneNo:phone,
+                        content:
+                        `Dear Customer,
+                  🎉 We are excited to welcome you to our e-commerce platform!
+                  Thank you for registering with **Vetra Sales**.
+                  We’re glad to have you as part of our community.
+                  Explore a wide range of products, exciting offers, and seamless shopping
+                  experience designed just for you.
+                  Visit Vetra Sales now and start shopping today!
+                  Regards,
+                  Vetra Sales Team`
+                    })
+            );
     };
 
     return (

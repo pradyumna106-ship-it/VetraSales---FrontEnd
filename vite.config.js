@@ -7,8 +7,8 @@ export default defineConfig({
         server: {
           port: 3005,
           proxy: {
-            '/create-order': 'http://localhost:8081',
-            '/payment-callback': 'http://localhost:8081',
+            '/create-order': 'https://vetrasales-payment-service-production.up.railway.app',
+            '/payment-callback': 'https://vetrasales-payment-service-production.up.railway.app',
           }
         }
 })
