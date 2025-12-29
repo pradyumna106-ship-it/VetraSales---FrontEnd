@@ -1,185 +1,154 @@
-import SearchBar from "./search/SearchBar"; // adjust path
-import SearchResultsList from "./search/SearchResultsList"; // your existing component
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import axios from "axios";
-function Customer() {
-  const [username, setUsername] = useState("");
-  const [products, setProducts] = useState([]);
-  const [results, setResults] = useState(null);
-  const [searchStatus, setSearchStatus] = useState(null);
-  const [pendingCart, setPendingCart] = useState({});
-  const [cartItems, setCartItems] = useState({});
-  const navigate = useNavigate();
-  const [reviews, setReviews] = useState([]);
-  const [productRatings, setProductRatings] = useState({});
+import { useState,useRef } from 'react';
+import { CartProvider } from './context/CardContext';
+import { Header } from './components/Header';
+import { HomePage } from './components/HomePage';
+import { ProductsPage } from './components/ProductsPage';
+import { ProductDetailPage } from './components/ProductDetailPage';
+import { CartPage } from './components/CartPage';
+import { CheckoutPage } from './components/CheckoutPage';
+import { OrderConfirmationPage } from './components/OrderConfirmation';
+import { Toaster } from 'sonner';
+import { products,categories } from './data/products';
+import { SearchPage } from './components/SearchPage';
+import { FavouriteProvider } from './context/FavouriteContext';
+import { FavouritePage } from './components/FavouritePage';
+import { UserProfile } from './components/UserProfilePage';
 
-useEffect(() => {
-  fetchProducts();
-  const storedUsername = localStorage.getItem('username') || '';
-  setUsername(storedUsername);
-}, []);
-
-useEffect(() => {
-  if (products.length > 0) {
-    fetchReviews(products);
+export default function Customer({onLogout}) {
+  const [currentPage, setCurrentPage] = useState('home');
+  const [selectedCategory, setSelectedCategory] = useState(undefined);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const aboutRef = useRef(null);
+  const contactRef = useRef(null);
+  const handleScroll = (section) => {
+  if (currentPage !== 'home') {
+    setCurrentPage('home');
+    setTimeout(() => {
+      section === 'about'
+        ? aboutRef.current?.scrollIntoView({ behavior: 'smooth' })
+        : contactRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  } else {
+    section === 'about'
+      ? aboutRef.current?.scrollIntoView({ behavior: 'smooth' })
+      : contactRef.current?.scrollIntoView({ behavior: 'smooth' });
   }
-}, [products]);
-
-      const handleViewReviews = (productId) => {
-        navigate(`/product/${productId}/reviews`);
-      };
-    const fetchProducts = () => {
-        axios.get('https://vetrasales-backend-production.up.railway.app/api/product/getAllProducts')
-            .then(res => {
-                setProducts(res.data)
-                
-            })
-            .catch(err => console.error('Failed to fetch products:', err));
-    };
-    const fetchReviews = (products) => {
-      products.forEach(product => {
-        axios.get(`https://vetrasales-backend-production.up.railway.app/api/review/listOfReview?productId=${product.id}`)
-        .then(response => {
-          let reviews = response.data;
-          if (!Array.isArray(reviews)) {
-            reviews = reviews ? [reviews] : [];
-          }
-          const total = reviews.reduce((sum, r) => sum + (r.rating || 0), 0);
-          const avg = reviews.length > 0 ? total / reviews.length : 0;
-          setProductRatings(prev => ({ ...prev, [product.id]: avg }));
-        })
-        .catch(error => {
-          console.error("Failed to fetch reviews for product ID:", product.id);
-        });
-      });
-    };
-
-    const handleAddClick = (pid) => {
-        setPendingCart(prev => ({ ...prev, [pid]: true }));
-        setCartItems(prev => ({ ...prev, [pid]: 1 }));  // Default quantity 1
-    };
-    const handleQuantityChange = (pid, val) => {
-        const v = Math.max(1, parseInt(val, 10) || 1);
-        setCartItems(prev => ({ ...prev, [pid]: v }));
-    };
-    const handleConfirmCart = (prod) => {
-    const data = {
-        username: username,
-        productId: prod,
-        quantity: cartItems[prod] || 1
-    };
-
-    axios.post('https://vetrasales-backend-production.up.railway.app/api/addToCart', data, {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(res => {
-        console.log('✅ Received message:', res.data);
-        fetchProducts();
-        setPendingCart(prev => {
-            const updated = { ...prev };
-            delete updated[prod.id];
-            return updated;
-        });
-    })
-    .catch(err => console.error('❌ Add to cart failed:', err));
 };
 
+  const handleNavigate = (page, category) => {
+  if (!page) return; // ⛔ prevent undefined navigation
 
-function getStars(avg) {
-  if (!avg || avg <= 0) return 'No ratings yet ⭐';
-  const fullStars = Math.round(avg);
-  return '⭐'.repeat(fullStars) + '✩'.repeat(5 - fullStars);
-}
+  setCurrentPage(page);
+  setSelectedCategory(category ?? undefined);
+  setSelectedProduct(null);
+};
+  const handleSearchClick = () => {
+  setCurrentPage('search');
+};
+
+  const handleFavouriteClick = () => {
+  setCurrentPage('favourites');
+};
+
+  const handleCartClick = () => {
+    setCurrentPage('cart');
+  };
+
+  const handleViewProduct = (product) => {
+    setSelectedProduct(product);
+    setCurrentPage('product-detail');
+  };
+
+  const handleBackToProducts = () => {
+    setCurrentPage('products');
+    setSelectedProduct(null);
+  };
+
+  const handleCheckout = () => {
+    setCurrentPage('checkout');
+  };
+
+  const handleOrderComplete = () => {
+    setCurrentPage('order-confirmation');
+  };
+
+  const handleUserProfile = () => {
+    setCurrentPage('user-profile');
+  };
 
 
-return (
-  <>
-  <button onClick={() => navigate('/user_profile_page')} className="user-profile">User Profile</button>
-  <div className="customer-container">
-    <h1>Welcome, {username}</h1>
+  console.log('Current Page:', currentPage);
+  return (
+    <FavouriteProvider>
+    <CartProvider>
+      <div className="min-h-screen bg-white">
+        <Toaster position="top-right" richColors />
+        <Header  onCartClick={handleCartClick}  onNavigate={handleNavigate}  currentPage={currentPage}  role="customer"  onSearchClick={handleSearchClick}  onScroll={handleScroll} onLogout={onLogout}/>
 
-    <div className="search-bar-container">
-      <SearchBar setResults={setResults} setSearchStatus={setSearchStatus} />
-    </div>
+        
+        <main>
+  {currentPage === 'home' && (
+    <HomePage onNavigate={() => handleNavigate('products', 'all')} aboutRef={aboutRef}
+  contactRef={contactRef}/>
+  )}
 
-    <button className="view-cart-btn" onClick={() => navigate('/view_cart_page')}>
-      View Cart
-    </button>
+  {currentPage === 'products' && (
+  <ProductsPage
+    products={products}
+    categories={categories}
+    initialCategory={selectedCategory}
+    onViewProduct={handleViewProduct}
+  />
+)}
 
-    {results?.length > 0 ? (
-      <>
-        <h3>🔍 Search Results</h3>
-        {searchStatus === "found" && (
-          <SearchResultsList
-            results={results}
-            pendingCart={pendingCart}
-            cartItems={cartItems}
-            handleQuantityChange={handleQuantityChange}
-            handleConfirmCart={handleConfirmCart}
-            handleAddClick={handleAddClick}
-          />
-        )}
-      </>
-    ) : results?.length === 0 ? (
-      <p>❌ Product not found.</p>
-    ) : (
-      <>
-        <table className="product-table">
-          <thead>
-            <tr>
-              <th>Image</th>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Price</th>
-              <th>Avg Rating</th>
-              <th>Reviews</th>
-              <th>Operations</th>
-            </tr>
-          </thead>
-          <tbody className='table-grid'>
-            {products.length > 0 ? (
-              products.map(p => (
-                <tr key={p.id}>
-                  <td><img src={p.image} alt={p.name} width="80" /></td>
-                  <td>{p.name}</td>
-                  <td>{p.description}</td>
-                  <td>{p.price}</td>
-                  <td>
-                      {productRatings[p.id] !== undefined ? getStars(productRatings[p.id]) // use function to convert avg -> stars
-                      : "Loading..."}
-                  </td>
-                  <td>
-                      <button onClick={() => handleViewReviews(p.id)}>View Reviews</button>
-                  </td>
-                  <td>
-                      {pendingCart[p.id] ? (
-                      <>
-                        <input type="number" min="1" value={cartItems[p.id]} onChange={e => handleQuantityChange(p.id, e.target.value)} style={{ width: '3em', marginRight: '0.5em' }}/>
-                        <button onClick={() => handleConfirmCart(p.id)}>Confirm</button>
-                      </>
-                        ) : (
-                      <button onClick={() => handleAddClick(p.id)}>Add to Cart</button>
-                        )}
-                      </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="5">❌ No products available.</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </>
-    )}
-  </div>
-</>
 
-);
+  {currentPage === 'product-detail' && selectedProduct && (
+  <ProductDetailPage
+    product={selectedProduct}
+    onBack={handleBackToProducts}
+  />
+)}
 
-}
+  {currentPage === 'cart' && (
+    <CartPage
+      onNavigate={handleNavigate}         // ✅ PASS FUNCTION
+      onCheckout={handleCheckout}
+    />
+  )}
 
-export default Customer;
+  {currentPage === 'checkout' && (
+    <CheckoutPage onOrderComplete={handleOrderComplete} />
+  )}
+
+  {currentPage === 'order-confirmation' && (
+    <OrderConfirmationPage onNavigate={handleNavigate} />
+  )}
+
+  {currentPage === 'search' && (
+  <SearchPage
+    products={products}
+    onViewProduct={handleViewProduct}
+    onBack={() => handleNavigate('products', selectedCategory)}
+  />
+)}
+  {currentPage === 'favourites' && (
+    <FavouritePage
+    onViewProduct={handleViewProduct}
+    onBack={() => handleNavigate('products', selectedCategory)}
+    />
+  )}
+  {currentPage === 'user-profile' && (
+    <UserProfile
+    username={"pradyumna"}
+    onBack={() => handleNavigate('products', selectedCategory)}
+    />
+  )}
+  </main>
+
+
+        
+      </div>
+    </CartProvider>
+    </FavouriteProvider>
+  )
+};

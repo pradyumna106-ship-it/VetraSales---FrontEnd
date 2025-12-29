@@ -1,76 +1,136 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-function Admin() {
-    const navigate = useNavigate();
-    const [products, setProducts] = useState([]);
-  // 1. Load all products on mount
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+import { useState } from "react";
+import { Toaster } from "sonner";
+import { Header } from "./components/Header";
+import { products as initialProducts, categories } from "./data/products";
+import { admins,customers } from "./data/users";
+import { orders } from "./data/orders";
+import { AdminDashboard } from "./components/admin/AdminDashboard";
+import { AdminProductsPage } from "./components/admin/AdminProductsPage";
+import { AddProductPage } from "./components/admin/AddProductPage";
+import { UpdateProductPage } from "./components/admin/UpdateProductPage";
+import { UserProfile } from "./components/UserProfilePage";
+import { CartProvider } from "./context/CardContext";
+import { FavouriteProvider } from "./context/FavouriteContext";
+import { AdminSearchPage } from "./components/admin/AdminSearchPage";
+import { AdminOrdersPage } from "./components/admin/AdminOrdersPage";
+import UserManagementPage from "./components/admin/UserManagementPage";
 
-  const fetchProducts = () => {
-    axios
-      .get('https://vetrasales-backend-production.up.railway.app/api/product/getAllProducts')
-      .then(res => setProducts(res.data))
-      .catch(err => console.error('Failed to fetch products:', err));
+
+export default function Admin({onLogout}) {
+  const [currentPage, setCurrentPage] = useState("dashboard");
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [products, setProducts] = useState(initialProducts); // ✅ FIX
+  const handleUpdateStatus = (orderId, status) => {
+    setCurrentPage("orders");
+    setOrders((prev) =>
+      prev.map((o) =>
+        o.id === orderId ? { ...o, orderStatus: status } : o
+      )
+    );
   };
-
-  // 2. Delete by ID, then refresh
-  const handleDelete = (productId) => {
-    axios
-      .get('https://vetrasales-backend-production.up.railway.app/api/product/deleteProduct', { params: { productId } })
-      .then(() => fetchProducts())
-      .catch(err => console.error('Delete failed:', err));
+  
+  const handleNavigate = (page) => {
+    setCurrentPage(page);
+    setSelectedProduct(null);
   };
-
-  // 3. Go to update page with product in state
-  const handleUpdate = (product) => {
-    navigate('/update_product_page', { state: { product } });
+  const handleAddProduct = () => {
+    setCurrentPage("add-product");
+  }
+  const handleEditProduct = (product) => {
+    setSelectedProduct(product);
+    setCurrentPage("edit-product");
   };
-
-  const handleViewReviews = (productId) => {
-        navigate(`/product/${productId}/reviews`);
-      };
+  const handleSearchClick = () => {
+    setCurrentPage('search');
+  };
+  const handleDeleteProduct = (id) => {
+    if (confirm("Delete this product?")) {
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+    }
+  };
 
   return (
-    <div className="admin-page">
-        <h2>Admin Dashboard</h2>
-        <button onClick={() => navigate('/add_product_page')}> Add New Product</button>
-        <button onClick={() => navigate('/all_reviews_page')}> Customer Reviews</button>
-        <button onClick={() => navigate('/user_profile_page')} className="user-profile">User Profile</button>
-        <button onClick={() => navigate('/order_lists_page')}>Orders</button>
-        <button onClick={() => navigate('/user_management_page')}>User Management</button>
-        <table border="1" cellPadding="5" style={{ marginTop: '1em' }}>
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Operations</th>
-            </tr>
-        </thead>
-        <tbody className='table-grid'>
-            {products.map(p => (
-                <tr key={p.id}>
-                <td>
-                    <img src={p.image} alt={p.name} width="80" />
-                </td>
-                <td>{p.name}</td>
-                <td>{p.description}</td>
-                <td>{p.price}</td>
-                <td>
-                    <button className="add-product-form" onClick={() => handleUpdate(p)}>Update</button>
-                    <button className="update-product-form" onClick={() => handleDelete(p.id)}>Delete</button>
-                    <button onClick={() => handleViewReviews(p.id)}>View Reviews</button>
-                </td>
-            </tr>
-            ))}
-        </tbody>
-        </table>
-    </div>
-    );
-}
+    <FavouriteProvider>
+      <CartProvider>
+        <div className="min-h-screen bg-gray-50">
+          <Toaster position="top-right" richColors />
 
-export default Admin;
+          <Header
+            role="admin"
+            currentPage={currentPage}
+            onNavigate={handleNavigate}
+            onSearchClick={handleSearchClick}
+            onLogout={onLogout} // ✅ function reference only
+          />
+
+          <main className="p-6">
+  {currentPage === "dashboard" && (
+    <AdminDashboard products={products} categories={categories} onViewAll={() => handleNavigate("products")}/>
+  )}
+
+  {currentPage === "add-product" && (
+    <AddProductPage onBack={() => handleNavigate("dashboard")} />
+  )}
+
+  {currentPage === "products" && (
+  <AdminProductsPage
+    products={products}
+    onAddProduct={handleAddProduct}
+    onEditProduct={handleEditProduct}
+    onDeleteProduct={handleDeleteProduct}
+    onBack={() => setCurrentPage("dashboard")}
+  />
+)}
+  {currentPage === "reviews" && (
+    <div className="text-center text-gray-500">
+      Customer Reviews Page (Coming Soon)
+    </div>
+  )}
+
+  {currentPage === "orders" && (
+    <AdminOrdersPage
+    orders={orders}
+    onUpdateStatus={handleUpdateStatus}
+  />
+
+  )}
+
+  {currentPage === "users" && (
+      <UserManagementPage/>
+  )}
+    {currentPage === "edit-product" && selectedProduct && (
+  <UpdateProductPage
+    product={selectedProduct}
+    onEditProduct={handleEditProduct}
+    onUpdate={(updatedProduct) => {
+      setProducts((prev) =>
+        prev.map((p) =>
+          p.id === updatedProduct.id ? updatedProduct : p
+        )
+      );
+      setSelectedProduct(null);
+      setCurrentPage("products"); // go back to products page
+    }}
+    onBack={() => {
+      setSelectedProduct(null);
+      setCurrentPage("products");
+    }}
+        />
+      )}
+    {currentPage === 'search' && (
+      <AdminSearchPage
+        products={products}
+        customers={customers}
+        admins={admins}
+        onBack={() => handleNavigate("dashboard")}
+      />
+    )}
+    {currentPage === 'user-profile' && (
+    <UserProfile username={"pradyumna"} onBack={() => handleNavigate('dashboard')} onLogout={onLogout} />
+  )}
+        </main>
+        </div>
+      </CartProvider>
+    </FavouriteProvider>
+  );
+}
