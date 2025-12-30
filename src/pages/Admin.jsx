@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Toaster } from "sonner";
 import { Header } from "./components/Header";
 import { products as initialProducts, categories } from "./data/products";
@@ -19,7 +19,13 @@ import UserManagementPage from "./components/admin/UserManagementPage";
 export default function Admin({onLogout}) {
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [products, setProducts] = useState(initialProducts); // ✅ FIX
+  const [products, setProducts] = useState([]);
+useEffect(() => {
+  if (Array.isArray(initialProducts)) {
+    setProducts([...initialProducts]);
+  }
+}, [initialProducts]);
+
   const handleUpdateStatus = (orderId, status) => {
     setCurrentPage("orders");
     setOrders((prev) =>
@@ -61,7 +67,7 @@ export default function Admin({onLogout}) {
             onNavigate={handleNavigate}
             onSearchClick={handleSearchClick}
             onLogout={onLogout} // ✅ function reference only
-          />
+        />
 
           <main className="p-6">
   {currentPage === "dashboard" && (

@@ -9,6 +9,8 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Form } from "./ui/form";
+import { signUp } from "../services/userService";
 
 export default function SignUpPage({onBack}) {
   const [formData, setFormData] = useState({
@@ -74,7 +76,7 @@ export default function SignUpPage({onBack}) {
             </AvatarFallback>
           </Avatar>
 
-          <form
+          <Form
             onSubmit={handleSubmit}
             className="grid grid-cols-2 gap-4 flex-1"
           >
@@ -170,7 +172,7 @@ export default function SignUpPage({onBack}) {
                 Sign Up
               </Button>
             </div>
-          </form>
+          </Form>
         </CardContent>
       </Card>
     </div>

@@ -2,7 +2,10 @@ import axios from "axios";
 
 const BASE_URL = "https://vetrasales-backend-production.up.railway.app/api/user";
 
-export const getAllUser = ()=> axios.get(`${BASE_URL}/getAllUser`,{headers: { "Content-Type": "application/json" }});
+export const getAllUser = async ()=>{
+    const response = await axios.get(`${BASE_URL}/getAllUser`,{headers: { "Content-Type": "application/json" }});
+    return response.data
+}
 export const searchUser = (name) => axios.get(`${BASE_URL}/searchUser`,name,{headers: { "Content-Type": "application/json" }});
 export const deleteUser = (id) => axios.get(`${BASE_URL}/delete`,id,{headers: { "Content-Type": "application/json" }});
 export const signUp = (user) => axios.post(`${BASE_URL}/signUp`,user,{headers: { "Content-Type": "application/json" }});

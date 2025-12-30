@@ -35,9 +35,8 @@ export default function Welcome() {
   };
 
   /* 🔹 AUTH PAGES */
-  if (!user && view === "signin") {
-    return <SignInPage onLogin={handleLogin} onBack={handleBack} />;
-  }
+  if (!user && view === "signin") return <SignInPage onLogin={handleLogin} onBack={handleBack} />;
+
 
   if (!user && view === "signup") {
     return <SignUpPage onBack={handleBack} />;
