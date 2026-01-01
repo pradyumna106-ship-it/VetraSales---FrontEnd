@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { Toaster } from "sonner";
 import { Header } from "./components/Header";
-import { products as initialProducts, categories } from "./data/products";
 import { admins,customers } from "./data/users";
-import { orders } from "./data/orders";
 import { AdminDashboard } from "./components/admin/AdminDashboard";
 import { AdminProductsPage } from "./components/admin/AdminProductsPage";
 import { AddProductPage } from "./components/admin/AddProductPage";
@@ -14,17 +12,25 @@ import { FavouriteProvider } from "./context/FavouriteContext";
 import { AdminSearchPage } from "./components/admin/AdminSearchPage";
 import { AdminOrdersPage } from "./components/admin/AdminOrdersPage";
 import UserManagementPage from "./components/admin/UserManagementPage";
-
-
-export default function Admin({onLogout}) {
+import { getAllProducts } from "./services/productService";
+import { deleteProduct } from "./services/productService";
+import { categories } from "./data/products";
+import { AdminReviewsPage } from "./components/admin/AdminReviewsPage";
+import { ProductReviewsPage } from "./components/admin/ProductReviewsPage";
+export default function Admin() {
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [products, setProducts] = useState([]);
+  const [username] = useState(localStorage.getItem('username') || '')
+  const [orders, setOrders] = useState([])
 useEffect(() => {
-  if (Array.isArray(initialProducts)) {
-    setProducts([...initialProducts]);
-  }
-}, [initialProducts]);
+  const loadProducts = async () => {
+    const data = await getAllProducts();
+    console.log("Products received in Customer:", data); // 👈 DEBUG
+    setProducts(data);
+  };
+  loadProducts();
+}, []);
 
   const handleUpdateStatus = (orderId, status) => {
     setCurrentPage("orders");
@@ -34,7 +40,11 @@ useEffect(() => {
       )
     );
   };
-  
+  const handleOpenProductReviews = (productId) => {
+  setSelectedProduct(productId);
+  setCurrentPage("product-reviews");
+};
+
   const handleNavigate = (page) => {
     setCurrentPage(page);
     setSelectedProduct(null);
@@ -52,6 +62,12 @@ useEffect(() => {
   const handleDeleteProduct = (id) => {
     if (confirm("Delete this product?")) {
       setProducts((prev) => prev.filter((p) => p.id !== id));
+      try {
+        const res = deleteProduct(id);
+        console.log(res);
+      } catch (error) {
+        console.error(error)
+      }
     }
   };
 
@@ -66,7 +82,6 @@ useEffect(() => {
             currentPage={currentPage}
             onNavigate={handleNavigate}
             onSearchClick={handleSearchClick}
-            onLogout={onLogout} // ✅ function reference only
         />
 
           <main className="p-6">
@@ -75,7 +90,7 @@ useEffect(() => {
   )}
 
   {currentPage === "add-product" && (
-    <AddProductPage onBack={() => handleNavigate("dashboard")} />
+    <AddProductPage onBack={() => handleNavigate("dashboard")} username={username}/>
   )}
 
   {currentPage === "products" && (
@@ -84,18 +99,31 @@ useEffect(() => {
     onAddProduct={handleAddProduct}
     onEditProduct={handleEditProduct}
     onDeleteProduct={handleDeleteProduct}
+    onViewReviews={handleOpenProductReviews}
     onBack={() => setCurrentPage("dashboard")}
   />
 )}
   {currentPage === "reviews" && (
-    <div className="text-center text-gray-500">
-      Customer Reviews Page (Coming Soon)
-    </div>
+    <AdminReviewsPage onBack={ () => {
+      setSelectedProduct(null)
+      setCurrentPage("products")
+    }
+    }/>
   )}
+
+  {currentPage === "product-reviews" && selectedProduct && (
+  <ProductReviewsPage
+    productId={selectedProduct}
+    onBack={() => {
+      setSelectedProduct(null);
+      setCurrentPage("products");
+    }}
+  />
+)}
+
 
   {currentPage === "orders" && (
     <AdminOrdersPage
-    orders={orders}
     onUpdateStatus={handleUpdateStatus}
   />
 
@@ -121,6 +149,7 @@ useEffect(() => {
       setSelectedProduct(null);
       setCurrentPage("products");
     }}
+    username={username}
         />
       )}
     {currentPage === 'search' && (
@@ -132,7 +161,7 @@ useEffect(() => {
       />
     )}
     {currentPage === 'user-profile' && (
-    <UserProfile username={"pradyumna"} onBack={() => handleNavigate('dashboard')} onLogout={onLogout} />
+    <UserProfile username={username} onBack={() => handleNavigate('dashboard')} />
   )}
         </main>
         </div>

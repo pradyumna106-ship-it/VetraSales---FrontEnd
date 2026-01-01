@@ -128,19 +128,19 @@ export function CartPage({ onNavigate, onCheckout }) {
               </div>
             )}
 
-            <button
+            <Button
               onClick={onCheckout}
               className="w-full bg-purple-600 text-white py-4 rounded-xl hover:bg-purple-700 transition-colors mb-3"
             >
               Proceed to Checkout
-            </button>
+            </Button>
 
-            <button
+            <Button
               onClick={() => onNavigate('products')}
               className="w-full border border-gray-300 py-4 rounded-xl hover:bg-gray-50 transition-colors"
             >
               Continue Shopping
-            </button>
+            </Button>
           </div>
         </div>
       </div>

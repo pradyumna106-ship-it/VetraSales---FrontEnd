@@ -1,8 +1,15 @@
+import { useState, useEffect } from "react";
+import { getAllAdmin } from "../../services/userService";
 export default function EmployeeTable() {
-  const employees = [
-    { id: 1, name: "Ramesh", role: "Godown Staff", status: "Active" },
-    { id: 2, name: "Suresh", role: "Delivery", status: "Inactive" },
-  ];
+  const [employees,setEmployees] = useState([]);
+  useEffect(() => {
+    const loadEmployees = async () => {
+        const data = await getAllAdmin();
+        console.log("Api of Employees:", data); // 👈 DEBUG
+        setEmployees(data);
+      };
+      loadEmployees();
+  },[])
 
   return (
     <div className="bg-white shadow rounded-lg">
@@ -19,12 +26,12 @@ export default function EmployeeTable() {
         <tbody>
           {employees.map(emp => (
             <tr key={emp.id} className="border-t">
-              <td className="p-3">{emp.name}</td>
+              <td className="p-3">{emp.username}</td>
               <td className="p-3">{emp.role}</td>
               <td className="p-3">
                 <span
                   className={`px-2 py-1 rounded text-xs ${
-                    emp.status === "Active"
+                    emp.status.toLowerCase() === "active"
                       ? "bg-green-100 text-green-700"
                       : "bg-red-100 text-red-700"
                   }`}

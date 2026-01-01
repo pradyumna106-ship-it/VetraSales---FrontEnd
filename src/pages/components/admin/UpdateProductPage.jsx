@@ -10,9 +10,10 @@ import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { products,categories } from "../../data/products"; // adjust path if needed
-
-export function UpdateProductPage({product,onEditProduct,onUpdate,onBack}) {
+import { updateProduct } from "../../services/productService";
+export function UpdateProductPage({product,onEditProduct,onUpdate,onBack,username}) {
   const EMPTY_FORM = {
+  id: 0,
   name: "",
   description: "",
   price: "",
@@ -35,20 +36,56 @@ export function UpdateProductPage({product,onEditProduct,onUpdate,onBack}) {
   console.log(product)
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+  const { name, value, type, checked } = e.target;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onUpdate({
-      ...formData,
-      price: Number(formData.price),
-    });
-  };
+  let finalValue = type === "checkbox" ? checked : value;
+
+  if (name === "category") {
+    finalValue = value.toUpperCase(); // ✅ enum-safe
+  }
+
+  setFormData((prev) => ({
+    ...prev,
+    [name]: finalValue,
+  }));
+};
+
+
+
+ const handleSubmit = async (e) => {
+   e.preventDefault();
+   const newProduct = {
+      id: formData.id,
+      name: formData.name,
+      description: formData.description,
+      price: formData.price,
+      category: formData.category,
+      image: formData.image,
+      inStock: formData.inStock,
+      adminName: username
+   };
+ 
+   console.log("Updated Product:", newProduct);
+ 
+   try {
+     const res = await updateProduct(newProduct);
+     console.log(res.data);
+     if (res.data === "success") {
+       alert("Product added successfully!");
+       setFormData({
+       name: "",
+       description: "",
+       price: "",
+       image: "",
+       category: "",
+       inStock: true,
+     });
+     }
+   } catch (error) {
+     console.error(error);
+     alert("Failed to add product!");
+   }
+ };
     
 
   return (
@@ -118,22 +155,15 @@ export function UpdateProductPage({product,onEditProduct,onUpdate,onBack}) {
             {/* Category */}
             <div>
               <Label>Category</Label>
-              <select
-                name="category"
-                value={formData.category ?? ""}
-                onChange={handleChange}
-                className="w-full border rounded-md p-2"
-                required
-              >
+                <select name="category"  value={formData.category ? formData.category.toLowerCase() : ""}  onChange={handleChange}  className="w-full border rounded-md p-2" required>
                 <option value="">Select Category</option>
-                {categories.map((cat) => (
-                  <option key={cat.slug} value={cat.slug ?? ""}>
-                    {cat.name}
-                  </option>
+                  {categories.map((cat) => (
+                      <option key={cat.slug} value={cat.slug}>
+                        {cat.name}
+                      </option>
                 ))}
-              </select>
+                </select>
             </div>
-
             {/* In Stock */}
             <div className="flex items-center gap-2 mt-6">
               <input
@@ -148,7 +178,7 @@ export function UpdateProductPage({product,onEditProduct,onUpdate,onBack}) {
             {/* Submit Button */}
             <div className="col-span-2 mt-4">
               <Button type="submit" className="w-full">
-                Add Product
+                Edit Product
               </Button>
             </div>
 

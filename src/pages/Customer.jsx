@@ -1,4 +1,4 @@
-import { useState,useRef } from 'react';
+import { useState,useRef,useEffect } from 'react';
 import { CartProvider } from './context/CardContext';
 import { Header } from './components/Header';
 import { HomePage } from './components/HomePage';
@@ -8,16 +8,28 @@ import { CartPage } from './components/CartPage';
 import { CheckoutPage } from './components/CheckoutPage';
 import { OrderConfirmationPage } from './components/OrderConfirmation';
 import { Toaster } from 'sonner';
-import { products,categories } from './data/products';
 import { SearchPage } from './components/SearchPage';
 import { FavouriteProvider } from './context/FavouriteContext';
 import { FavouritePage } from './components/FavouritePage';
 import { UserProfile } from './components/UserProfilePage';
-
+import { getAllProducts } from './services/productService';
+import { categories } from './data/products';
 export default function Customer({onLogout}) {
   const [currentPage, setCurrentPage] = useState('home');
   const [selectedCategory, setSelectedCategory] = useState(undefined);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [products, setProducts] = useState([]);
+useEffect(() => {
+  const loadProducts = async () => {
+    const data = await getAllProducts();
+    console.log("Products received in Customer:", data); // 👈 DEBUG
+    setProducts(data);
+  };
+  loadProducts();
+}, []);
+
+
+  console.log('products List',products)
   const aboutRef = useRef(null);
   const contactRef = useRef(null);
   const handleScroll = (section) => {
@@ -94,11 +106,12 @@ export default function Customer({onLogout}) {
 
   {currentPage === 'products' && (
   <ProductsPage
-    products={products}
-    categories={categories}
-    initialCategory={selectedCategory}
-    onViewProduct={handleViewProduct}
-  />
+  products={products}
+  categories={categories}
+  initialCategory={selectedCategory}
+  onViewProduct={handleViewProduct}
+/>
+
 )}
 
 

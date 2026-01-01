@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -21,38 +21,59 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "./ui/avatar";
-
+import { userData } from "../services/userService";
 /* Default user data (NO API) */
-const defaultUsers = {
-  pradyumna: {
-    name: "Pradyumna J Kumar",
-    email: "pradyumna@example.com",
-    phone: "+91 8431362112",
-    location: "Bangalore",       // Customer | Admin
-    gender: "Male",          // Male | Female | Other
-    dob: "2001-08-25",        // YYYY-MM-DD
-    joinedDate: "2024-01-15",
-    status: "Active",
 
-    // Password fields (for UI only)
-    password: {
-      currentPassword: "advjkjgfd",
-      newPassword: "",
-      confirmPassword: "",
-    },
+export function UserProfile({ username }) {
+  const [formData, setFormData] = useState({
+  username: "",
+  email: "",
+  phone: "",
+  location: "",
+  gender: "",
+  role: "",
+  dob: "",
+  password: {
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
   },
-};
-
-export function UserProfile({ username,role }) {
-  const user = defaultUsers[username];
-  const [formData, setFormData] = useState(user);
-
-    const [passwordData, setPasswordData] = useState({
+});
+  const [passwordData, setPasswordData] = useState({
   currentPassword: "",
   newPassword: "",
   confirmPassword: "",
 });
 const [passwordError, setPasswordError] = useState("");
+useEffect(() => {
+  if (!username) return;
+
+  const loadUserData = async () => {
+    try {
+      const data = await userData(username);
+      console.log("User Data:", data);
+
+      setFormData({
+        username: data.username || "",
+        email: data.email || "",
+        phone: data.phone || "",
+        location: data.location || "",
+        gender: data.gender || "",
+        role: data.role || "",
+        dob: data.dob || "",
+        password: {
+          currentPassword: data.password || "",
+          newPassword: "",
+          confirmPassword: "",
+        },
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  loadUserData();
+}, [username]);
+
 
 const handlePasswordChange = (e) => {
   const { name, value } = e.target;
@@ -100,14 +121,15 @@ const handlePasswordSubmit = () => {
             <Avatar className="h-24 w-24">
                 <AvatarImage src="/avatar.png" />
                     <AvatarFallback>
-                        {formData.name.charAt(0)}
-                </AvatarFallback>
+                        {(formData?.username && formData.username.length > 0) ? formData.username[0].toUpperCase(): "U"}
+</AvatarFallback>
+
             </Avatar>
             <div className="grid grid-cols-2 gap-4 flex-1">
 
   <div>
     <Label>Name</Label>
-    <Input value={formData.name} readOnly />
+    <Input value={formData.username} readOnly />
   </div>
 
   <div>
@@ -133,7 +155,7 @@ const handlePasswordSubmit = () => {
         <Input
           type="radio"
           name="role"
-          checked={formData.role === "Customer"}
+          checked={formData.role === "CUSTOMER"}
           readOnly
         />
         Customer
@@ -143,7 +165,7 @@ const handlePasswordSubmit = () => {
         <Input
           type="radio"
           name="role"
-          checked={formData.role === "Admin"}
+          checked={formData.role === "ADMIN"}
           readOnly
         />
         Admin
@@ -159,7 +181,7 @@ const handlePasswordSubmit = () => {
         <Input
           type="radio"
           name="gender"
-          checked={formData.gender === "Male"}
+          checked={formData.gender === "MALE"}
           readOnly
         />
         Male
@@ -169,7 +191,7 @@ const handlePasswordSubmit = () => {
         <Input
           type="radio"
           name="gender"
-          checked={formData.gender === "Female"}
+          checked={formData.gender === "FEMALE"}
           readOnly
         />
         Female
@@ -179,7 +201,7 @@ const handlePasswordSubmit = () => {
         <Input
           type="radio"
           name="gender"
-          checked={formData.gender === "Other"}
+          checked={formData.gender === "OTHER"}
           readOnly
         />
         Other
@@ -196,9 +218,37 @@ const handlePasswordSubmit = () => {
     <div className="col-span-2 mt-4">
         <Label className="font-semibold">Change Password</Label>
         <div className="grid grid-cols-1 gap-4 mt-2">
-            <Input type="password" placeholder="Current Password" value={formData.password.currentPassword} readOnly/>
-            <Input type="password" placeholder="New Password" value={formData.password.newPassword} readOnly/>
-            <Input type="password" placeholder="Confirm Password" value={formData.password.confirmPassword} readOnly/>
+            <Input
+  type="password"
+  name="currentPassword"
+  placeholder="Current Password"
+  value={formData.password|| passwordData.currentPassword}
+  onChange={handlePasswordChange}
+  readOnly
+/>
+
+<Input
+  type="password"
+  name="newPassword"
+  placeholder="New Password"
+  value={passwordData.newPassword}
+  onChange={handlePasswordChange}
+  readOnly
+/>
+
+<Input
+  type="password"
+  name="confirmPassword"
+  placeholder="Confirm Password"
+  value={passwordData.confirmPassword}
+  onChange={handlePasswordChange}
+  readOnly
+/>
+
+{passwordError && (
+  <p className="text-red-600 text-sm">{passwordError}</p>
+)}
+
         </div>
     </div>
   {/* ================= ACTION BUTTONS ================= */}
@@ -232,7 +282,7 @@ const handlePasswordSubmit = () => {
 
             <TableBody>
               <TableRow>
-                <TableCell>20 Dec 2025</TableCell>
+                <TableCell>{formData.joinedDat}</TableCell>
                 <TableCell>Order Placed</TableCell>
                 <TableCell className="text-green-600">
                   Completed

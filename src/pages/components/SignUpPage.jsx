@@ -11,78 +11,115 @@ import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Form } from "./ui/form";
 import { signUp } from "../services/userService";
-
-export default function SignUpPage({onBack}) {
+import { useNavigate } from "react-router-dom";
+export default function SignUpPage() {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    location: "",
-    role: "Customer",
-    gender: "Male",
-    dob: "",
-    password: "",
-    confirmPassword: "",
-  });
+  username: "",
+  email: "",
+  phone: "",
+  location: "",
+  role: "CUSTOMER",
+  gender: "MALE",
+  dob: "",
+  password: "",
+  confirmPassword: "",
+  joinedDate: new Date().toISOString().split("T")[0],
+  status: "ACTIVE"
+});
+
+  const onNav = useNavigate()
 
   const [passwordError, setPasswordError] = useState("");
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+      const { name, value } = e.target;
 
-    if (
-      (name === "password" || name === "confirmPassword") &&
-      formData.confirmPassword &&
-      formData.password !== value
-    ) {
-      setPasswordError("Passwords do not match!");
-    } else {
-      setPasswordError("");
-    }
-  };
+      let finalValue = value;
 
-  const handleSubmit = (e) => {
+      // ✅ enum-safe normalization
+      if (name === "role" || name === "gender") {
+        finalValue = value.toUpperCase();
+      }
+
+      setFormData((prev) => ({
+        ...prev,
+        [name]: finalValue,
+      }));
+
+      // Password validation
+      if (
+        (name === "password" || name === "confirmPassword") &&
+        formData.confirmPassword &&
+        formData.password !== value
+      ) {
+        setPasswordError("Passwords do not match!");
+      } else {
+        setPasswordError("");
+      }
+    };
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (formData.password !== formData.confirmPassword) {
       setPasswordError("Passwords do not match!");
       return;
     }
-
     setPasswordError("");
+    
     console.log("Sign Up Data:", formData);
-    alert("Sign Up successful!");
+    const payload = {
+        username: formData.username.trim(),
+        email: formData.email.toLowerCase().trim(),
+        phone: formData.phone,
+        location: formData.location,
+        gender: formData.gender,
+        dob: formData.dob,
+        role: formData.role,
+        password: formData.password
+      };
+
+
     // API call goes here
+    try {
+  const response = await signUp(payload);
+  console.log("User signed up:", response.data);
+} catch (error) {
+  if (error.response?.status === 409) {
+    alert("User already exists. Please use a different email or phone.");
+  } else {
+    console.error("Sign-up error:", error);
+  }
+}
+    
   };
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Sign Up</CardTitle>
-        </CardHeader>
-        <Button
-        onClick={onBack}
+      <Button
+        onClick={() => onNav('/')}
         className="mb-4 bg-gray-300 hover:bg-gray-400 text-black"
       >
         ← Back
       </Button>
+      <Card>
+        <CardHeader>
+          <CardTitle>Sign Up</CardTitle>
+        </CardHeader>
         <CardContent className="flex gap-6">
           <Avatar className="h-24 w-24">
             <AvatarImage src="/avatar.png" />
             <AvatarFallback>
-              {formData.name?.charAt(0) || "U"}
+              {formData.username?.charAt(0) || "U"}
             </AvatarFallback>
           </Avatar>
 
-          <Form
+          <form
             onSubmit={handleSubmit}
             className="grid grid-cols-2 gap-4 flex-1"
           >
             <div>
               <Label>Name</Label>
-              <Input name="name" onChange={handleChange} required />
+              <Input name="username" onChange={handleChange} required />
             </div>
 
             <div>
@@ -104,18 +141,12 @@ export default function SignUpPage({onBack}) {
             <div>
               <Label>Role</Label>
               <div className="flex gap-4 mt-2">
-                {["Customer", "Admin"].map((r) => (
+                {["CUSTOMER", "ADMIN"].map((r) => (
                   <Label key={r} className="flex items-center gap-2">
-                    <Input
-                      type="radio"
-                      name="role"
-                      value={r}
-                      checked={formData.role === r}
-                      onChange={handleChange}
-                    />
-                    {r}
+                  <Input  type="radio"  name="role"  value={r}  checked={formData.role === r}  onChange={handleChange}/>
+                    {r.charAt(0) + r.slice(1).toLowerCase()}
                   </Label>
-                ))}
+                    ))}
               </div>
             </div>
 
@@ -123,7 +154,7 @@ export default function SignUpPage({onBack}) {
             <div>
               <Label>Gender</Label>
               <div className="flex gap-4 mt-2">
-                {["Male", "Female", "Other"].map((g) => (
+                {["MALE", "FEMALE", "OTHER"].map((g) => (
                   <Label key={g} className="flex items-center gap-2">
                     <Input
                       type="radio"
@@ -132,12 +163,11 @@ export default function SignUpPage({onBack}) {
                       checked={formData.gender === g}
                       onChange={handleChange}
                     />
-                    {g}
+                    {g.charAt(0) + g.slice(1).toLowerCase()}
                   </Label>
                 ))}
               </div>
             </div>
-
             <div>
               <Label>Date of Birth</Label>
               <Input type="date" name="dob" onChange={handleChange} />
@@ -172,7 +202,7 @@ export default function SignUpPage({onBack}) {
                 Sign Up
               </Button>
             </div>
-          </Form>
+          </form>
         </CardContent>
       </Card>
     </div>

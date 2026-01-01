@@ -13,8 +13,17 @@ import {
   TableRow,
 } from "../ui/table";
 import { Button } from "../ui/button";
-
-export function AdminOrdersPage({ orders, onUpdateStatus }) {
+import { getAllOrders } from "../../services/orderService";
+import { useState, useEffect } from "react";
+export function AdminOrdersPage({ onUpdateStatus }) {
+  const [orders, setOrders] = useState([]);
+   useEffect(() => {
+      const loadEmployees = async () => {
+          const res = await getAllOrders();
+          setOrders(res.data); // ✅
+        };
+        loadEmployees();
+    },[])
   return (
     <Card>
       <CardHeader>
@@ -45,9 +54,9 @@ export function AdminOrdersPage({ orders, onUpdateStatus }) {
 
                 <TableCell>
                   <div className="flex flex-col">
-                    <span>{order.customerName}</span>
+                    <span>{order.address}</span>
                     <span className="text-sm text-muted-foreground">
-                      {order.customerEmail}
+                      {order.address}
                     </span>
                   </div>
                 </TableCell>
@@ -59,18 +68,18 @@ export function AdminOrdersPage({ orders, onUpdateStatus }) {
                 <TableCell>
                   <span
                     className={
-                      order.paymentStatus === "Paid"
+                      order.status === "Paid"
                         ? "text-green-600"
                         : "text-red-600"
                     }
                   >
-                    {order.paymentStatus}
+                    {order.status}
                   </span>
                 </TableCell>
 
                 <TableCell>
                   <span className="capitalize">
-                    {order.orderStatus}
+                    {order.status}
                   </span>
                 </TableCell>
 

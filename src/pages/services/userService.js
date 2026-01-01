@@ -3,15 +3,92 @@ import axios from "axios";
 const BASE_URL = "https://vetrasales-backend-production.up.railway.app/api/user";
 
 export const getAllUser = async ()=>{
-    const response = await axios.get(`${BASE_URL}/getAllUser`,{headers: { "Content-Type": "application/json" }});
-    return response.data
+    try {
+        const res = await axios.get(`${BASE_URL}/getAllUser`,{headers: { "Content-Type": "application/json" }});
+        console.log("API response:", res.data); // 👈 DEBUG
+        return res.data
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      return []; // prevent undefined
+  }
+    
 }
-export const searchUser = (name) => axios.get(`${BASE_URL}/searchUser`,name,{headers: { "Content-Type": "application/json" }});
-export const deleteUser = (id) => axios.get(`${BASE_URL}/delete`,id,{headers: { "Content-Type": "application/json" }});
-export const signUp = (user) => axios.post(`${BASE_URL}/signUp`,user,{headers: { "Content-Type": "application/json" }});
+
+export const getAllCustomer = async ()=>{
+    try {
+        const res = await axios.get(`${BASE_URL}/getAllCustomer`,{headers: { "Content-Type": "application/json" }});
+        console.log("API response:", res.data); // 👈 DEBUG
+        return res.data
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      return []; // prevent undefined
+  }
+    
+}
+
+export const getAllAdmin = async ()=>{
+    try {
+        const res = await axios.get(`${BASE_URL}/getAllAdmin`,{headers: { "Content-Type": "application/json" }});
+        console.log("API response:", res.data); // 👈 DEBUG
+        return res.data
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      return []; // prevent undefined
+  }
+    
+}
+export const searchUser = async (name) => {
+    try {
+        const res = await axios.get(`${BASE_URL}/searchUser`,{param:{name}},{headers: { "Content-Type": "application/json" }});
+        console.log("API response:", res.data); // 👈 DEBUG
+        return res.data;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      return []; // prevent undefined
+  }
+    
+
+}
+export const deleteUser = (id) => axios.get(`${BASE_URL}/delete`,{param:{id}},{headers: { "Content-Type": "application/json" }});
+export const signUp = (user) =>
+  axios.post(`${BASE_URL}/signUp`, user, {
+    headers: { "Content-Type": "application/json" },
+  });
+
 export const signIn = (login) => axios.post(`${BASE_URL}/signIn`,login,{headers: { "Content-Type": "application/json" }});
-export const userData = (username) => axios.get(`${BASE_URL}/userData`,username,{headers: { "Content-Type": "application/json" }});
+export const userData = async (username) => {
+    try {
+        const res = await axios.get(`${BASE_URL}/userData`,{
+        params: { username },   // ✅ REQUIRED
+      },{headers: { "Content-Type": "application/json" }});
+        console.log("API response:", res.data); // 👈 DEBUG
+        return res.data;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      return []; // prevent undefined
+  }
+}
 export const deleteAll = () => axios.get(`${BASE_URL}/deleteAll`,{headers: { "Content-Type": "application/json" }});
 export const updateUser = (user) => axios.post(`${BASE_URL}/updateUser`,user,{headers: { "Content-Type": "application/json" }});
-export const emails = () => axios.get(`${BASE_URL}/emails`,{headers: { "Content-Type": "application/json" }});
-export const phones = () => axios.get(`${BASE_URL}/phones`,{headers: { "Content-Type": "application/json" }});
+export const emails = async () => {
+    try {
+        const res = await axios.get(`${BASE_URL}/emails`,{headers: { "Content-Type": "application/json" }});
+        console.log("API response:", res.data); // 👈 DEBUG
+        return res.data;
+        } catch (error) {
+            console.error("Error fetching products:", error);
+        return []; // prevent undefined
+    }
+}
+export const phones = async () => {
+    try {
+        const res = await axios.get(`${BASE_URL}/phones`,{headers: { "Content-Type": "application/json" }});
+        console.log("API response:", res.data); // 👈 DEBUG
+        return res.data;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      return []; // prevent undefined
+  }
+    
+
+}

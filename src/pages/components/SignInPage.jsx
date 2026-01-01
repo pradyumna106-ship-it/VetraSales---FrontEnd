@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -11,7 +12,9 @@ import { Label } from "./ui/label";
 import { Button } from "./ui/button";
 import { signIn } from "../services/userService";
 
-export default function SignInPage({ onLogin, onBack }) {
+export default function SignInPage() {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -29,23 +32,33 @@ export default function SignInPage({ onLogin, onBack }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    localStorage.setItem('username', formData.username);
     try {
-    const response = await signIn(formData);
-    // Axios wraps the backend response inside 'data'
-    const data = response.data;
-    onLogin({
-      username: formData.username, // use username from form
-      role: data.role, // use role returned from backend
-    });
+      const response = await signIn(formData);
+      const role = response.data.toLowerCase(); // admin / customer
+      console.log("role: ",role)
+      const user = {
+        username: formData.username,
+        role,
+      };
+
+      // ✅ persist login (refresh-safe)
+      localStorage.setItem("user", JSON.stringify(user));
+
+      // ✅ role-based routing
+      if (role === "admin") {
+        navigate("/admin_page");
+      } else if (role === "customer") {
+        navigate("/customer_page");
+      }
     } catch (err) {
       setError(
-      err.response?.data?.message || "Invalid username or password"
+        err.response?.data?.message || "Invalid username or password"
       );
     } finally {
       setLoading(false);
     }
   };
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
@@ -57,14 +70,14 @@ export default function SignInPage({ onLogin, onBack }) {
           </CardDescription>
         </CardHeader>
 
-        <Button
-          onClick={onBack}
-          className="mx-4 mb-4 bg-gray-300 hover:bg-gray-400 text-black"
-        >
-          ← Back
-        </Button>
-
         <CardContent>
+          <Button
+            onClick={() => navigate("/")}
+            className="mb-4 bg-gray-300 hover:bg-gray-400 text-black"
+          >
+            ← Back
+          </Button>
+
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Username */}
             <div>

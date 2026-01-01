@@ -10,34 +10,49 @@ import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { products,categories } from "../../data/products"; // adjust path if needed
+import { addProduct } from "../../services/productService";
+export function AddProductPage({onBack, username}) {
+  const [formData, setFormData] = useState({
+  name: "",
+  description: "",
+  price: "",
+  image: "",
+  category: "",
+  inStock: true,
+});
 
-export function AddProductPage() {
-  const [formData, setFormData] = useState(products);
-
+  
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const { name, value, type, checked } = e.target;
+  const finalValue = type === "checkbox" ? checked : value;
+  setFormData((prev) => ({
+    ...prev,
+    [name]: finalValue,
+  }));
+};
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+
+
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  const newProduct = {
+    name: formData.name,
+    description: formData.description,
+    price: formData.price,
+    category: formData.category,
+    image: formData.image,
+    inStock: formData.inStock,
+    adminName: username
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  console.log("New Product:", newProduct);
 
-    const newProduct = {
-      id: Date.now(), // temporary ID (replace with backend later)
-      ...formData,
-      price: Number(formData.price),
-      rating: Number(formData.rating),
-    };
-
-    console.log("New Product:", newProduct);
-    alert("Product added successfully!");
-
-    // Reset form
-    setFormData({
+  try {
+    const res = await addProduct(newProduct);
+    console.log(res.data);
+    if (res.data === "success") {
+      alert("Product added successfully!");
+      setFormData({
       name: "",
       description: "",
       price: "",
@@ -45,10 +60,18 @@ export function AddProductPage() {
       category: "",
       inStock: true,
     });
-  };
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Failed to add product!");
+  }
+};
 
   return (
     <div className="max-w-3xl mx-auto p-6">
+      <Button onClick={() => onBack()}>
+        ⬅️Back
+        </Button>
       <Card>
         <CardHeader>
           <CardTitle>Add New Product (Admin)</CardTitle>
@@ -62,7 +85,7 @@ export function AddProductPage() {
               <Label>Product Name</Label>
               <Input
                 name="name"
-                value={formData.name}
+                value={formData.name || ""}
                 onChange={handleChange}
                 placeholder="Enter product name"
                 required
@@ -74,7 +97,7 @@ export function AddProductPage() {
               <Label>Description</Label>
               <Textarea
                 name="description"
-                value={formData.description}
+                value={formData.description || ""}
                 onChange={handleChange}
                 placeholder="Enter product description"
                 rows={3}
@@ -88,7 +111,7 @@ export function AddProductPage() {
               <Input
                 type="number"
                 name="price"
-                value={formData.price}
+                value={formData.price || 0}
                 onChange={handleChange}
                 placeholder="49.99"
                 required
@@ -99,7 +122,7 @@ export function AddProductPage() {
               <Label>Image URL</Label>
               <Input
                 name="image"
-                value={formData.image}
+                value={formData.image || ""}
                 onChange={handleChange}
                 placeholder="https://image-url.com"
                 required
@@ -111,7 +134,7 @@ export function AddProductPage() {
               <Label>Category</Label>
               <select
                 name="category"
-                value={formData.category}
+                value={formData.category || ""}
                 onChange={handleChange}
                 className="w-full border rounded-md p-2"
                 required
@@ -127,10 +150,11 @@ export function AddProductPage() {
 
             {/* In Stock */}
             <div className="flex items-center gap-2 mt-6">
-              <input
+              <Input
                 type="checkbox"
                 name="inStock"
-                checked={formData.inStock}
+                checked={formData.inStock || false}
+                className="btn"
                 onChange={handleChange}
               />
               <Label>In Stock</Label>

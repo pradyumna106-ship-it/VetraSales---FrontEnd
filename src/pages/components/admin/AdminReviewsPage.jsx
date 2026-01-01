@@ -5,35 +5,23 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { allReviews } from "../../services/reviewService";
 /* MOCK REVIEWS DATA (Replace with API later) */
-const initialReviews = [
-  {
-    id: 1,
-    productName: "Premium Dog Food",
-    customerName: "Rahul",
-    rating: 4,
-    comment: "Good quality, my dog loves it!",
-    status: "approved", // approved | hidden
-    date: "2025-01-12",
-  },
-  {
-    id: 2,
-    productName: "Chew Toy",
-    customerName: "Ananya",
-    rating: 2,
-    comment: "Not durable, broke in 2 days.",
-    status: "pending",
-    date: "2025-01-15",
-  },
-];
+
 
 export function AdminReviewsPage({ onBack }) {
-    const [reviews, setReviews] = useState(initialReviews);
+    const [reviews, setReviews] = useState([]);
     const [search, setSearch] = useState("");
     useEffect(() => {
-        allReviews().then(res => {
-        setReviews(res.data)
-        })
-    },[reviews])
+  const loadReview = async () => {
+    try {
+      const data = await allReviews();
+      setReviews(Array.isArray(data) ? data : []);
+    } catch (err) {
+      console.error("Failed to load reviews", err);
+      setReviews([]);
+    }
+  };
+  loadReview();
+}, []);
     const toggleStatus = (id) => {
     setReviews((prev) =>
       prev.map((r) =>
@@ -44,7 +32,7 @@ export function AdminReviewsPage({ onBack }) {
     );
   };
 
-  const filteredReviews = reviews.filter(
+  const filteredReviews = (reviews || []).filter(
     (r) =>
       r.productName.toLowerCase().includes(search.toLowerCase()) ||
       r.customerName.toLowerCase().includes(search.toLowerCase())

@@ -12,7 +12,7 @@ export function ProductsPage({ initialCategory, onViewProduct,products,categorie
 
     // Filter by category
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter((p) => p.category === selectedCategory);
+      filtered = filtered.filter((p) => p.category.toLowerCase() === selectedCategory);
     }
 
     // Filter by price range

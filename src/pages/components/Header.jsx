@@ -3,13 +3,18 @@ import { useCart } from '../context/CardContext';
 import { SearchPage } from './SearchPage';
 import { AdminSearchPage } from './admin/AdminSearchPage';
 import { Button,buttonVariants } from './ui/button';
-export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, role, onScroll,onLogout}) {
+import { useNavigate } from 'react-router-dom';
+export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, role, onScroll}) {
   const { getCartCount } = useCart();
   const cartCount = getCartCount();
-
+  const onNav = useNavigate();
   const handleSearchClick = () => {
   setCurrentPage('search');
 };
+  const handleLogout = () => {
+    alert("Are you sure You wanted to Log Out.")
+    onNav('/');
+  }
 
   return (
     <header className="sticky top-0 bg-white shadow-sm z-50">
@@ -66,7 +71,7 @@ export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, ro
                 <Button className="p-2 hover:bg-gray-100 rounded-full transition-colors" onClick={() => onNavigate('user-profile')}>
                   <User className="w-5 h-5" />
                 </Button>
-                <Button onClick={onLogout} className="bg-red-600 hover:bg-red-700 text-white"> Logout</Button>
+                <Button onClick={() => handleLogout()} className="bg-red-600 hover:bg-red-700 text-white"> Logout</Button>
               </div>
             </>
           )}
@@ -81,10 +86,10 @@ export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, ro
                 <Button onClick={() => onSearchClick()}  className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                     <Search className="w-5 h-5" />
                 </Button>
-                <Button onClick={() => onNavigate('user-profile')} className={currentPage === "user-profile" ? 'text-purple-600' : 'hover:text-purple-600'}>
+                <Button onClick={() => onNavigate('user-profile')} className={currentPage === "user-profile" ? 'text-purple-600' : 'p-2 hover:bg-gray-100 rounded-full transition-colors'}>
                   <User className="w-5 h-5" />
                 </Button>
-                <Button onClick={onLogout} className="bg-red-600 hover:bg-red-700 text-white"> Logout</Button>
+                <Button onClick={() => handleLogout()} className="bg-red-600 hover:bg-red-700 text-white"> Logout</Button>
               </nav>
           )}
 

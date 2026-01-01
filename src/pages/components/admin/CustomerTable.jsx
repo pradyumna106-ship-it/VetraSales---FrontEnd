@@ -1,8 +1,16 @@
+import { useState, useEffect } from "react";
+import { getAllCustomer } from "../../services/userService";
+
 export default function CustomerTable() {
-  const customers = [
-    { id: 1, name: "Arjun", orders: 12, spend: "₹8,500" },
-    { id: 2, name: "Megha", orders: 3, spend: "₹1,200" },
-  ];
+  const [customers,setCustomers] = useState([]);
+  useEffect(() => {
+    const loadEmployees = async () => {
+        const data = await getAllCustomer();
+        console.log("Api of Customers:", data); // 👈 DEBUG
+        setEmployees(data);
+      };
+      loadEmployees();
+  },[])
 
   return (
     <div className="bg-white shadow rounded-lg">
@@ -19,7 +27,7 @@ export default function CustomerTable() {
         <tbody>
           {customers.map(user => (
             <tr key={user.id} className="border-t">
-              <td className="p-3">{user.name}</td>
+              <td className="p-3">{user.username}</td>
               <td className="p-3">{user.orders}</td>
               <td className="p-3">{user.spend}</td>
               <td className="p-3 flex gap-2">

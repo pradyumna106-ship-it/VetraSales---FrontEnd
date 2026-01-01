@@ -1,6 +1,5 @@
 import { getAllProducts } from "../services/productService";
 export const products = getAllProducts();
-
 export const categories = [
   {
     name: 'Food',

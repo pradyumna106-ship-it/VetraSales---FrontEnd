@@ -43,7 +43,7 @@ export function CheckoutPage({ onOrderComplete }) {
     <div className="mx-auto px-4 py-8">
       <h1 className="text-4xl mb-8">Checkout</h1>
 
-      <Form onSubmit={handleSubmit} className="grid lg:grid-cols-3 gap-8">
+      <form onSubmit={handleSubmit} className="grid lg:grid-cols-3 gap-8">
         {/* Checkout Form */}
         <div className="lg:col-span-2 space-y-6">
           {/* Shipping Information */}
@@ -243,7 +243,7 @@ export function CheckoutPage({ onOrderComplete }) {
             </p>
           </div>
         </div>
-      </Form>
+      </form>
     </div>
   );
 }

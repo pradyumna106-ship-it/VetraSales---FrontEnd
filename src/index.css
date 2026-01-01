@@ -1,14 +1,11 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss"
+/* @import "tw-animate-css"; */
 
 /* =====================
    CSS VARIABLES
 ===================== */
 
-:root {
+/* :root {
   --font-size: 16px;
 
   --background: #ffffff;
@@ -43,12 +40,12 @@
   --ring: oklch(0.708 0 0);
 
   --radius: 0.625rem;
-}
+} */
 
 /* =====================
    DARK MODE
 ===================== */
-
+/* 
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -83,7 +80,7 @@
    BASE LAYER
 ===================== */
 
-@layer base {
+/* @layer base {
   * {
     @apply border-border outline-ring/50
   }
@@ -118,4 +115,4 @@
   textarea {
     @apply text-base font-normal;
   }
-}
+} */ 

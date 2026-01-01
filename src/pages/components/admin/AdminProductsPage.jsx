@@ -14,6 +14,7 @@ export function AdminProductsPage({
   onAddProduct,
   onEditProduct,
   onDeleteProduct,   // ✅ FIX
+  onViewReviews,
   onBack,
 }) {
   return (
@@ -78,13 +79,7 @@ export function AdminProductsPage({
                     >
                             Delete
                         </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => alert("Navigate to product reviews")}
-                  >
-                    Reviews
-                  </Button>
+                  <Button  size="sm"  variant="outline"  onClick={() => onViewReviews(product.id)}> Reviews </Button>
                 </TableCell>
 
               </TableRow>
