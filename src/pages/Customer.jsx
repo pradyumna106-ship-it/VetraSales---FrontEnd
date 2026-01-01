@@ -19,6 +19,7 @@ export default function Customer({onLogout}) {
   const [selectedCategory, setSelectedCategory] = useState(undefined);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [products, setProducts] = useState([]);
+  const [username] = useState(localStorage.getItem('username') || '')
 useEffect(() => {
   const loadProducts = async () => {
     const data = await getAllProducts();
@@ -152,7 +153,7 @@ useEffect(() => {
   )}
   {currentPage === 'user-profile' && (
     <UserProfile
-    username={"pradyumna"}
+    username={username}
     onBack={() => handleNavigate('products', selectedCategory)}
     />
   )}
