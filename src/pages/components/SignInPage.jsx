@@ -62,6 +62,12 @@ export default function SignInPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      <Button
+            onClick={() => navigate("/")}
+            className="mb-4 bg-gray-300 hover:bg-gray-400 text-black"
+          >
+            ← Back
+          </Button>
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Sign In</CardTitle>
@@ -69,15 +75,7 @@ export default function SignInPage() {
             Enter your credentials to continue
           </CardDescription>
         </CardHeader>
-
         <CardContent>
-          <Button
-            onClick={() => navigate("/")}
-            className="mb-4 bg-gray-300 hover:bg-gray-400 text-black"
-          >
-            ← Back
-          </Button>
-
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Username */}
             <div>
