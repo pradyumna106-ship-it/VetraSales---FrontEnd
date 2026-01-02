@@ -17,10 +17,15 @@ import { deleteProduct } from "./services/productService";
 import { categories } from "./data/products";
 import { AdminReviewsPage } from "./components/admin/AdminReviewsPage";
 import { ProductReviewsPage } from "./components/admin/ProductReviewsPage";
+import CustomerProfile from "./components/admin/CustomerProfile";
+import EmployeeProfile from "./components/admin/EmployeeProfile";
+
 export default function Admin() {
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [products, setProducts] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [username] = useState(localStorage.getItem('username') || '')
   const [orders, setOrders] = useState([])
 useEffect(() => {
@@ -70,6 +75,28 @@ useEffect(() => {
       }
     }
   };
+  const handleOpenUserProfile = (user) => {
+  setSelectedUser(user);
+  setCurrentPage("customer-profile");
+};
+
+  const handleViewEmployee = (emp) => {
+    setSelectedEmployee(emp);
+    setCurrentPage("employee-profile");
+  };
+
+  const handleEditEmployee = (emp) => {
+    setSelectedEmployee(emp);
+    setCurrentPage("employee-edit");
+  };
+
+  const handleDisableEmployee = (emp) => {
+    if (confirm(`Disable ${emp.username}?`)) {
+      // call backend API later
+      console.log("Disabling employee:", emp.username);
+    }
+  };
+
 
   return (
     <FavouriteProvider>
@@ -85,84 +112,112 @@ useEffect(() => {
         />
 
           <main className="p-6">
-  {currentPage === "dashboard" && (
-    <AdminDashboard products={products} categories={categories} onViewAll={() => handleNavigate("products")}/>
-  )}
+              {currentPage === "dashboard" && (
+                <AdminDashboard products={products} categories={categories} onViewAll={() => handleNavigate("products")}/>
+              )}
 
-  {currentPage === "add-product" && (
-    <AddProductPage onBack={() => handleNavigate("dashboard")} username={username}/>
-  )}
+              {currentPage === "add-product" && (
+                <AddProductPage onBack={() => handleNavigate("dashboard")} username={username}/>
+              )}
 
-  {currentPage === "products" && (
-  <AdminProductsPage
-    products={products}
-    onAddProduct={handleAddProduct}
-    onEditProduct={handleEditProduct}
-    onDeleteProduct={handleDeleteProduct}
-    onViewReviews={handleOpenProductReviews}
-    onBack={() => setCurrentPage("dashboard")}
-  />
-)}
-  {currentPage === "reviews" && (
-    <AdminReviewsPage onBack={ () => {
-      setSelectedProduct(null)
-      setCurrentPage("products")
-    }
-    }/>
-  )}
+              {currentPage === "products" && (
+              <AdminProductsPage
+                products={products}
+                onAddProduct={handleAddProduct}
+                onEditProduct={handleEditProduct}
+                onDeleteProduct={handleDeleteProduct}
+                onViewReviews={handleOpenProductReviews}
+                onBack={() => setCurrentPage("dashboard")}
+              />
+            )}
+              {currentPage === "reviews" && (
+                <AdminReviewsPage onBack={ () => {
+                  setSelectedProduct(null)
+                  setCurrentPage("products")
+                }
+                }/>
+              )}
 
-  {currentPage === "product-reviews" && selectedProduct && (
-  <ProductReviewsPage
-    productId={selectedProduct}
-    onBack={() => {
-      setSelectedProduct(null);
-      setCurrentPage("products");
-    }}
-  />
-)}
+              {currentPage === "product-reviews" && selectedProduct && (
+              <ProductReviewsPage
+                productId={selectedProduct}
+                onBack={() => {
+                  setSelectedProduct(null);
+                  setCurrentPage("products");
+                }}
+              />
+            )}
 
 
-  {currentPage === "orders" && (
-    <AdminOrdersPage
-    onUpdateStatus={handleUpdateStatus}
-  />
+              {currentPage === "orders" && (
+                <AdminOrdersPage
+                onUpdateStatus={handleUpdateStatus}
+              />
 
-  )}
+              )}
 
-  {currentPage === "users" && (
-      <UserManagementPage/>
-  )}
-    {currentPage === "edit-product" && selectedProduct && (
-  <UpdateProductPage
-    product={selectedProduct}
-    onEditProduct={handleEditProduct}
-    onUpdate={(updatedProduct) => {
-      setProducts((prev) =>
-        prev.map((p) =>
-          p.id === updatedProduct.id ? updatedProduct : p
-        )
-      );
-      setSelectedProduct(null);
-      setCurrentPage("products"); // go back to products page
-    }}
-    onBack={() => {
-      setSelectedProduct(null);
-      setCurrentPage("products");
-    }}
-    username={username}
-        />
-      )}
-    {currentPage === 'search' && (
-      <AdminSearchPage
-        products={products}
-        customers={customers}
-        admins={admins}
-        onBack={() => handleNavigate("dashboard")}
-      />
-    )}
-    {currentPage === 'user-profile' && (
-    <UserProfile username={username} onBack={() => handleNavigate('dashboard')} />
-  )}
+              {currentPage === "users" && (
+                  <UserManagementPage onViewProfile={handleOpenUserProfile}  onViewEmployee={handleViewEmployee}  onEditEmployee={handleEditEmployee}  onDisableEmployee={handleDisableEmployee}/>
+              )}
+                {currentPage === "edit-product" && selectedProduct && (
+              <UpdateProductPage
+                product={selectedProduct}
+                onEditProduct={handleEditProduct}
+                onUpdate={(updatedProduct) => {
+                  setProducts((prev) =>
+                    prev.map((p) =>
+                      p.id === updatedProduct.id ? updatedProduct : p
+                    )
+                  );
+                  setSelectedProduct(null);
+                  setCurrentPage("products"); // go back to products page
+                }}
+                onBack={() => {
+                  setSelectedProduct(null);
+                  setCurrentPage("products");
+                }}
+                username={username}
+                    />
+                  )}
+                {currentPage === 'search' && (
+                  <AdminSearchPage
+                    products={products}
+                    customers={customers}
+                    admins={admins}
+                    onBack={() => handleNavigate("dashboard")}
+                  />
+                )}
+                {currentPage === 'my-profile' && (
+                <UserProfile username={username} onBack={() => handleNavigate('dashboard')} />
+              )}
+              {currentPage === "customer-profile" && selectedUser && (
+                <CustomerProfile
+                  user={selectedUser}
+                  onBack={() => {
+                    setSelectedUser(null);
+                    setCurrentPage("users");
+                  }}
+                />
+              )}
+              {currentPage === "emp-table" && (
+                <EmployeeTable
+                  onViewEmployee={handleViewEmployee}
+                  onEditEmployee={handleEditEmployee}
+                  onDisableEmployee={handleDisableEmployee}
+                />
+              )}
+              {currentPage === "employee-profile" && selectedEmployee && (
+                <EmployeeProfile
+                  employee={selectedEmployee}
+                  onBack={() => {
+                    setSelectedEmployee(null);
+                    setCurrentPage("users");
+                  }}
+                  onEdit={handleEditEmployee}
+                  onDisable={handleDisableEmployee}
+                />
+              )}
+
         </main>
         </div>
       </CartProvider>

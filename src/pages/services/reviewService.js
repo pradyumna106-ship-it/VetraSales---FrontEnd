@@ -8,6 +8,14 @@ export const listOfReview = async (productId) => {
         console.error("Error fetching products:", error)
     }
 };
+
+export const customerReview = async (username) => { 
+    try {const response = await axios.get(`${BASE_URL}/customerReviews`,{params: { username }},{headers: { "Content-Type": "application/json" }});
+    return response;
+    } catch (error) {
+        console.error("Error fetching products:", error)
+    }
+};
 export const deleteReview = (reviewId,username,admin) => axios.delete(`${BASE_URL}/deleteReview`,{reviewId,username,admin},{headers: { "Content-Type": "application/json" }});
 export const deleteAllReviews = () => axios.delete(`${BASE_URL}/deleteAllReviews`,{headers: { "Content-Type": "application/json" }});
 export const deleteReviewsByProduct = (productId) => axios.delete(`${BASE_URL}/deleteReviewsByProduct`,{params:{productId}},{headers: { "Content-Type": "application/json" }});

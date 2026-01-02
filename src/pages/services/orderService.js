@@ -9,7 +9,7 @@ export const getOrdersByUserId = (userId) =>
   axios.get(`${API}/user/userId/${userId}`);
 
 export const getOrdersByUsername = (username) =>
-  axios.get(`${API}/user/username/${username}`);
+  axios.get(`${API}/delivered`,{params:{username}},{headers: { "Content-Type": "application/json" }});
 
 export const cancelOrder = (orderId) =>
   axios.put(`${API}/${orderId}/cancel`);
@@ -21,4 +21,6 @@ export const getAllOrders = () => axios.get(API);
 
 export const getOrderById = (orderId) =>
   axios.get(`${API}/byId?orderId=${orderId}`);
+
+export const getSummary = (username) => axios.get(`${API}/getSummary`,{params:{username}},{headers: { "Content-Type": "application/json" }})
 

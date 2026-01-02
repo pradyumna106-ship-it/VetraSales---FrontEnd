@@ -13,13 +13,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./ui/table";
+} from "../ui/table";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "./ui/avatar";
-
+} from "../ui/avatar";
+import { useState,useEffect } from "react";
+import { getOrdersByUsername } from "../../services/orderService";
+import { customerReview } from "../../services/reviewService";
+import { getSummary } from "../../services/orderService";
+import { Button } from "../ui/button";
 /* Default customer data (NO API) */
 const customerData = {
   name: "Pradyumna J Kumar",
@@ -62,10 +66,45 @@ const customerData = {
   ],
 };
 
-export default function CustomerProfile() {
+export default function CustomerProfile({user,onBack}) {
+  const [customer, setCustomer] = useState({
+      username: user.username || "",
+      email: user.email || "",
+      phone: user.phone || "",
+      location: user.location || "",
+      gender: user.gender || "",
+      dob: user.dob || "",
+      joinedDate: user.joinedDate || "",
+      status: user.status || ""
+  });
+  const [orders, setOrders] = useState([]);
+  const [reviews,setReviews] = useState([]);
+  const [summary,setSummary] = useState({});
+  useEffect(() => {
+    loadOrders()
+    loadReviews()
+    loadSummary()
+  }, []);
+  const loadOrders = async () => {
+    const res = await getOrdersByUsername(user.username);
+    console.log("API Orders: ", res);
+    const data = Array.isArray(res) ? res : [];
+    setOrders(data)
+  }
+  const loadReviews = async () => {
+    const res = await customerReview(user.username);
+    console.log("API Reviews: ", res);
+    const data = Array.isArray(res) ? res : [];
+    setReviews(data)
+  }
+  const loadSummary = async () => {
+    const res = await getSummary(user.username);
+    console.log("API Summary",res);
+    setSummary(res||{})
+  }
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">
-
+      <Button className='btn' onClick={() => {onBack()}}>Back</Button>
       {/* ================= CUSTOMER PROFILE ================= */}
       <Card>
         <CardHeader>
@@ -76,53 +115,82 @@ export default function CustomerProfile() {
           <Avatar className="h-24 w-24">
             <AvatarImage src="/avatar.png" />
             <AvatarFallback>
-              {customerData.name.charAt(0)}
+              {customer.username.charAt(0)}
             </AvatarFallback>
           </Avatar>
 
           <div className="grid grid-cols-2 gap-4 flex-1">
             <div>
               <Label>Name</Label>
-              <Input value={customerData.name} readOnly />
+              <Input value={customer.username} readOnly />
             </div>
 
             <div>
               <Label>Email</Label>
-              <Input value={customerData.email} readOnly />
+              <Input value={customer.email} readOnly />
             </div>
 
             <div>
               <Label>Phone</Label>
-              <Input value={customerData.phone} readOnly />
+              <Input value={customer.phone} readOnly />
             </div>
 
             <div>
               <Label>Location</Label>
-              <Input value={customerData.location} readOnly />
+              <Input value={customer.location} readOnly />
             </div>
 
             <div>
               <Label>Gender</Label>
-              <Input value={customerData.gender} readOnly />
+              <Input value={customer.gender} readOnly />
             </div>
 
             <div>
               <Label>Date of Birth</Label>
-              <Input type="date" value={customerData.dob} readOnly />
+              <Input type="date" value={customer.dob} readOnly />
             </div>
 
             <div>
               <Label>Account Status</Label>
-              <Input value={customerData.status} readOnly />
+              <Input value={customer.status} readOnly />
             </div>
 
             <div>
               <Label>Joined On</Label>
-              <Input value={customerData.joinedDate} readOnly />
+              <Input value={customer.joinedDate} readOnly />
             </div>
           </div>
         </CardContent>
       </Card>
+
+
+      {/* ================= ORDER HISTORY ================= */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Order Summary</CardTitle>
+        </CardHeader>
+
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Total Orders</TableHead>
+                <TableHead>Total Spend</TableHead>
+              </TableRow>
+            </TableHeader>
+
+            <TableBody>
+                  <TableRow key={summary.id}>
+                    <TableCell>{summary.totalOrders}</TableCell>
+                    <TableCell>{summary.totalSpend}</TableCell>
+                  </TableRow>
+
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+
+
 
       {/* ================= ORDER HISTORY ================= */}
       <Card>
@@ -142,16 +210,15 @@ export default function CustomerProfile() {
             </TableHeader>
 
             <TableBody>
-              {customerData.orders.map(order => (
-                <TableRow key={order.id}>
-                  <TableCell>{order.id}</TableCell>
-                  <TableCell>{order.date}</TableCell>
-                  <TableCell>{order.amount}</TableCell>
-                  <TableCell className="text-green-600">
-                    {order.status}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {orders.map(order => (
+                  <TableRow key={order.id}>
+                    <TableCell>{order.id}</TableCell>
+                    <TableCell>{order.date}</TableCell>
+                    <TableCell>{order.totalAmount}</TableCell>
+                    <TableCell>{order.status}</TableCell>
+                  </TableRow>
+                ))}
+
             </TableBody>
           </Table>
         </CardContent>
@@ -164,13 +231,13 @@ export default function CustomerProfile() {
         </CardHeader>
 
         <CardContent className="space-y-4">
-          {customerData.reviews.map((review, index) => (
+          {reviews.map((review, index) => (
             <div
               key={index}
               className="border rounded-lg p-4 space-y-1"
             >
               <div className="flex justify-between">
-                <h4 className="font-medium">{review.product}</h4>
+                <h4 className="font-medium">{review.productName}</h4>
                 <span className="text-sm text-gray-500">
                   {review.date}
                 </span>

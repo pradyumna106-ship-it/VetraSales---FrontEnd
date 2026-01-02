@@ -1,50 +1,86 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
+import { Button } from "../ui/button";
 import { getAllCustomer } from "../../services/userService";
 
-export default function CustomerTable() {
-  const [customers,setCustomers] = useState([]);
+export default function CustomerTable({onViewProfile,onViewOrders,onViewReviews}) {
+  const [customers, setCustomers] = useState([]);
+
   useEffect(() => {
-    const loadEmployees = async () => {
-        const data = await getAllCustomer();
-        console.log("Api of Customers:", data); // 👈 DEBUG
-        setEmployees(data);
-      };
-      loadEmployees();
-  },[])
+    const loadCustomers = async () => {
+      try {
+        const response = await getAllCustomer();
+        console.log("Api of Customers:", response);
+
+        // ✅ Axios-safe
+        setCustomers(response || []);
+      } catch (error) {
+        console.error("Failed to load customers", error);
+        setCustomers([]);
+      }
+    };
+
+    loadCustomers();
+  }, []);
 
   return (
     <div className="bg-white shadow rounded-lg">
-      <table className="w-full text-sm">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="p-3 text-left">Name</th>
-            <th className="p-3 text-left">Orders</th>
-            <th className="p-3 text-left">Total Spend</th>
-            <th className="p-3 text-left">Actions</th>
-          </tr>
-        </thead>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Username</TableHead>
+            <TableHead>Phone</TableHead>
+            <TableHead>Email</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
 
-        <tbody>
-          {customers.map(user => (
-            <tr key={user.id} className="border-t">
-              <td className="p-3">{user.username}</td>
-              <td className="p-3">{user.orders}</td>
-              <td className="p-3">{user.spend}</td>
-              <td className="p-3 flex gap-2">
-                <button className="text-blue-600 hover:underline">
-                  Profile
-                </button>
-                <button className="text-purple-600 hover:underline">
-                  Orders
-                </button>
-                <button className="text-gray-600 hover:underline">
-                  Reviews
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        <TableBody>
+          {customers.length === 0 ? (
+            <TableRow>
+              <TableCell colSpan={5} className="text-center py-6">
+                No customers found
+              </TableCell>
+            </TableRow>
+          ) : (
+            customers.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>{user.username}</TableCell>
+                <TableCell>{user.phone}</TableCell>
+                <TableCell>{user.email}</TableCell>
+
+                {/* Status Badge */}
+                <TableCell>
+                  <span
+                    className={`px-2 py-1 rounded text-xs font-medium ${
+                      user.status?.toLowerCase() === "active"
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-700"
+                    }`}
+                  >
+                    {user.status}
+                  </span>
+                </TableCell>
+
+                {/* Actions */}
+                <TableCell className="flex gap-3">
+                  <Button className="text-blue-600 hover:underline" onClick={() => onViewProfile(user)}>
+                    Profile
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))
+          )}
+        </TableBody>
+      </Table>
     </div>
   );
 }

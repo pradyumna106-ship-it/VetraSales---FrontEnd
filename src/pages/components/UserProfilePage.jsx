@@ -122,7 +122,7 @@ const handlePasswordSubmit = () => {
                 <AvatarImage src="/avatar.png" />
                     <AvatarFallback>
                         {(formData?.username && formData.username.length > 0) ? formData.username[0].toUpperCase(): "U"}
-</AvatarFallback>
+        </AvatarFallback>
 
             </Avatar>
             <div className="grid grid-cols-2 gap-4 flex-1">

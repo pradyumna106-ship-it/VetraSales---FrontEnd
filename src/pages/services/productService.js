@@ -26,6 +26,16 @@ export const searchProduct = async (input) => {
   }
 }
 
+export const getByAdmin = async (id) => {
+  try {
+    const res = await axios.get(`${BASE_URL}/getByAdmin`,{params:{id}},{  headers: { "Content-Type": "application/json" }  });
+    console.log("API products:", res.data);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return []; // prevent undefined
+  }
+}
 export const getAllProducts = async () => {
   try {
     const res = await axios.get(`${BASE_URL}/getAllProducts`,{  headers: { "Content-Type": "application/json" }  });

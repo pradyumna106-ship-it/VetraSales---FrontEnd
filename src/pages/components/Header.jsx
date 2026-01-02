@@ -1,18 +1,14 @@
 import { ShoppingCart, Search, Heart, User } from 'lucide-react';
 import { useCart } from '../context/CardContext';
-import { SearchPage } from './SearchPage';
-import { AdminSearchPage } from './admin/AdminSearchPage';
 import { Button,buttonVariants } from './ui/button';
 import { useNavigate } from 'react-router-dom';
 export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, role, onScroll}) {
   const { getCartCount } = useCart();
   const cartCount = getCartCount();
   const onNav = useNavigate();
-  const handleSearchClick = () => {
-  setCurrentPage('search');
-};
   const handleLogout = () => {
-    alert("Are you sure You wanted to Log Out.")
+    alert("Are you sure You wanted to Log Out.");
+    localStorage.clear()
     onNav('/');
   }
 
@@ -86,7 +82,7 @@ export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, ro
                 <Button onClick={() => onSearchClick()}  className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                     <Search className="w-5 h-5" />
                 </Button>
-                <Button onClick={() => onNavigate('user-profile')} className={currentPage === "user-profile" ? 'text-purple-600' : 'p-2 hover:bg-gray-100 rounded-full transition-colors'}>
+                <Button onClick={() => onNavigate('my-profile')} className={currentPage === "my-profile" ? 'text-purple-600' : 'p-2 hover:bg-gray-100 rounded-full transition-colors'}>
                   <User className="w-5 h-5" />
                 </Button>
                 <Button onClick={() => handleLogout()} className="bg-red-600 hover:bg-red-700 text-white"> Logout</Button>

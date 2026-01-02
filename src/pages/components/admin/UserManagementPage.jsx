@@ -2,9 +2,8 @@ import { useState } from "react";
 import EmployeeTable from "./EmployeeTable";
 import CustomerTable from "./CustomerTable";
 import { Button } from "../ui/button";
-export default function UserManagementPage() {
+export default function UserManagementPage({onViewProfile, onViewEmployee,onEditEmployee,onDisableEmployee}) {
   const [activeTab, setActiveTab] = useState("employees");
-
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-2xl font-bold">User Management</h1>
@@ -34,7 +33,7 @@ export default function UserManagementPage() {
         </Button>
       </div>
       {/* Content */}
-      {activeTab === "employees" ? <EmployeeTable /> : <CustomerTable />}
+      {activeTab === "employees" ?<EmployeeTable onViewEmployee={onViewEmployee} onEditEmployee={onEditEmployee} onDisableEmployee={onDisableEmployee}/> : <CustomerTable onViewProfile={onViewProfile} />}
     </div>
   );
 }
