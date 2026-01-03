@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Toaster } from "sonner";
 import { Header } from "./components/Header";
-import { admins,customers } from "./data/users";
 import { AdminDashboard } from "./components/admin/AdminDashboard";
 import { AdminProductsPage } from "./components/admin/AdminProductsPage";
 import { AddProductPage } from "./components/admin/AddProductPage";
@@ -20,6 +19,10 @@ import { ProductReviewsPage } from "./components/admin/ProductReviewsPage";
 import CustomerProfile from "./components/admin/CustomerProfile";
 import EmployeeProfile from "./components/admin/EmployeeProfile";
 import { updateUser } from "./services/userService"; 
+import { getAllCustomer } from "./services/userService";
+import { getAllAdmin } from "./services/userService";
+import { toggleStatus } from "./services/userService";
+import { updateOrderStatus } from "./services/orderService";
 export default function Admin() {
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -27,24 +30,50 @@ export default function Admin() {
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [username] = useState(localStorage.getItem('username') || '')
-  const [orders, setOrders] = useState([])
+  const [orders, setOrders] = useState([]);
+  const [customers, setCustomers] = useState([]);
+  const [admins,setAdmins] = useState([])
 useEffect(() => {
-  const loadProducts = async () => {
-    const data = await getAllProducts();
-    console.log("Products received in Customer:", data); // 👈 DEBUG
-    setProducts(data);
-  };
+  loadAdmins();
+  loadCustomers();
   loadProducts();
 }, []);
-
-  const handleUpdateStatus = (orderId, status) => {
-    setCurrentPage("orders");
-    setOrders((prev) =>
-      prev.map((o) =>
-        o.id === orderId ? { ...o, orderStatus: status } : o
-      )
-    );
+  const loadProducts = async () => {
+    const data = await getAllProducts();
+    console.log("Products received in Admin:", data); // 👈 DEBUG
+    setProducts(data);
   };
+  const loadCustomers = async () => {
+    const data = await getAllCustomer();
+    console.log("customer data received in Admin:", data); // 👈 DEBUG
+    setCustomers(data);
+  };
+  const loadAdmins = async () => {
+    const data = await getAllAdmin();
+    console.log("admin data received in Admin:", data); // 👈 DEBUG
+    setAdmins(data);
+  };
+  const handleUpdateStatus = (orderId, status) => {
+  setCurrentPage("orders");
+
+  const updateOrders = async (orderId, status) => {
+    try {
+      const res = await updateOrderStatus(orderId, status);
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  updateOrders(orderId, status); // ✅ CALL IT
+
+  setOrders((prev) =>
+    prev.map((o) =>
+      o.id === orderId ? { ...o, orderStatus: status } : o
+    )
+  );
+};
+
   const handleOpenProductReviews = (productId) => {
   setSelectedProduct(productId);
   setCurrentPage("product-reviews");
@@ -101,6 +130,16 @@ useEffect(() => {
   const handleDisableEmployee = (emp) => {
     if (confirm(`Disable ${emp.username}?`)) {
       // call backend API later
+      const id = emp.id;
+      const toggle = async() => {
+        try {
+          const res = await toggleStatus(id)
+          console.log(res);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+      toggle()
       console.log("Disabling employee:", emp.username);
     }
   };

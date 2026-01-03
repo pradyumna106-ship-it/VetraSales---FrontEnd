@@ -17,7 +17,6 @@ export const getAllUser = async ()=>{
 export const getAllCustomer = async ()=>{
     try {
         const res = await axios.get(`${BASE_URL}/getAllCustomer`,{headers: { "Content-Type": "application/json" }});
-        console.log("API response:", res.data); // 👈 DEBUG
         return res.data
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -29,7 +28,6 @@ export const getAllCustomer = async ()=>{
 export const getAllAdmin = async ()=>{
     try {
         const res = await axios.get(`${BASE_URL}/getAllAdmin`,{headers: { "Content-Type": "application/json" }});
-        console.log("API response:", res.data); // 👈 DEBUG
         return res.data
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -49,7 +47,12 @@ export const searchUser = async (name) => {
     
 
 }
-export const deleteUser = (id) => axios.get(`${BASE_URL}/delete`,{param:{id}},{headers: { "Content-Type": "application/json" }});
+export const deleteUser = (id) => {
+  return axios.get(`${BASE_URL}/delete`, {
+    params: { id }
+  },{headers: { "Content-Type": "application/json" }});
+};
+
 export const signUp = (user) =>
   axios.post(`${BASE_URL}/signUp`, user, {
     headers: { "Content-Type": "application/json" },
@@ -89,6 +92,10 @@ export const phones = async () => {
       console.error("Error fetching products:", error);
       return []; // prevent undefined
   }
-    
-
 }
+
+export const toggleStatus = (id) =>
+  axios.get(`${BASE_URL}/userStatus`, {
+    params: { id },
+    headers: { "Content-Type": "application/json" }
+  });

@@ -15,6 +15,7 @@ import {
 import { Button } from "../ui/button";
 import { getAllOrders } from "../../services/orderService";
 import { useState, useEffect } from "react";
+import { placeOrder,cancelOrder } from "../../services/orderService";
 export function AdminOrdersPage({ onUpdateStatus }) {
   const [orders, setOrders] = useState([]);
    useEffect(() => {
@@ -23,7 +24,36 @@ export function AdminOrdersPage({ onUpdateStatus }) {
           setOrders(res.data); // ✅
         };
         loadEmployees();
-    },[])
+    },[]);
+
+    const handlePlaceOrder = (orderId) => {
+      const loadPlaceOrder = async (orderId) => {
+        const res = await placeOrder(orderId);
+        console.log(res);
+      }
+      try {
+        loadPlaceOrder(orderId);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    const handleCancelOrder = (orderId) => {
+      const loadCancelOrder = async (orderId) => {
+        const res = await cancelOrder(orderId) ;
+        console.log(res);
+      }
+      try {
+        loadCancelOrder(orderId);
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    const handleDeliverOrder = (orderId) => {
+      onUpdateStatus(orderId, "DELIVERED")
+    }
+    const handleShipOrder = (orderId) => {
+      onUpdateStatus(orderId, "SHIPPED")
+    }
   return (
     <Card>
       <CardHeader>
@@ -98,7 +128,7 @@ export function AdminOrdersPage({ onUpdateStatus }) {
                     size="sm"
                     variant="destructive"
                     className="bg-red-500 text-white hover:bg-red-600"
-                    onClick={() => onUpdateStatus(order.id, "Cancelled")}
+                    onClick={() => handleCancelOrder(order.id)}
                   >
                     Cancel
                   </Button>

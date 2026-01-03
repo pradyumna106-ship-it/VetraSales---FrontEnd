@@ -11,31 +11,32 @@ export function AdminSearchPage({
   const [type, setType] = useState("products");
 
   const results = useMemo(() => {
-    const q = query.toLowerCase();
+  const q = query?.toLowerCase() || "";
 
-    if (!q) return [];
+  if (!q) return [];
 
-    switch (type) {
-      case "products":
-        return products.filter(p =>
-          p.name.toLowerCase().includes(q)
-        );
+  switch (type) {
+    case "products":
+      return (products || []).filter(p =>
+        (p.name || "").toLowerCase().includes(q)
+      );
 
-      case "customers":
-        return customers.filter(c =>
-          c.name.toLowerCase().includes(q) ||
-          c.email.toLowerCase().includes(q)
-        );
+    case "customers":
+      return (customers || []).filter(c =>
+        (c.username || "").toLowerCase().includes(q) ||
+        (c.email || "").toLowerCase().includes(q)
+      );
 
-      case "admins":
-        return admins.filter(e =>
-          e.name.toLowerCase().includes(q)
-        );
+    case "admins":
+      return (admins || []).filter(e =>
+        (e.username || "").toLowerCase().includes(q)
+      );
 
-      default:
-        return [];
-    }
-  }, [query, type, products, customers, admins]);
+    default:
+      return [];
+  }
+}, [query, type, products, customers, admins]);
+
 
   return (
     <div className="space-y-4">
@@ -55,7 +56,7 @@ export function AdminSearchPage({
         >
           <option value="products">Products</option>
           <option value="customers">Customers</option>
-          <option value="admins">admins</option>
+          <option value="admins">Admins</option>
         </select>
       </div>
 
