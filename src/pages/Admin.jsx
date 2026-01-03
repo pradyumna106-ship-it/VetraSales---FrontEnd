@@ -19,7 +19,7 @@ import { AdminReviewsPage } from "./components/admin/AdminReviewsPage";
 import { ProductReviewsPage } from "./components/admin/ProductReviewsPage";
 import CustomerProfile from "./components/admin/CustomerProfile";
 import EmployeeProfile from "./components/admin/EmployeeProfile";
-
+import { updateUser } from "./services/userService"; 
 export default function Admin() {
   const [currentPage, setCurrentPage] = useState("dashboard");
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -85,10 +85,18 @@ useEffect(() => {
     setCurrentPage("employee-profile");
   };
 
-  const handleEditEmployee = (emp) => {
-    setSelectedEmployee(emp);
-    setCurrentPage("employee-edit");
-  };
+  const handleEditEmployee = (updatedEmp) => {
+  console.log("Updated employee:", updatedEmp);
+  // TODO: call backend API here
+  try{ 
+    const res = updateUser(updatedEmp);
+    console.log(res.then(response => console.log(response.data)))
+  } catch (error) {
+    console.error(error);
+  }
+  setSelectedEmployee(updatedEmp);
+};
+
 
   const handleDisableEmployee = (emp) => {
     if (confirm(`Disable ${emp.username}?`)) {
@@ -213,9 +221,10 @@ useEffect(() => {
                     setSelectedEmployee(null);
                     setCurrentPage("users");
                   }}
-                  onEdit={handleEditEmployee}
                   onDisable={handleDisableEmployee}
+                  onUpdateEmployee={handleEditEmployee}
                 />
+
               )}
 
         </main>

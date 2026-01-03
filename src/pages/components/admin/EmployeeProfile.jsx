@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -16,20 +16,53 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import {
-  Avatar,
-  AvatarFallback,
-} from "../ui/avatar";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import { getByAdmin } from "../../services/productService";
+
+
 export default function EmployeeProfile({
   employee,
   onBack,
-  onEdit,
   onDisable,
+  onUpdateEmployee, // 🔹 callback
 }) {
   if (!employee) return null;
 
-  const [productsAdded,setProductAdded] = useState([]); // SAFE
+  const [productsAdded, setProductsAdded] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const [formData, setFormData] = useState({
+    username: employee.username || "",
+    email: employee.email || "",
+    phone: employee.phone || "",
+    role: employee.role || "",
+    status: employee.status || "",
+  });
+
+  /* ✅ FIXED useEffect */
+  useEffect(() => {
+    if (employee?.id) {
+      loadProducts(employee.id);
+    }
+  }, [employee?.id]);
+
+  const loadProducts = async (id) => {
+    try {
+      const res = await getByAdmin(id);
+      setProductsAdded(res || []);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSave = () => {
+    onUpdateEmployee({ ...employee, ...formData });
+    setIsEditing(false);
+  };
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
@@ -43,13 +76,24 @@ export default function EmployeeProfile({
             <Button variant="outline" onClick={onBack}>
               ← Back
             </Button>
-            <Button
-              variant="outline"
-              className="text-yellow-600"
-              onClick={() => onEdit(employee)}
-            >
-              Edit
-            </Button>
+
+            {!isEditing ? (
+              <Button
+                variant="outline"
+                className="text-yellow-600"
+                onClick={() => setIsEditing(true)}
+              >
+                Edit
+              </Button>
+            ) : (
+              <Button
+                className="bg-green-600 text-white"
+                onClick={handleSave}
+              >
+                Save
+              </Button>
+            )}
+
             <Button
               variant="outline"
               className="text-red-600"
@@ -68,34 +112,27 @@ export default function EmployeeProfile({
           </Avatar>
 
           <div className="grid grid-cols-2 gap-4 flex-1">
-            <div>
-              <Label>Username</Label>
-              <Input value={employee.username} readOnly />
-            </div>
-
-            <div>
-              <Label>Email</Label>
-              <Input value={employee.email || "-"} readOnly />
-            </div>
-
-            <div>
-              <Label>Role</Label>
-              <Input value={employee.role} readOnly />
-            </div>
-
-            <div>
-              <Label>Status</Label>
-              <Input value={employee.status} readOnly />
-            </div>
-
-            <div>
-              <Label>Phone</Label>
-              <Input value={employee.phone || "-"} readOnly />
-            </div>
+            {[
+              { label: "Username", name: "username" },
+              { label: "Email", name: "email" },
+              { label: "Phone", name: "phone" },
+              { label: "Role", name: "role" },
+              { label: "Status", name: "status" },
+            ].map((field) => (
+              <div key={field.name}>
+                <Label>{field.label}</Label>
+                <Input
+                  name={field.name}
+                  value={formData[field.name]}
+                  onChange={handleChange}
+                  readOnly={!isEditing}
+                />
+              </div>
+            ))}
 
             <div>
               <Label>Joined On</Label>
-              <Input value={employee.joinedDate || "-"} readOnly />
+              <Input value={employee.joinedDate || "-"} readOnly={!isEditing} />
             </div>
           </div>
         </CardContent>
@@ -114,7 +151,7 @@ export default function EmployeeProfile({
                 <TableHead>Product</TableHead>
                 <TableHead>Category</TableHead>
                 <TableHead>Price</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead>Stock</TableHead>
               </TableRow>
             </TableHeader>
 
@@ -131,7 +168,13 @@ export default function EmployeeProfile({
                     <TableCell>{product.name}</TableCell>
                     <TableCell>{product.category}</TableCell>
                     <TableCell>₹{product.price}</TableCell>
-                    <TableCell>{product.status}</TableCell>
+                    <TableCell
+                      className={
+                        product.inStock ? "bg-green-300" : "bg-red-300"
+                      }
+                    >
+                      {product.inStock ? "AVAILABLE" : "NOT AVAILABLE"}
+                    </TableCell>
                   </TableRow>
                 ))
               )}
@@ -139,7 +182,6 @@ export default function EmployeeProfile({
           </Table>
         </CardContent>
       </Card>
-
     </div>
   );
 }
