@@ -71,6 +71,19 @@ export const userData = async (username) => {
       return []; // prevent undefined
   }
 }
+
+export const contact = async (username) => {
+    try {
+        const res = await axios.get(`${BASE_URL}/getEmail`,{
+        params: { username },   // ✅ REQUIRED
+      },{headers: { "Content-Type": "application/json" }});
+        console.log("API response:", res.data); // 👈 DEBUG
+        return res.data;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      return []; // prevent undefined
+  }
+}
 export const deleteAll = () => axios.get(`${BASE_URL}/deleteAll`,{headers: { "Content-Type": "application/json" }});
 export const updateUser = (user) => axios.post(`${BASE_URL}/updateUser`,user,{headers: { "Content-Type": "application/json" }});
 export const emails = async () => {

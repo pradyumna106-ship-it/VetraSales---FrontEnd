@@ -5,22 +5,35 @@ const BASE_URL = "https://vetrasales-notification-service-production.up.railway.
 // -----------------------
 //  SEND EMAIL
 // -----------------------
+// Updated email payload format for your API
 export const sendEmail = async (mailData) => {
   try {
-    const response = await axios.post(`${BASE_URL}/email`, mailData);
-    return response.data; // "Email sent successfully!"
+    // Transform data to match your API structure
+    const payload = {
+      receiver: mailData.receiver,  // "user@example.com"
+      subject: mailData.subject,
+      body: mailData.body,        // Plain text or HTML
+    };
+    
+    const response = await axios.post(`${BASE_URL}/email`, payload,{headers: { "Content-Type": "application/json" }});
+    return response.data;
   } catch (error) {
     console.error("Error sending email:", error);
     throw error;
   }
 };
 
+
 // -----------------------
 //  SEND SMS
 // -----------------------
 export const sendSMS = async (smsData) => {
   try {
-    const response = await axios.post(`${BASE_URL}/sms`, smsData);
+    const payload = {
+      phoneNo: smsData.phoneNo,  // "user@example.com"
+      content: smsData.content,
+    };
+    const response = await axios.post(`${BASE_URL}/sms`, payload,{headers: { "Content-Type": "application/json" }});
     return response.data; // "SMS sent!"
   } catch (error) {
     console.error("Error sending SMS:", error);

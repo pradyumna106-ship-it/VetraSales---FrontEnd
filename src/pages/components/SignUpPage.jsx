@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Form } from "./ui/form";
 import { signUp } from "../services/userService";
 import { useNavigate } from "react-router-dom";
+import { sendWelcomeEmail,sendWelcomeSms } from "../notification/notification";
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
   username: "",
@@ -81,16 +82,24 @@ export default function SignUpPage() {
 
     // API call goes here
     try {
-  const response = await signUp(payload);
-  console.log("User signed up:", response.data);
-  onNav('/sign_in_page')
-} catch (error) {
-  if (error.response?.status === 409) {
-    alert("User already exists. Please use a different email or phone.");
-  } else {
-    console.error("Sign-up error:", error);
-  }
-}
+      const response = await signUp(payload);
+      console.log("User signed up:", response.data);
+      await sendWelcomeEmail({
+        name: payload.username,
+        email: payload.email
+      });
+      await sendWelcomeSms({
+        name: payload.username,
+        phone: payload.phone
+      })
+      onNav('/sign_in_page')
+    } catch (error) {
+      if (error.response?.status === 409) {
+        alert("User already exists. Please use a different email or phone.");
+      } else {
+        console.error("Sign-up error:", error);
+      }
+    }
     
   };
 

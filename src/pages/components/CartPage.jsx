@@ -6,9 +6,11 @@ import { Button } from './ui/button';
 import { useNavigate } from "react-router-dom";
 import { makePayment } from "../services/razorpayService";
 import { placeOrder } from '../services/orderService';
-
+import { contact } from '../services/userService';
 export function CartPage({ onNavigate,username}) {
   const [loading, setLoading] = useState(false);  // Add this line
+  const [phone,setPhone] = useState('');
+  const [email,setEmail] = useState('')
   const { cart, updateQuantity, removeFromCart, getCartTotal, clearCart } = useCart();
   const totalAmount =
     getCartTotal() +
@@ -27,12 +29,20 @@ export function CartPage({ onNavigate,username}) {
       })),
       totalAmount: totalAmount
     };
-
+    const loadContact = async () => {
+      try {
+        const res = await contact(username);
+        setPhone(res.phone);
+        setEmail(res.email);
+      } catch (error) {
+        console.error(error)
+      }
+    }
   console.log("🟢 Sending order request:", request);
     const handlePayment = async () => {
       setLoading(true);
       try {
-        await makePayment(totalAmount, onNavigate,request);
+        await makePayment(totalAmount, onNavigate,request,phone,email);
       } finally {
         setLoading(false);
       }
