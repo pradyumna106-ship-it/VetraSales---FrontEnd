@@ -1,9 +1,44 @@
+import React, { useState } from 'react';
 import { Plus, Minus, Trash2, ShoppingBag } from 'lucide-react';
 import { useCart } from '../context/CardContext'; 
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { Button } from './ui/button';
-export function CartPage({ onNavigate, onCheckout }) {
-  const { cart, updateQuantity, removeFromCart, getCartTotal } = useCart();
+import { useNavigate } from "react-router-dom";
+import { makePayment } from "../services/razorpayService";
+import { placeOrder } from '../services/orderService';
+
+export function CartPage({ onNavigate,username}) {
+  const [loading, setLoading] = useState(false);  // Add this line
+  const { cart, updateQuantity, removeFromCart, getCartTotal, clearCart } = useCart();
+  const totalAmount =
+    getCartTotal() +
+    (getCartTotal() >= 50 ? 0 : 5.99) +
+    getCartTotal() * 0.08;
+    const request = {
+      username: username,
+      address: localStorage.getItem('location'),
+      status:"PAID",
+      items: cart.map(item => ({
+        productId: item.productId,
+        productName: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        subtotal: item.quantity * item.price
+      })),
+      totalAmount: totalAmount
+    };
+
+  console.log("🟢 Sending order request:", request);
+    const handlePayment = async () => {
+      setLoading(true);
+      try {
+        await makePayment(totalAmount, onNavigate,request);
+      } finally {
+        setLoading(false);
+      }
+    };
+   
+
 
   if (cart.length === 0) {
     return (
@@ -34,17 +69,16 @@ export function CartPage({ onNavigate, onCheckout }) {
       <div className="grid lg:grid-cols-3 gap-8">
         {/* Cart Items */}
         <div className="lg:col-span-2 space-y-4">
-          {cart.map((item) => (
-            <div
-              key={item.id}
-              className="bg-white rounded-xl shadow-sm p-4 flex gap-4"
-            >
+          {cart.map((item,index) => (
+            <div key={index} className="bg-white rounded-xl shadow-sm p-4 flex gap-4">
               <div className="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
                 <ImageWithFallback
+                  key={`img-${item.id}`}  // Add this line
                   src={item.image}
                   alt={item.name}
                   className="w-full h-full object-cover"
                 />
+
               </div>
 
               <div className="flex-1 min-w-0">
@@ -54,26 +88,26 @@ export function CartPage({ onNavigate, onCheckout }) {
                 </p>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
-                    <button
+                    <Button
                       onClick={() => updateQuantity(item.id, item.quantity - 1)}
                       className="w-8 h-8 border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-100 transition-colors"
                     >
                       <Minus className="w-4 h-4" />
-                    </button>
+                    </Button>
                     <span className="w-8 text-center">{item.quantity}</span>
-                    <button
+                    <Button
                       onClick={() => updateQuantity(item.id, item.quantity + 1)}
                       className="w-8 h-8 border border-gray-300 rounded-lg flex items-center justify-center hover:bg-gray-100 transition-colors"
                     >
                       <Plus className="w-4 h-4" />
-                    </button>
+                    </Button>
                   </div>
-                  <button
+                  <Button
                     onClick={() => removeFromCart(item.id)}
                     className="text-red-500 hover:text-red-700 transition-colors p-2"
                   >
                     <Trash2 className="w-5 h-5" />
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -121,20 +155,18 @@ export function CartPage({ onNavigate, onCheckout }) {
                 </span>
               </div>
             </div>
-
             {getCartTotal() < 50 && (
               <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 mb-4 text-sm text-purple-700">
                 Add ${(50 - getCartTotal()).toFixed(2)} more for free shipping!
               </div>
             )}
-
-            <Button
-              onClick={onCheckout}
-              className="w-full bg-purple-600 text-white py-4 rounded-xl hover:bg-purple-700 transition-colors mb-3"
-            >
-              Proceed to Checkout
-            </Button>
-
+              <Button 
+                  onClick={handlePayment} 
+                  disabled={loading}
+                  className="w-full bg-purple-600 text-white py-4 rounded-xl hover:bg-purple-700 disabled:opacity-50"
+                >
+                  {loading ? 'Processing...' : 'Pay Now'}
+                </Button>
             <Button
               onClick={() => onNavigate('products')}
               className="w-full border border-gray-300 py-4 rounded-xl hover:bg-gray-50 transition-colors"

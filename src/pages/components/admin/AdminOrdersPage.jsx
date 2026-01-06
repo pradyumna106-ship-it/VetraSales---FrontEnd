@@ -15,7 +15,7 @@ import {
 import { Button } from "../ui/button";
 import { getAllOrders } from "../../services/orderService";
 import { useState, useEffect } from "react";
-import { placeOrder,cancelOrder } from "../../services/orderService";
+import { cancelOrder } from "../../services/orderService";
 export function AdminOrdersPage({ onUpdateStatus }) {
   const [orders, setOrders] = useState([]);
    useEffect(() => {
@@ -28,7 +28,7 @@ export function AdminOrdersPage({ onUpdateStatus }) {
 
     const handlePlaceOrder = (orderId) => {
       const loadPlaceOrder = async (orderId) => {
-        const res = await placeOrder(orderId);
+        const res = await onUpdateStatus(orderId,"PLACED");
         console.log(res);
       }
       try {

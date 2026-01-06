@@ -3,9 +3,24 @@ import { useCart } from '../context/CardContext';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { toast } from 'sonner';
 import { Button } from './ui/button';
+import { getRating } from '../services/reviewService';
+import { useEffect,useState } from 'react';
 export function ProductCard({ product, onViewDetails }) {
   const { addToCart } = useCart();
-
+  const [rating,setRating] = useState(0);
+    
+  useEffect(() => {
+    loadRating(product.id);
+  },[])
+      const loadRating = async (productId) => {
+          try {
+              const res = await getRating(productId);
+              setRating(res || 0);
+          } catch (error) {
+            console.error(error)
+          }
+        }
+      
   const handleAddToCart = (e) => {
     e.stopPropagation();
     addToCart(product);
@@ -35,9 +50,19 @@ export function ProductCard({ product, onViewDetails }) {
         <p className="text-gray-600 text-sm mb-3 line-clamp-2">{product.description}</p>
         
         <div className="flex items-center gap-1 mb-3">
-          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-          <span className="text-sm">{product.rating}</span>
+          {[...Array(5)].map((_, index) => (
+            <Star
+              key={index}
+              className={`w-4 h-4 ${
+                index < rating
+                  ? "fill-yellow-400 text-yellow-400"
+                  : "text-gray-300"
+              }`}
+            />
+          ))}
+          <span className="text-sm ml-1">({rating})</span>
         </div>
+
         
         <div className="flex items-center justify-between">
           <span className="text-2xl text-purple-600">${product.price}</span>

@@ -5,14 +5,26 @@ import { ImageWithFallback } from './figma/ImageWithFallback';
 import { toast } from 'sonner';
 import { useFavourite } from '../context/FavouriteContext';
 import { Button,buttonVariants } from './ui/button';
-export function ProductDetailPage({ product, onBack }) {
+import { getRating } from '../services/reviewService';
+
+export function ProductDetailPage({ product, onBack,onViewReviews }) {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
   const { toggleFavourite, isFavourite } = useFavourite();
   const fav = isFavourite(product.id);
+  const [rating,setRating] = useState(0);
 
+  const loadRating = async (productId) => {
+      try {
+          const res = await getRating(productId);
+          setRating(res || 0);
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    loadRating(product.id)
   const handleAddToCart = () => {
-    for (let i = 0; i < quantity; i++) {
+    for (let index = 0; index < quantity; index++) {
       addToCart(product);
     }
     toast.success(`${quantity} ${product.name}${quantity > 1 ? 's' : ''} added to cart!`);
@@ -65,12 +77,12 @@ export function ProductDetailPage({ product, onBack }) {
             {/* Rating */}
             <div className="flex items-center gap-2 mb-6">
               <div className="flex items-center gap-1">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i}  className={`w-5 h-5 ${  i < Math.floor(product.rating)  ? 'fill-yellow-400 text-yellow-400'  : 'text-gray-300' }`}/>
+                {[...Array(5)].map((_, index) => (
+                  <Star key={index}  className={`w-5 h-5 ${  index < Math.floor(rating)  ? 'fill-yellow-400 text-yellow-400'  : 'text-gray-300' }`}/>
                 ))}
               </div>
               <span className="text-gray-600">
-                {product.rating > 0 ? `${product.rating} out of 5` : "No ratings yet"}
+                {rating > 0 ? `${rating} out of 5` : "No ratings yet"}
               </span>
             </div>
           </div>
@@ -116,6 +128,10 @@ export function ProductDetailPage({ product, onBack }) {
             <Button className="w-14 h-14 border border-gray-300 rounded-xl flex items-center justify-center hover:bg-gray-100 transition-colors" onClick={() => toggleFavourite(product)}>
               <Heart className={`w-6 h-6 transition-colors ${ fav ? 'fill-red-500 text-red-500' : 'text-gray-500'  }`}/>
             </Button>
+            <Button onClick={() => onViewReviews()} variant="outline">
+              View Reviews
+            </Button>
+
           </div>
           {/* Features */}
           <div className="border-t pt-8 space-y-4">

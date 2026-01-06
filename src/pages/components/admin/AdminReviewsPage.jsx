@@ -32,11 +32,10 @@ export function AdminReviewsPage({ onBack }) {
     );
   };
 
-  const filteredReviews = (reviews || []).filter(
-    (r) =>
-      r.productName.toLowerCase().includes(search.toLowerCase()) ||
-      r.customerName.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredReviews = (reviews || []).filter((r) =>
+  (r.productName ?? "").toLowerCase().includes(search.toLowerCase()) ||
+  (r.customerName ?? "").toLowerCase().includes(search.toLowerCase())
+);
 
   return (
     <div className="space-y-6">
@@ -73,7 +72,7 @@ export function AdminReviewsPage({ onBack }) {
                   {review.productName}
                 </CardTitle>
                 <p className="text-sm text-gray-500">
-                  by {review.customerName} • {review.date}
+                  by {review.username} • {review.date}
                 </p>
               </div>
 
@@ -94,13 +93,15 @@ export function AdminReviewsPage({ onBack }) {
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-4 h-4 ${
-                      i < review.rating
+                    size={16}
+                    className={
+                      i < (review.rating || 0)
                         ? "fill-yellow-400 text-yellow-400"
                         : "text-gray-300"
-                    }`}
+                    }
                   />
                 ))}
+
               </div>
 
               {/* COMMENT */}

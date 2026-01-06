@@ -23,7 +23,7 @@ export function OrderConfirmationPage({ onNavigate }) {
         {/* Success Icon */}
         <div className="text-center mb-8">
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <CircleCheck className="w-12 h-12 text-green-600" />
+            <CircleCheck size={48} className="text-green-600" />
           </div>
           <h1 className="text-4xl mb-2">Order Confirmed!</h1>
           <p className="text-gray-600 text-lg">
@@ -101,7 +101,7 @@ export function OrderConfirmationPage({ onNavigate }) {
         {/* Next Steps */}
         <div className="bg-purple-50 rounded-xl p-6 mb-8">
           <div className="flex items-start gap-3">
-            <Package className="w-6 h-6 text-purple-600 flex-shrink-0 mt-1" />
+            <Package size={24} className="text-purple-600 flex-shrink-0 mt-1" />
             <div>
               <h3 className="text-lg mb-2">What's Next?</h3>
               <ul className="space-y-2 text-gray-700">
@@ -119,7 +119,7 @@ export function OrderConfirmationPage({ onNavigate }) {
             onClick={handleGoHome}
             className="flex-1 flex items-center justify-center gap-2 border border-gray-300 py-4 rounded-xl hover:bg-gray-50 transition-colors"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft size={20} />
             <span>Back to Home</span>
           </Button>
           <Button

@@ -3,7 +3,7 @@ import axios from 'axios';
 const API = 'https://vetrasales-backend-production.up.railway.app/api/orders';
 
 export const placeOrder = (orderData) => 
-  axios.post(`${API}/create`, orderData);
+  axios.post(`${API}/create`, orderData,{headers: { "Content-Type": "application/json" }});
 
 export const getOrdersByUserId = (userId) =>
   axios.get(`${API}/user/userId/${userId}`);
@@ -22,5 +22,7 @@ export const getAllOrders = () => axios.get(API);
 export const getOrderById = (orderId) =>
   axios.get(`${API}/byId?orderId=${orderId}`);
 
-export const getSummary = (username) => axios.get(`${API}/getSummary`,{params:{username}},{headers: { "Content-Type": "application/json" }})
+export const getSummary = (username) => axios.get(`${API}/getSummary`,{params:{username}},{headers: { "Content-Type": "application/json" }});
+
+
 

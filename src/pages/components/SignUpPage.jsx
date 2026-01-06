@@ -83,6 +83,7 @@ export default function SignUpPage() {
     try {
   const response = await signUp(payload);
   console.log("User signed up:", response.data);
+  onNav('/sign_in_page')
 } catch (error) {
   if (error.response?.status === 409) {
     alert("User already exists. Please use a different email or phone.");

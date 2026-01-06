@@ -47,5 +47,15 @@ export const getAllProducts = async () => {
   }
 };
 
-export const addReview = (review) => axios.post(`${BASE_URL}/addReview`, {params:{review}},{headers: { "Content-Type": "application/json" }});
+export const addReview = async (review) => {
+  try {
+    const res = await axios.post(`${BASE_URL}/addReview`, review,{headers: { "Content-Type": "application/json" }});
+     console.log("API response:", res.data); // 👈 DEBUG
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return []; // prevent undefined
+  }
+}
 export const deleteProduct = (productId) => axios.get(`${BASE_URL}/deleteProduct`,{params:{productId}},{headers: { "Content-Type": "application/json" }});
+

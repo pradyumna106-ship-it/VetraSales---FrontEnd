@@ -24,9 +24,28 @@ import {
 import { userData } from "../services/userService";
 import { updateUser } from "../services/userService";
 import { deleteUser } from "../services/userService";
+import { toggleStatus } from "../services/userService";
 /* Default user data (NO API) */
 
 export function UserProfile({ username }) {
+  const [recentActivity, setRecentActivity] = useState([]);
+  useEffect(() => {
+  setRecentActivity([
+    {
+      date: "2025-01-06",
+      action: "Profile Updated",
+      status: "SUCCESS",
+      color: "text-green-600",
+    },
+    {
+      date: "2025-01-04",
+      action: "Password Changed",
+      status: "SUCCESS",
+      color: "text-blue-600",
+    },
+  ]);
+}, []);
+
   const [formData, setFormData] = useState({
   username: "",
   email: "",
@@ -54,7 +73,9 @@ export function UserProfile({ username }) {
         try {
           const data = await userData(username);
           console.log("User Data:", data);
-
+          setRecentActivity([
+          localStorage.setItem('location',data.location)
+          ])
           setFormData({
             id: data.id,
             username: data.username || "",
@@ -97,7 +118,7 @@ export function UserProfile({ username }) {
     const handlePasswordChange = (e) => {
       const { name, value } = e.target;
       setPasswordData((prev) => ({ ...prev, [name]: value }));
-
+    
       // Real-time validation
       if (name === "confirmPassword" || name === "newPassword") {
         if (
@@ -118,12 +139,16 @@ export function UserProfile({ username }) {
     };
 
     const handlePasswordSubmit = () => {
+
       if (passwordData.newPassword !== passwordData.confirmPassword) {
         setPasswordError("Passwords do not match!");
         return;
       }
-      setPasswordError("");
-      alert("Password updated successfully!");
+      if (passwordData.currentPassword !== formData.password){
+        setPasswordError("Please provide correct current password");
+        return;
+      }
+        
       // Add API call here if needed
       const payload = {
         id: formData.id,
@@ -142,6 +167,7 @@ export function UserProfile({ username }) {
       }
       try {
         loadUpdateUser(payload)
+        alert("Password updated successfully!");
       } catch (error) {
         console.error(error);
       }
@@ -161,7 +187,7 @@ export function UserProfile({ username }) {
       {/* ================= PROFILE CARD ================= */}
         <Card>
         <CardHeader>
-            <CardTitle>User Profile</CardTitle>
+            <CardTitle className="text-3xl md:text-4xl text-center block">User Profile</CardTitle>
         </CardHeader>
         <CardContent className="flex gap-6">
             <Avatar className="h-24 w-24">
@@ -307,43 +333,6 @@ export function UserProfile({ username }) {
 
         </div>
 
-                </CardContent>
-              </Card>
-
-              {/* ================= RECENT ACTIVITY ================= */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Recent Activity</CardTitle>
-                </CardHeader>
-
-                <CardContent>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Action</TableHead>
-                        <TableHead>Status</TableHead>
-                      </TableRow>
-                    </TableHeader>
-
-                    <TableBody>
-                      <TableRow>
-                        <TableCell>{formData.joinedDat}</TableCell>
-                        <TableCell>Order Placed</TableCell>
-                        <TableCell className="text-green-600">
-                          Completed
-                        </TableCell>
-                      </TableRow>
-
-                      <TableRow>
-                        <TableCell>22 Dec 2025</TableCell>
-                        <TableCell>Password Changed</TableCell>
-                        <TableCell className="text-blue-600">
-                          Success
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
                 </CardContent>
               </Card>
 

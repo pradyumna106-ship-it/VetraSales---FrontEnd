@@ -5,7 +5,6 @@ import { HomePage } from './components/HomePage';
 import { ProductsPage } from './components/ProductsPage';
 import { ProductDetailPage } from './components/ProductDetailPage';
 import { CartPage } from './components/CartPage';
-import { CheckoutPage } from './components/CheckoutPage';
 import { OrderConfirmationPage } from './components/OrderConfirmation';
 import { Toaster } from 'sonner';
 import { SearchPage } from './components/SearchPage';
@@ -14,7 +13,9 @@ import { FavouritePage } from './components/FavouritePage';
 import { UserProfile } from './components/UserProfilePage';
 import { getAllProducts } from './services/productService';
 import { categories } from './data/products';
-export default function Customer({onLogout}) {
+import ProductReviews from './components/ProductReviews';
+
+export default function Customer() {
   const [currentPage, setCurrentPage] = useState('home');
   const [selectedCategory, setSelectedCategory] = useState(undefined);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -59,6 +60,11 @@ useEffect(() => {
   setCurrentPage('search');
 };
 
+  const handleViewReviews = (product) => {
+  setSelectedProduct(product);
+  setCurrentPage('reviews');
+};
+
   const handleFavouriteClick = () => {
   setCurrentPage('favourites');
 };
@@ -77,9 +83,6 @@ useEffect(() => {
     setSelectedProduct(null);
   };
 
-  const handleCheckout = () => {
-    setCurrentPage('checkout');
-  };
 
   const handleOrderComplete = () => {
     setCurrentPage('order-confirmation');
@@ -96,68 +99,74 @@ useEffect(() => {
     <CartProvider>
       <div className="min-h-screen bg-white">
         <Toaster position="top-right" richColors />
-        <Header  onCartClick={handleCartClick}  onNavigate={handleNavigate}  currentPage={currentPage}  role="customer"  onSearchClick={handleSearchClick}  onScroll={handleScroll} onLogout={onLogout}/>
+        <Header  onCartClick={handleCartClick}  onNavigate={handleNavigate}  currentPage={currentPage}  role="customer"  onSearchClick={handleSearchClick}  onScroll={handleScroll}/>
 
         
         <main>
-  {currentPage === 'home' && (
-    <HomePage onNavigate={() => handleNavigate('products', 'all')} aboutRef={aboutRef}
-  contactRef={contactRef}/>
-  )}
+              {currentPage === 'home' && (
+                <HomePage onNavigate={() => handleNavigate('products', 'all')} aboutRef={aboutRef}
+              contactRef={contactRef}/>
+              )}
 
-  {currentPage === 'products' && (
-  <ProductsPage
-  products={products}
-  categories={categories}
-  initialCategory={selectedCategory}
-  onViewProduct={handleViewProduct}
-/>
+              {currentPage === 'products' && (
+              <ProductsPage
+              products={products}
+              categories={categories}
+              initialCategory={selectedCategory}
+              onViewProduct={handleViewProduct}
+            />
 
-)}
+            )}
 
 
-  {currentPage === 'product-detail' && selectedProduct && (
-  <ProductDetailPage
-    product={selectedProduct}
-    onBack={handleBackToProducts}
-  />
-)}
+              {currentPage === 'product-detail' && selectedProduct && (
+              <ProductDetailPage
+                product={selectedProduct}
+                onBack={handleBackToProducts}
+                onViewReviews={() => handleViewReviews(selectedProduct)}
+                username={username}
+              />
+            )}
 
-  {currentPage === 'cart' && (
-    <CartPage
-      onNavigate={handleNavigate}         // ✅ PASS FUNCTION
-      onCheckout={handleCheckout}
-    />
-  )}
+              {currentPage === 'cart' && (
+                <CartPage
+                  onNavigate={handleNavigate}         // ✅ PASS FUNCTION
+                  username={username}
+                />
+              )}
 
-  {currentPage === 'checkout' && (
-    <CheckoutPage onOrderComplete={handleOrderComplete} />
-  )}
+              {currentPage === 'order-confirmation' && (
+                <OrderConfirmationPage onNavigate={handleNavigate} />
+              )}
 
-  {currentPage === 'order-confirmation' && (
-    <OrderConfirmationPage onNavigate={handleNavigate} />
-  )}
+              {currentPage === 'search' && (
+              <SearchPage
+                products={products}
+                onViewProduct={handleViewProduct}
+                onBack={() => handleNavigate('products', selectedCategory)}
+              />
+            )}
+              {currentPage === 'favourites' && (
+                <FavouritePage
+                onViewProduct={handleViewProduct}
+                onBack={() => handleNavigate('products', selectedCategory)}
+                />
+              )}
+              {currentPage === 'user-profile' && (
+                <UserProfile
+                username={username}
+                onBack={() => handleNavigate('products', selectedCategory)}
+                />
+              )}
+              {currentPage === 'reviews' && selectedProduct && (
+                  <ProductReviews
+                    productId={selectedProduct.id}
+                    onBack={() => setCurrentPage('product-detail')}
+                    username={username}
+                  />
+                )}
 
-  {currentPage === 'search' && (
-  <SearchPage
-    products={products}
-    onViewProduct={handleViewProduct}
-    onBack={() => handleNavigate('products', selectedCategory)}
-  />
-)}
-  {currentPage === 'favourites' && (
-    <FavouritePage
-    onViewProduct={handleViewProduct}
-    onBack={() => handleNavigate('products', selectedCategory)}
-    />
-  )}
-  {currentPage === 'user-profile' && (
-    <UserProfile
-    username={username}
-    onBack={() => handleNavigate('products', selectedCategory)}
-    />
-  )}
-  </main>
+      </main>
 
 
         

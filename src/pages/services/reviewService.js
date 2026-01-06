@@ -29,3 +29,14 @@ export const allReviews =  async () => {
       return []; // prevent undefined
 }
 };
+
+export const getRating = async (productId) => {
+  try {
+    const res = await axios.get(`${BASE_URL}/getRating`,{params:{productId}},{headers: { "Content-Type": "application/json" }});
+    console.log("API response:", res.data); // 👈 DEBUG
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    return null;
+  }
+}

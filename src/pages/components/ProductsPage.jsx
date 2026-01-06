@@ -7,9 +7,9 @@ export function ProductsPage({ initialCategory, onViewProduct,products,categorie
   const [selectedCategory, setSelectedCategory] = useState(initialCategory || 'all');
   const [sortBy, setSortBy] = useState('name');
   const [priceRange, setPriceRange] = useState([0, 200]);
+      
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = products;
-
     // Filter by category
     if (selectedCategory !== 'all') {
       filtered = filtered.filter((p) => p.category.toLowerCase() === selectedCategory);
