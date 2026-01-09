@@ -40,7 +40,7 @@ export const getByAdmin = async (id) => {
 }
 export const getAllProducts = async () => {
   try {
-    const res = await axios.get(`${BASE_URL}/getAllProducts`,{  headers: { "Content-Type": "application/json" }, "Authorization": `Bearer ${token}`  });
+    const res = await axios.get(`${BASE_URL}/getAllProducts`,{  headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` }  });
     console.log("API response:", res.data); // 👈 DEBUG
     return res.data; // ✅ THIS IS THE KEY FIX
   } catch (error) {
