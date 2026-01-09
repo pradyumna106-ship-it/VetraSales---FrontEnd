@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Button } from "./components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { result } from "./services/authenticator";
 export default function Welcome() {
   const navigate = useNavigate();
-  console.log(result());
+  useEffect(() => {
+    console.log(result())
+  },[])
 
   /* 🔹 WELCOME SCREEN */
   return (
