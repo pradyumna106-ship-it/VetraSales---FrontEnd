@@ -34,9 +34,13 @@ export default function Admin() {
   const [customers, setCustomers] = useState([]);
   const [admins,setAdmins] = useState([])
 useEffect(() => {
-  loadAdmins();
-  loadCustomers();
-  loadProducts();
+  const token = localStorage.getItem("token");
+  if (token){
+      loadAdmins();
+      loadCustomers();
+      loadProducts();
+  }
+  
 }, []);
   const loadProducts = async () => {
     const data = await getAllProducts();

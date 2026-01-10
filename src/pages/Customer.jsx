@@ -27,7 +27,12 @@ useEffect(() => {
     console.log("Products received in Customer:", data); // 👈 DEBUG
     setProducts(data || []);
   };
-  loadProducts();
+
+  const token = localStorage.getItem("token");
+  if (token){
+    loadProducts();
+
+  }
 }, []);
 
 
