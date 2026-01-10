@@ -77,7 +77,7 @@ export function UserProfile({ username }) {
           localStorage.setItem('location',data.location)
           ])
           setFormData({
-            id: data.id,
+            id: data.id||0,
             username: data.username || "",
             email: data.email || "",
             phone: data.phone || "",
