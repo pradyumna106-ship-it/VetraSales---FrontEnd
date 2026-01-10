@@ -1,22 +1,22 @@
 import axios from "axios";
-
 const BASE_URL = "https://vetrasales-backend-production.up.railway.app/api";
 const token = localStorage.getItem('token')
+const header = {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}
 export const addToCart = (cartData) =>
   axios.post(`${BASE_URL}/addToCart`, cartData, {
-    headers: getAuthHeaders(),
+    headers: header
   });
 
 export const updateCartItem = (cartData) =>
   axios.post(`${BASE_URL}/updateCartItem`, cartData, {
-    headers: getAuthHeaders(),
+    headers: header
   });
 
 export const viewCart = async (username) => {
   try {
     const res = await axios.get(`${BASE_URL}/viewCart`, {
       params: { username },
-      headers: getAuthHeaders(),
+      headers: header
     });
     return res.data;
   } catch (error) {
@@ -28,5 +28,5 @@ export const viewCart = async (username) => {
 export const removeItem = (prod_id) =>
   axios.get(`${BASE_URL}/removeItem`, {
     params: { prod_id },
-    headers: getAuthHeaders(),
+    headers: header
   });

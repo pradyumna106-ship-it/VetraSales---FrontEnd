@@ -1,15 +1,15 @@
 import axios from 'axios';
-import { getAuthHeaders } from './authenticator';
-
-const BASE_URL = "https://vetrasales-backend-production.up.railway.app/api/product"
-export const addProduct = (prod) => axios.post(`${BASE_URL}/addProduct`, prod,{headers: getAuthHeaders()});
 
 const token = localStorage.getItem('token')
-export const updateProduct = (prodDto) => axios.post(`${BASE_URL}/updateProduct`, prodDto,{headers: getAuthHeaders()})
+const header = {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}
+
+const BASE_URL = "https://vetrasales-backend-production.up.railway.app/api/product"
+export const addProduct = (prod) => axios.post(`${BASE_URL}/addProduct`, prod,{headers: header});
+export const updateProduct = (prodDto) => axios.post(`${BASE_URL}/updateProduct`, prodDto,{headers: header})
 export const getProductById = async (productId) => {
   
     try {
-      const res = await axios.get(`${BASE_URL}/searchProductById`, productId,{headers: getAuthHeaders()});
+      const res = await axios.get(`${BASE_URL}/searchProductById`, productId,{headers: header});
       console.log("API response:", res.data); // 👈 DEBUG
       return res.data;
     } catch (error) {
@@ -20,7 +20,7 @@ export const getProductById = async (productId) => {
 }
 export const searchProduct = async (input) => {
   try {
-    const res = await axios.get(`${BASE_URL}/searchProduct?keyword=${input}`,{headers: getAuthHeaders()});
+    const res = await axios.get(`${BASE_URL}/searchProduct?keyword=${input}`,{headers: header});
     console.log("API response:", res.data); // 👈 DEBUG
     return res.data;
   } catch (error) {
@@ -31,7 +31,7 @@ export const searchProduct = async (input) => {
 
 export const getByAdmin = async (id) => {
   try {
-    const res = await axios.get(`${BASE_URL}/getByAdmin`,{params:{id}},{headers: getAuthHeaders()});
+    const res = await axios.get(`${BASE_URL}/getByAdmin`,{params:{id}},{headers: header});
     console.log("API products:", res.data);
     return res.data;
   } catch (error) {
@@ -41,7 +41,7 @@ export const getByAdmin = async (id) => {
 }
 export const getAllProducts = async () => {
   try {
-    const res = await axios.get(`${BASE_URL}/getAllProducts`,{headers: getAuthHeaders()});
+    const res = await axios.get(`${BASE_URL}/getAllProducts`,{headers: header});
     console.log("API response:", res.data); // 👈 DEBUG
     return res.data; // ✅ THIS IS THE KEY FIX
   } catch (error) {
@@ -52,7 +52,7 @@ export const getAllProducts = async () => {
 
 export const addReview = async (review) => {
   try {
-    const res = await axios.post(`${BASE_URL}/addReview`, review,{headers: getAuthHeaders()});
+    const res = await axios.post(`${BASE_URL}/addReview`, review,{headers: header});
      console.log("API response:", res.data); // 👈 DEBUG
     return res.data;
   } catch (error) {
@@ -60,5 +60,5 @@ export const addReview = async (review) => {
     return []; // prevent undefined
   }
 }
-export const deleteProduct = (productId) => axios.get(`${BASE_URL}/deleteProduct`,{params:{productId}},{headers: getAuthHeaders()});
+export const deleteProduct = (productId) => axios.get(`${BASE_URL}/deleteProduct`,{params:{productId}},{headers: header});
 
