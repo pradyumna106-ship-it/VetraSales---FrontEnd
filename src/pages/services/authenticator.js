@@ -1,9 +1,13 @@
 import axios from "axios";
 
-const loginUser = async (loginData) => {
+export const loginUser = async () => {
     const URL = "https://vetrasales-backend-production.up.railway.app/auth/login";
     
     try {
+        loginData = {
+            username: 'server',
+            password: 'server'
+        }
         const response = await axios.post(URL, loginData);
         const token = response.data.jwtToken;
         
@@ -19,11 +23,6 @@ const loginUser = async (loginData) => {
 };
 
 // Usage
-export const result = await loginUser({
-    username: 'server',
-    password: 'server'
-});
-
 export const logout = () => {
     // Clear global header
     delete axios.defaults.headers.common['Authorization'];
@@ -33,4 +32,12 @@ export const logout = () => {
     
     // Redirect to login
     window.location.href = '/';
+};
+
+export const getAuthHeaders = () => {
+    const token = localStorage.getItem('token');
+    return {
+        "Content-Type": "application/json",
+        ...(token && { "Authorization": `Bearer ${token}` })
+    };
 };

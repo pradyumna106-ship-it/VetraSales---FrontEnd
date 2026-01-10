@@ -1,11 +1,11 @@
 import { useState,useEffect } from "react";
 import { Button } from "./components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { result } from "./services/authenticator";
+import { loginUser } from "./services/authenticator";
 export default function Welcome() {
   const navigate = useNavigate();
   useEffect(() => {
-    console.log(result())
+    console.log(loginUser())
   },[])
 
   /* 🔹 WELCOME SCREEN */
