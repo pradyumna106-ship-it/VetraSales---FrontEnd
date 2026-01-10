@@ -1,16 +1,15 @@
 import axios from "axios";
-
+import { useState } from "react";
+const [token,setToken] = useState('')
 export const loginUser = async () => {
     const URL = "https://vetrasales-backend-production.up.railway.app/auth/login";
     
     try {
         const response = await axios.post(URL, {username:'server', password: 'server'},{headers:{"Content-Type": "application/json"}});
-        const token = response.data.jwtToken;
+        setToken(response.data.jwtToken);
         console.log("token recived:",token)
         // Set global header
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        localStorage.setItem('token', token);
-        
         return { success: true, token };
     } catch (error) {
         console.error('Login error:', error.response?.data);
@@ -18,17 +17,6 @@ export const loginUser = async () => {
     }
 };
 
-// Usage
-export const logout = () => {
-    // Clear global header
-    delete axios.defaults.headers.common['Authorization'];
-    
-    // Clear localStorage
-    localStorage.removeItem('token');
-    
-    // Redirect to login
-    window.location.href = '/';
-};
 
 export const getAuthHeaders = () => {
     const token = localStorage.getItem('token');
