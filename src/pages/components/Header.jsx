@@ -2,6 +2,7 @@ import { ShoppingCart, Search, Heart, User } from 'lucide-react';
 import { useCart } from '../context/CardContext';
 import { Button,buttonVariants } from './ui/button';
 import { useNavigate } from 'react-router-dom';
+import { loginUser } from "./services/authenticator";
 export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, role, onScroll}) {
   const { getCartCount } = useCart();
   const cartCount = getCartCount();
@@ -22,7 +23,7 @@ export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, ro
             onClick={() => onNavigate(role === 'admin' ? 'dashboard' : 'home')}
             className="flex items-center gap-2"
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-linear-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
               <span className="text-white">🐾</span>
             </div>
             <span className="text-xl">VETRA SALES</span>

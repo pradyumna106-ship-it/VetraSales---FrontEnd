@@ -31,7 +31,6 @@ useEffect(() => {
   const token = localStorage.getItem("token");
   if (token){
     loadProducts();
-
   }
 }, []);
 
