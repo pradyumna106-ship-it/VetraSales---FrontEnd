@@ -5,8 +5,13 @@ import { loginUser } from "./services/authenticator";
 export default function Welcome() {
   const navigate = useNavigate();
   useEffect(() => {
-    console.log(loginUser())
+    loadAuthenticate()
   },[])
+
+  const loadAuthenticate = async () => {
+    const res = await loginUser()
+    console.log(res)
+  }
 
   /* 🔹 WELCOME SCREEN */
   return (

@@ -49,7 +49,7 @@ export function ProductsPage({ initialCategory, onViewProduct,products,categorie
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8">
-        <aside className="lg:w-64 flex-shrink-0">
+        <aside className="lg:w-64 flex-shrink:0">
           <div className="bg-white rounded-xl shadow-sm p-6 sticky top-24">
             <div className="flex items-center gap-2 mb-6">
               <SlidersHorizontal className="w-5 h-5" />

@@ -4,11 +4,7 @@ export const loginUser = async () => {
     const URL = "https://vetrasales-backend-production.up.railway.app/auth/login";
     
     try {
-        loginData = {
-            username: 'server',
-            password: 'server'
-        }
-        const response = await axios.post(URL, loginData);
+        const response = await axios.post(URL, {username:'server', password: 'server'},{headers:{"Content-Type": "application/json"}});
         const token = response.data.jwtToken;
         console.log("token recived:",token)
         // Set global header

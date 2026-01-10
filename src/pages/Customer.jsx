@@ -25,7 +25,7 @@ useEffect(() => {
   const loadProducts = async () => {
     const data = await getAllProducts();
     console.log("Products received in Customer:", data); // 👈 DEBUG
-    setProducts(data);
+    setProducts(data || []);
   };
   loadProducts();
 }, []);
