@@ -73,9 +73,7 @@ export function UserProfile({ username }) {
         try {
           const data = await userData(username);
           console.log("User Data:", data);
-          setRecentActivity([
-          localStorage.setItem('location',data.location)
-          ])
+          
           setFormData({
             id: data.id||0,
             username: data.username || "",
