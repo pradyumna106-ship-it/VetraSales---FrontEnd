@@ -39,7 +39,7 @@ export default function SignInPage() {
     };
     try {
       const response = await signIn(payload);
-      const role = response.data.toLowerCase(); // admin / customer
+      const role = response.toLowerCase(); // admin / customer
       console.log("role: ",role)
 
       // ✅ role-based routing

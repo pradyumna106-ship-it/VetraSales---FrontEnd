@@ -58,7 +58,15 @@ export const signUp = (user) =>
     headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
   });
 
-export const signIn = (login) => axios.post(`${BASE_URL}/signIn`,login,{headers: getAuthHeaders()});
+export const signIn = async (login) => {
+    try {
+      const res = await axios.post(`${BASE_URL}/signIn`,login,{headers: getAuthHeaders()});
+      console.log(res.data)
+      return res.data
+    } catch (error) {
+      console.error(error)
+    }
+  }
 export const userData = async (username) => {
     try {
         const res = await axios.get(`${BASE_URL}/userData`,{
