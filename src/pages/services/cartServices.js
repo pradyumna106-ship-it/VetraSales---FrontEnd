@@ -4,19 +4,19 @@ const token = localStorage.getItem('token')
 const header = {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}
 export const addToCart = (cartData) =>
   axios.post(`${BASE_URL}/addToCart`, cartData, {
-    headers: header
+    headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}
   });
 
 export const updateCartItem = (cartData) =>
   axios.post(`${BASE_URL}/updateCartItem`, cartData, {
-    headers: header
+    headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}
   });
 
 export const viewCart = async (username) => {
   try {
     const res = await axios.get(`${BASE_URL}/viewCart`, {
       params: { username },
-      headers: header
+      headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}
     });
     return res.data;
   } catch (error) {
@@ -28,5 +28,5 @@ export const viewCart = async (username) => {
 export const removeItem = (prod_id) =>
   axios.get(`${BASE_URL}/removeItem`, {
     params: { prod_id },
-    headers: header
+    headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}
   });

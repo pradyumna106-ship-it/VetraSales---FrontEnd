@@ -5,7 +5,7 @@ const token = localStorage.getItem('token')
 const header = {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}
 export const getAllUser = async ()=>{
     try {
-        const res = await axios.get(`${BASE_URL}/getAllUser`,{headers: header});
+        const res = await axios.get(`${BASE_URL}/getAllUser`,{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
         console.log("API response:", res.data); // 👈 DEBUG
         return res.data
     } catch (error) {
@@ -17,7 +17,7 @@ export const getAllUser = async ()=>{
 
 export const getAllCustomer = async ()=>{
     try {
-        const res = await axios.get(`${BASE_URL}/getAllCustomer`,{headers: header});
+        const res = await axios.get(`${BASE_URL}/getAllCustomer`,{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
         return res.data
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -28,7 +28,7 @@ export const getAllCustomer = async ()=>{
 
 export const getAllAdmin = async ()=>{
     try {
-        const res = await axios.get(`${BASE_URL}/getAllAdmin`,{headers: header});
+        const res = await axios.get(`${BASE_URL}/getAllAdmin`,{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
         return res.data
     } catch (error) {
       console.error("Error fetching products:", error);
@@ -38,7 +38,7 @@ export const getAllAdmin = async ()=>{
 }
 export const searchUser = async (name) => {
     try {
-        const res = await axios.get(`${BASE_URL}/searchUser`,{param:{name}},{headers: header});
+        const res = await axios.get(`${BASE_URL}/searchUser`,{param:{name}},{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
         console.log("API response:", res.data); // 👈 DEBUG
         return res.data;
     } catch (error) {
@@ -51,17 +51,17 @@ export const searchUser = async (name) => {
 export const deleteUser = (id) => {
   return axios.get(`${BASE_URL}/delete`, {
     params: { id }
-  },{headers: header});
+  },{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
 };
 
 export const signUp = (user) =>
   axios.post(`${BASE_URL}/signUp`, user, {
-    headers: {headers: header},
+    headers: {headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}},
   });
 
 export const signIn = async (login) => {
     try {
-      const res = await axios.post(`${BASE_URL}/signIn`,login,{headers: header});
+      const res = await axios.post(`${BASE_URL}/signIn`,login,{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
       console.log(res.data)
       return res.data
     } catch (error) {
@@ -72,7 +72,7 @@ export const userData = async (username) => {
     try {
         const res = await axios.get(`${BASE_URL}/userData`,{
         params: { username },   // ✅ REQUIRED
-      },{headers: header});
+      },{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
         console.log("API response:", res.data); // 👈 DEBUG
         return res.data;
     } catch (error) {
@@ -85,7 +85,7 @@ export const contact = async (username) => {
     try {
         const res = await axios.get(`${BASE_URL}/getEmail`,{
         params: { username },   // ✅ REQUIRED
-      },{headers: header});
+      },{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
         console.log("API response:", res.data); // 👈 DEBUG
         return res.data;
     } catch (error) {
@@ -93,11 +93,11 @@ export const contact = async (username) => {
       return []; // prevent undefined
   }
 }
-export const deleteAll = () => axios.get(`${BASE_URL}/deleteAll`,{headers: header});
-export const updateUser = (user) => axios.post(`${BASE_URL}/updateUser`,user,{headers: header});
+export const deleteAll = () => axios.get(`${BASE_URL}/deleteAll`,{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
+export const updateUser = (user) => axios.post(`${BASE_URL}/updateUser`,user,{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
 export const emails = async () => {
     try {
-        const res = await axios.get(`${BASE_URL}/emails`,{headers: header});
+        const res = await axios.get(`${BASE_URL}/emails`,{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
         console.log("API response:", res.data); // 👈 DEBUG
         return res.data;
         } catch (error) {
@@ -107,7 +107,7 @@ export const emails = async () => {
 }
 export const phones = async () => {
     try {
-        const res = await axios.get(`${BASE_URL}/phones`,{headers: header});
+        const res = await axios.get(`${BASE_URL}/phones`,{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
         console.log("API response:", res.data); // 👈 DEBUG
         return res.data;
     } catch (error) {
@@ -119,5 +119,5 @@ export const phones = async () => {
 export const toggleStatus = (id) =>
   axios.get(`${BASE_URL}/userStatus`, {
     params: { id },
-    headers: {headers: header}
+    headers: {headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}}
   });
