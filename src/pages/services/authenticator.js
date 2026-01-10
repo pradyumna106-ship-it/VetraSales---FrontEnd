@@ -10,7 +10,7 @@ export const loginUser = async () => {
         }
         const response = await axios.post(URL, loginData);
         const token = response.data.jwtToken;
-        
+        console.log("token recived:",token)
         // Set global header
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         localStorage.setItem('token', token);
