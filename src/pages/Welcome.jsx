@@ -4,15 +4,21 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "./services/authenticator";
 export default function Welcome() {
   const navigate = useNavigate();
-  useEffect(() => {
-    loadAuthenticate()
-  },[])
 
   const loadAuthenticate = async () => {
     const res = await loginUser()
     console.log(res)
   }
-
+  const handlelogin = async() => {
+    navigate('/sign_in_page')
+    const res = await loadAuthenticate()
+    console.log(res);
+  }
+  const handleSingup = async() => {
+    navigate('/sign_up_page')
+    const res = await loadAuthenticate()
+    console.log(res);
+  }
   /* 🔹 WELCOME SCREEN */
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 gap-4">
@@ -21,10 +27,10 @@ export default function Welcome() {
       </h2>
 
       <div className="flex gap-4">
-        <Button className="btn btn-primary "  onClick={() => navigate('/sign_in_page')}>
+        <Button className="btn btn-primary "  onClick={() =>  handlelogin() }>
         SIGN IN
       </Button>
-      <Button className="btn btn-secondary" onClick={() => navigate('/sign_up_page')}>
+      <Button className="btn btn-secondary" onClick={() => handleSingup()}>
         SIGN UP
       </Button>
       </div>
