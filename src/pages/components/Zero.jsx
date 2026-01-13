@@ -1,6 +1,5 @@
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { Button,buttonVariants } from './ui/button';
-import Logo from "@/assets/logo.svg?react";
 import { motion } from "framer-motion";
 export function Zero({ onSignIn,onSignUp }) {
   const container = {
