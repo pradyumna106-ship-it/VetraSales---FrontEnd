@@ -32,7 +32,7 @@ export default function Welcome() {
           {/* Logo / Brand */}
           <div className="flex items-center gap-2">
             <img
-              src="https://inherent-copper-qi3fxgu3xx.edgeone.app/svgviewer-png-output.png"
+              src="src\assets\svgviewer-png-output.png"
               alt="Vetra Sales"
               className="w-10 h-10 object-contain"
             />
