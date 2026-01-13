@@ -2,7 +2,6 @@ import { ShoppingCart, Search, Heart, User } from 'lucide-react';
 import { useCart } from '../context/CardContext';
 import { Button,buttonVariants } from './ui/button';
 import { useNavigate } from 'react-router-dom';
-import { loginUser } from "./services/authenticator";
 export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, role, onScroll}) {
   const { getCartCount } = useCart();
   const cartCount = getCartCount();
@@ -23,8 +22,12 @@ export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, ro
             onClick={() => onNavigate(role === 'admin' ? 'dashboard' : 'home')}
             className="flex items-center gap-2"
           >
-            <div className="w-10 h-10 bg-linear-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-              <span className="text-white">🐾</span>
+            <div className="w-10 h-10 bg-gradient-to-br from-[#4B3F1A] via-[#8A7432] to-[#D9C88A] rounded-lg flex items-center justify-center">
+              <span className="text-white"><img
+              src="https://inherent-copper-qi3fxgu3xx.edgeone.app/svgviewer-png-output.png"
+              alt="Vetra Sales"
+              className="w-10 h-10 object-contain"
+            /></span>
             </div>
             <span className="text-xl">VETRA SALES</span>
           </Button>
@@ -35,14 +38,14 @@ export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, ro
               <nav className="hidden md:flex items-center gap-6">
                 <Button
                   onClick={() => onNavigate('home')}
-                  className={currentPage === 'home' ? 'text-purple-600' : 'hover:text-purple-600'}
+                  className={currentPage === 'home' ? 'text-[#8A7432]-600' : 'hover:text-[#D9C88A]-600'}
                 >
                   Home
                 </Button>
-                <Button  onClick={() => onNavigate('products')}  className={currentPage === 'products' ? 'text-purple-600' : 'hover:text-purple-600'}> Products</Button>
-                  <Button onClick={() => onScroll('about')}  className="hover:text-purple-600">
+                <Button  onClick={() => onNavigate('products')}  className={currentPage === 'products' ? 'text-[#8A7432]-600' : 'hover:text-[#D9C88A]-600'}> Products</Button>
+                  <Button onClick={() => onScroll('about')}  className="hover:text-[#D9C88A]-600">
                       About </Button>
-                  <Button onClick={() => onScroll('contact')} className="hover:text-purple-600">
+                  <Button onClick={() => onScroll('contact')} className="hover:text-[#D9C88A]-600">
                     Contact </Button>
               </nav>
 
@@ -60,7 +63,7 @@ export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, ro
                 >
                   <ShoppingCart className="w-5 h-5" />
                   {cartCount > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-purple-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 bg-[#D9C88A]-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                       {cartCount}
                     </span>
                   )}
@@ -76,14 +79,14 @@ export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, ro
           {/* ================= ADMIN NAV ================= */}
             {role === 'admin' && (
               <nav className="hidden md:flex items-center gap-6">
-                <Button onClick={() => onNavigate("dashboard")} className={currentPage === 'dashboard' ? 'text-purple-600' : 'hover:text-purple-600'}>Dashboard</Button>
-                <Button onClick={() => onNavigate("reviews")} className={currentPage === "reviews" ? 'text-purple-600' : 'hover:text-purple-600'}>Customer Reviews</Button>
-                <Button onClick={() => onNavigate("orders")} className={currentPage === "orders" ? 'text-purple-600' : 'hover:text-purple-600'}>Orders</Button>
-                <Button onClick={() => onNavigate("users")} className={currentPage === "users" ? 'text-purple-600' : 'hover:text-purple-600'}>User Management</Button>
+                <Button onClick={() => onNavigate("dashboard")} className={currentPage === 'dashboard' ? 'text-[#8A7432]-600' : 'hover:text-[#D9C88A]-600'}>Dashboard</Button>
+                <Button onClick={() => onNavigate("reviews")} className={currentPage === "reviews" ? 'text-[#8A7432]-600' : 'hover:text-[#D9C88A]-600'}>Customer Reviews</Button>
+                <Button onClick={() => onNavigate("orders")} className={currentPage === "orders" ? 'text-[#8A7432]-600' : 'hover:text-[#D9C88A]-600'}>Orders</Button>
+                <Button onClick={() => onNavigate("users")} className={currentPage === "users" ? 'text-[#8A7432]-600' : 'hover:text-[#D9C88A]-600'}>User Management</Button>
                 <Button onClick={() => onSearchClick()}  className="p-2 hover:bg-gray-100 rounded-full transition-colors">
                     <Search className="w-5 h-5" />
                 </Button>
-                <Button onClick={() => onNavigate('my-profile')} className={currentPage === "my-profile" ? 'text-purple-600' : 'p-2 hover:bg-gray-100 rounded-full transition-colors'}>
+                <Button onClick={() => onNavigate('my-profile')} className={currentPage === "my-profile" ? 'text-[#8A7432]-600' : 'p-2 hover:bg-gray-100 rounded-full transition-colors'}>
                   <User className="w-5 h-5" />
                 </Button>
                 <Button onClick={() => handleLogout()} className="bg-red-600 hover:bg-red-700 text-white"> Logout</Button>

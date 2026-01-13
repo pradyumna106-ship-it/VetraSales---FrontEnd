@@ -1,4 +1,15 @@
-@import "tailwindcss"
+@import "tailwindcss/preflight";
+@import "tailwindcss/utilities";
+
+/* Your custom font */
+@font-face {
+  font-family: "Beauty Sense Demo";
+  src: url("/fonts/beauty-sense-demo.woff2") format("woff2"),
+       url("/fonts/beauty-sense-demo.woff") format("woff");
+  font-display: swap;
+}
+
+
 /* @import "tw-animate-css"; */
 
 /* =====================

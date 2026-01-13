@@ -63,7 +63,7 @@ export function CartPage({ onNavigate,username}) {
           </p>
           <Button
             onClick={() => onNavigate('products')}
-            className="bg-purple-600 text-white px-8 py-3 rounded-xl hover:bg-purple-700 transition-colors"
+            className="bg-[#D9C88A]-600 text-white px-8 py-3 rounded-xl hover:bg-[#D9C88A]-700 transition-colors"
           >
             Start Shopping
           </Button>
@@ -122,7 +122,7 @@ export function CartPage({ onNavigate,username}) {
               </div>
 
               <div className="flex flex-col items-end justify-between">
-                <span className="text-xl text-purple-600">
+                <span className="text-xl text-[#D9C88A]-600">
                   ${(item.price * item.quantity).toFixed(2)}
                 </span>
                 <span className="text-sm text-gray-500">
@@ -155,7 +155,7 @@ export function CartPage({ onNavigate,username}) {
               </div>
               <div className="border-t pt-3 flex justify-between text-xl">
                 <span>Total</span>
-                <span className="text-purple-600">
+                <span className="text-[#D9C88A]-600">
                   $
                   {(
                     getCartTotal() +
@@ -166,14 +166,14 @@ export function CartPage({ onNavigate,username}) {
               </div>
             </div>
             {getCartTotal() < 50 && (
-              <div className="bg-purple-50 border border-purple-200 rounded-lg p-3 mb-4 text-sm text-purple-700">
+              <div className="bg-[#D9C88A]-50 border border-[#D9C88A]-200 rounded-lg p-3 mb-4 text-sm text-[#D9C88A]-700">
                 Add ${(50 - getCartTotal()).toFixed(2)} more for free shipping!
               </div>
             )}
               <Button 
                   onClick={handlePayment} 
                   disabled={loading}
-                  className="w-full bg-purple-600 text-white py-4 rounded-xl hover:bg-purple-700 disabled:opacity-50"
+                  className="w-full bg-[#D9C88A]-600 text-white py-4 rounded-xl hover:bg-[#D9C88A]-700 disabled:opacity-50"
                 >
                   {loading ? 'Processing...' : 'Pay Now'}
                 </Button>

@@ -60,7 +60,7 @@ export function OrderConfirmationPage({ onNavigate }) {
                     <p className="mb-1">{item.name}</p>
                     <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
                   </div>
-                  <p className="text-purple-600">
+                  <p className="text-[#D9C88A]-600">
                     ${(item.price * item.quantity).toFixed(2)}
                   </p>
                 </div>
@@ -86,7 +86,7 @@ export function OrderConfirmationPage({ onNavigate }) {
             </div>
             <div className="flex justify-between text-xl pt-2 border-t">
               <span>Total</span>
-              <span className="text-purple-600">
+              <span className="text-[#D9C88A]-600">
                 $
                 {(
                   getCartTotal() +
@@ -99,9 +99,9 @@ export function OrderConfirmationPage({ onNavigate }) {
         </div>
 
         {/* Next Steps */}
-        <div className="bg-purple-50 rounded-xl p-6 mb-8">
+        <div className="bg-[#D9C88A]-50 rounded-xl p-6 mb-8">
           <div className="flex items-start gap-3">
-            <Package size={24} className="text-purple-600 flex-shrink-0 mt-1" />
+            <Package size={24} className="text-[#D9C88A]-600 flex-shrink-0 mt-1" />
             <div>
               <h3 className="text-lg mb-2">What's Next?</h3>
               <ul className="space-y-2 text-gray-700">
@@ -124,7 +124,7 @@ export function OrderConfirmationPage({ onNavigate }) {
           </Button>
           <Button
             onClick={handleContinueShopping}
-            className="flex-1 bg-purple-600 text-white py-4 rounded-xl hover:bg-purple-700 transition-colors"
+            className="flex-1 bg-[#D9C88A]-600 text-white py-4 rounded-xl hover:bg-[#D9C88A]-700 transition-colors"
           >
             Continue Shopping
           </Button>

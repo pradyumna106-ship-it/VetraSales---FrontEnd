@@ -41,7 +41,7 @@ export function HomePage({ onNavigate, aboutRef, contactRef }) {
           <div className="grid md:grid-cols-3 gap-8">
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-[#D9C88A]-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 🚚
               </div>
               <h3 className="text-xl mb-2">Free Shipping</h3>
@@ -49,7 +49,7 @@ export function HomePage({ onNavigate, aboutRef, contactRef }) {
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-[#D9C88A]-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 ✨
               </div>
               <h3 className="text-xl mb-2">Quality Products</h3>
@@ -57,7 +57,7 @@ export function HomePage({ onNavigate, aboutRef, contactRef }) {
             </div>
 
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-[#D9C88A]-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 💝
               </div>
               <h3 className="text-xl mb-2">Happy Pets</h3>

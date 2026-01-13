@@ -69,7 +69,7 @@ export function ProductDetailPage({ product, onBack,onViewReviews }) {
         {/* Product Info */}
         <div className="flex flex-col">
           <div className="mb-4">
-            <span className="inline-block bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm mb-4">
+            <span className="inline-block bg-[#D9C88A]-100 text-[#D9C88A]-600 px-3 py-1 rounded-full text-sm mb-4">
               {product.category}
             </span>
             <h1 className="text-4xl mb-4">{product.name}</h1>
@@ -87,7 +87,7 @@ export function ProductDetailPage({ product, onBack,onViewReviews }) {
             </div>
           </div>
 
-          <div className="text-4xl text-purple-600 mb-6">
+          <div className="text-4xl text-[#D9C88A]-600 mb-6">
             ${product.price}
           </div>
 
@@ -120,7 +120,7 @@ export function ProductDetailPage({ product, onBack,onViewReviews }) {
             <Button
               onClick={() => handleAddToCart()}
               disabled={!product.inStock}
-              className="flex-1 bg-purple-600 text-white py-4 rounded-xl hover:bg-purple-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-lg"
+              className="flex-1 bg-[#D9C88A]-600 text-white py-4 rounded-xl hover:bg-[#D9C88A]-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-lg"
             >
               <ShoppingCart className="w-5 h-5" />
               <span>Add to Cart</span>

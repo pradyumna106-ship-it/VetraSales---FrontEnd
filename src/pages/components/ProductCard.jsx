@@ -65,11 +65,11 @@ export function ProductCard({ product, onViewDetails }) {
 
         
         <div className="flex items-center justify-between">
-          <span className="text-2xl text-purple-600">${product.price}</span>
+          <span className="text-2xl text-[#D9C88A]-600">${product.price}</span>
           <Button
             onClick={handleAddToCart}
             disabled={!product.inStock}
-            className="bg-purple-600 text-white p-2 rounded-lg hover:bg-purple-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+            className="bg-[#D9C88A]-600 text-white p-2 rounded-lg hover:bg-[#D9C88A]-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
             <ShoppingCart className="w-5 h-5" />
           </Button>
