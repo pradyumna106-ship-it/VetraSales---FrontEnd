@@ -24,7 +24,7 @@ export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, ro
           >
             <div className="w-10 h-10 bg-gradient-to-br from-[#4B3F1A] via-[#8A7432] to-[#D9C88A] rounded-lg flex items-center justify-center">
               <span className="text-white"><img
-              src="https://github.com/pr4dyumn4/VetraSales---FrontEnd/blob/main/src/assets/svgviewer-png-output.png"
+              src="https://raw.githubusercontent.com/pr4dyumn4/VetraSales---FrontEnd/main/src/assets/svgviewer-png-output.png"
               alt="Vetra Sales"
               className="w-10 h-10 object-contain"
             /></span>

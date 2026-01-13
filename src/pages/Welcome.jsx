@@ -32,7 +32,7 @@ export default function Welcome() {
           {/* Logo / Brand */}
           <div className="flex items-center gap-2">
             <img
-              src="https://github.com/pr4dyumn4/VetraSales---FrontEnd/blob/main/src/assets/svgviewer-png-output.png"
+              src="https://raw.githubusercontent.com/pr4dyumn4/VetraSales---FrontEnd/main/src/assets/svgviewer-png-output.png"
               alt="Vetra Sales"
               className="w-10 h-10 object-contain"
             />
