@@ -22,7 +22,7 @@ const item = {
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <motion.div variants={container} initial="hidden"animate="show" className="space-y-6 text-left">
             <motion.img
-              src="https://github.com/pr4dyumn4/VetraSales---FrontEnd/blob/3190d00704950146fb8da5ce85f6c3a71da798e4/src/assets/svgviewer-png-output.png"
+              src="https://github.com/pr4dyumn4/VetraSales---FrontEnd/blob/main/src/assets/svgviewer-png-output.png"
               alt="Superman Fly"
               initial={{ x: "-120%", opacity: 1 }}
               animate={{ x: "120%", opacity: 0 }}
