@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8080"+"/api/notification";
+const BASE_URL = "vetrasales-notification-service-production.up.railway.app"+"/api/notification";
 
 // -----------------------
 //  SEND EMAIL

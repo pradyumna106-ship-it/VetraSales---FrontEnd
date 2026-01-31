@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:9090" + "/api/user";
+const BASE_URL = "vetrasales-backend-production.up.railway.app" + "/api/user";
 
 const getHeaders = () => {
   const token = localStorage.getItem('token');
