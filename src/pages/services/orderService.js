@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = 'vetrasales-backend-production.up.railway.app'+'/api/orders';
+const API = 'https://vetrasales-backend-production.up.railway.app'+'/api/orders';
 const token = localStorage.getItem('token')
 const header = {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}
 export const placeOrder = (orderData) => 
