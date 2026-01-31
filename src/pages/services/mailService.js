@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://vetrasales-notification-service-production.up.railway.app"+"/api/notification";
+const BASE_URL = "https://kong-3d316d3c07inoh561.kongcloud.dev"+"/api/notification";
 
 // -----------------------
 //  SEND EMAIL
