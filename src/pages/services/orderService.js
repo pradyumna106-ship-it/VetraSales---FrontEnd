@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API = 'https://kong-3d316d3c07inoh561.kongcloud.dev.app'+'/api/orders';
+const API = 'https://3d316d3c07.undefined-eu.edge.gateways.konggateway.com'+'/api/orders';
 const token = localStorage.getItem('token')
 const header = {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}
 export const placeOrder = (orderData) => 

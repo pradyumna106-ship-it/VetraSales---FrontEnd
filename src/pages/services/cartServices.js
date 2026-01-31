@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "https://kong-3d316d3c07inoh561.kongcloud.dev"+"/api";
+const BASE_URL = "https://3d316d3c07.undefined-eu.edge.gateways.konggateway.com"+"/api";
 const token = localStorage.getItem('token')
 const header = {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}
 export const addToCart = (cartData) =>

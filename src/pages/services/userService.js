@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://kong-3d316d3c07inoh561.kongcloud.dev" + "/api/user";
+const BASE_URL = "https://3d316d3c07.undefined-eu.edge.gateways.konggateway.com" + "/api/user";
 
 const getHeaders = () => {
   const token = localStorage.getItem('token');

@@ -3,7 +3,7 @@ import axios from 'axios';
 const token = localStorage.getItem('token')
 const header = {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}
 
-const BASE_URL = "https://kong-3d316d3c07inoh561.kongcloud.dev"+"/api/product"
+const BASE_URL = "https://3d316d3c07.undefined-eu.edge.gateways.konggateway.com"+"/api/product"
 export const addProduct = (prod) => axios.post(`${BASE_URL}/addProduct`, prod,{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
 export const updateProduct = (prodDto) => axios.post(`${BASE_URL}/updateProduct`, prodDto,{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}})
 export const getProductById = async (productId) => {
