@@ -5,7 +5,10 @@ const BASE_URL = "https://kong-3d316d3c07inoh561.kongcloud.dev"+"/api/review";
 const token = localStorage.getItem('token')
 const header = {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}
 export const listOfReview = async (productId) => { 
-    try {const response = await axios.get(`${BASE_URL}/listOfReview`,{params: { productId }},{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
+    try {const response = await axios.get(`${BASE_URL}/listOfReview`,{
+    params: { productId },
+    headers: { "Content-Type": 'application/json', "Authorization": `Bearer ${token}` }
+});
     return response.data;} catch (error) {
         console.error("Error fetching products:", error)
     }
