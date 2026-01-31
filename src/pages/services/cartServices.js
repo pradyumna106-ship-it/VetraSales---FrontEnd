@@ -1,5 +1,5 @@
 import axios from "axios";
-const BASE_URL = "https://vetrasales-backend-production.up.railway.app/api";
+const BASE_URL = "http://localhost:9090"+"/api";
 const token = localStorage.getItem('token')
 const header = {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}
 export const addToCart = (cartData) =>

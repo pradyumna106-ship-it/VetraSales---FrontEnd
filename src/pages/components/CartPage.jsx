@@ -81,7 +81,7 @@ export function CartPage({ onNavigate,username}) {
         <div className="lg:col-span-2 space-y-4">
           {cart.map((item,index) => (
             <div key={index} className="bg-white rounded-xl shadow-sm p-4 flex gap-4">
-              <div className="w-24 h-24 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100">
+              <div className="w-24 h-24 shrink-0 rounded-lg overflow-hidden bg-gray-100">
                 <ImageWithFallback
                   key={`img-${item.id}`}  // Add this line
                   src={item.image}

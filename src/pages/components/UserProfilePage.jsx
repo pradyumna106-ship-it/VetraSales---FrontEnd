@@ -29,311 +29,320 @@ import { toggleStatus } from "../services/userService";
 
 export function UserProfile({ username }) {
   const [recentActivity, setRecentActivity] = useState([]);
+  const [isPasswordEdit, setIsPasswordEdit] = useState(false);
+
   useEffect(() => {
-  setRecentActivity([
-    {
-      date: "2025-01-06",
-      action: "Profile Updated",
-      status: "SUCCESS",
-      color: "text-green-600",
-    },
-    {
-      date: "2025-01-04",
-      action: "Password Changed",
-      status: "SUCCESS",
-      color: "text-blue-600",
-    },
-  ]);
-}, []);
+    setRecentActivity([
+      {
+        date: "2025-01-06",
+        action: "Profile Updated",
+        status: "SUCCESS",
+        color: "text-green-600",
+      },
+      {
+        date: "2025-01-04",
+        action: "Password Changed",
+        status: "SUCCESS",
+        color: "text-blue-600",
+      },
+    ]);
+  }, []);
 
   const [formData, setFormData] = useState({
-  username: "",
-  email: "",
-  phone: "",
-  location: "",
-  gender: "",
-  role: "",
-  dob: "",
-  password: {
+    id: "",
+    username: "",
+    email: "",
+    phone: "",
+    location: "",
+    gender: "",
+    role: "",
+    dob: "",
+  });
+
+  const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
-  },
-});
-  const [passwordData, setPasswordData] = useState({
-  currentPassword: "",
-  newPassword: "",
-  confirmPassword: "",
-});
-    const [passwordError, setPasswordError] = useState("");
-    const [isEdit, setIsEdit] = useState(true);
-    useEffect(() => {
-      if (!username) return;
-      const loadUserData = async () => {
-        try {
-          const data = await userData(username);
-          console.log("User Data:", data);
-          
-          setFormData({
-            id: data.id||0,
-            username: data.username || "",
-            email: data.email || "",
-            phone: data.phone || "",
-            location: data.location || "",
-            gender: data.gender || "",
-            role: data.role || "",
-            dob: data.dob || "",
-            password: {
-              currentPassword: data.password || "",
-              newPassword: "",
-              confirmPassword: "",
-            },
-          });
-        } catch (err) {
-          console.error(err);
-        }
-      };
-      loadUserData();
-    }, [username]);
-    
-    const handleDeleteUser = (id) => {
-      const loadDeleteUser = async (id) => {
-        const res = await deleteUser(id);
-        console.log(res)
-      }
+  });
+  const [passwordError, setPasswordError] = useState("");
+  const [isEdit, setIsEdit] = useState(true);
+  useEffect(() => {
+    if (!username) return;
+    const loadUserData = async () => {
       try {
-        loadDeleteUser(id);
-        if (formData.role === "ADMIN") {
-          alert("Are sure you want to delete If Admin Delete this Profile Entire Stock Data will be removed Which Current Admin is Added")
-        } else {
-          alert("Are you Sure you want to delete this profile")
-        }
-      } catch(error) {
-        console.error(error);
-      }
-    }
+        const data = await userData(username);
+        console.log("User Data:", data);
 
-    const handlePasswordChange = (e) => {
-      const { name, value } = e.target;
-      setPasswordData((prev) => ({ ...prev, [name]: value }));
-    
-      // Real-time validation
-      if (name === "confirmPassword" || name === "newPassword") {
-        if (
-          name === "confirmPassword" &&
-          value !== passwordData.newPassword
-        ) {
-          setPasswordError("Passwords do not match!");
-        } else if (
-          name === "newPassword" &&
-          passwordData.confirmPassword &&
-          value !== passwordData.confirmPassword
-        ) {
-          setPasswordError("Passwords do not match!");
-        } else {
-          setPasswordError("");
-        }
+        setFormData({
+          id: data.id || "",
+          username: data.username || "",
+          email: data.email || "",
+          phone: data.phone || "",
+          location: data.location || "",
+          gender: data.gender || "",
+          role: data.role || "",
+          dob: data.dob || "",
+          password: {
+            currentPassword: data.password || "",
+            newPassword: "",
+            confirmPassword: "",
+          },
+        });
+      } catch (err) {
+        console.error(err);
       }
     };
+    loadUserData();
+  }, [username]);
 
-    const handlePasswordSubmit = () => {
+  const handleDeleteUser = async (id) => {
+    const confirmed = window.confirm(
+      formData.role === "ADMIN"
+        ? "Deleting admin will remove all related stock data. Continue?"
+        : "Are you sure you want to delete this profile?"
+    );
 
-      if (passwordData.newPassword !== passwordData.confirmPassword) {
+    if (!confirmed) return;
+
+    try {
+      await deleteUser(id);
+      alert("Profile deleted successfully");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setPasswordData((prev) => ({ ...prev, [name]: value }));
+
+    // Real-time validation
+    if (name === "confirmPassword" || name === "newPassword") {
+      if (
+        name === "confirmPassword" &&
+        value !== passwordData.newPassword
+      ) {
         setPasswordError("Passwords do not match!");
-        return;
-      }
-      if (passwordData.currentPassword !== formData.password){
-        setPasswordError("Please provide correct current password");
-        return;
-      }
-        
-      // Add API call here if needed
-      const payload = {
-        id: formData.id,
-        username: formData.username.trim(),
-        email: formData.email.toLowerCase().trim(),
-        phone: formData.phone,
-        location: formData.location,
-        gender: formData.gender,
-        dob: formData.dob,
-        role: formData.role,
-        password: passwordData.newPassword
-      };
-      const loadUpdateUser = async (payload) => {
-        const res = await updateUser(payload);
-        console.log(res);
-      }
-      try {
-        loadUpdateUser(payload)
-        alert("Password updated successfully!");
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    const handleEditUser = () => {
-      if (isEdit) {
-        setIsEdit(false);
+      } else if (
+        name === "newPassword" &&
+        passwordData.confirmPassword &&
+        value !== passwordData.confirmPassword
+      ) {
+        setPasswordError("Passwords do not match!");
       } else {
-        setIsEdit(true);
+        setPasswordError("");
       }
     }
+  };
+
+  const handlePasswordSubmit = async (e) => {
+    e.preventDefault();
+
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      setPasswordError("Passwords do not match!");
+      return;
+    }
+
+    try {
+      await updateUser({
+        id: formData.id,
+        currentPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword,
+      });
+
+      alert("Password updated successfully!");
+      setPasswordData({
+        currentPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+    } catch (error) {
+      setPasswordError("Current password is incorrect");
+    }
+  };
+
+  const handleLogout = () => {
+    alert("Are you sure You wanted to Log Out.");
+    localStorage.clear()
+    onNav('/');
+  }
+  const handleEditUser = () => {
+    if (isEdit) {
+      setIsEdit(false);
+    } else {
+      setIsEdit(true);
+    }
+  }
 
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-6">
 
       {/* ================= PROFILE CARD ================= */}
-        <Card>
+      <Card>
         <CardHeader>
-            <CardTitle className="text-3xl md:text-4xl text-center block">User Profile</CardTitle>
+          <CardTitle className="text-3xl md:text-4xl text-center block">User Profile</CardTitle>
         </CardHeader>
         <CardContent className="flex gap-6">
-            <Avatar className="h-24 w-24">
-                <AvatarImage src="/avatar.png" />
-                    <AvatarFallback>
-                        {(formData?.username && formData.username.length > 0) ? formData.username[0].toUpperCase(): "U"}
-        </AvatarFallback>
+          <Avatar className="h-24 w-24">
+            <AvatarImage src="/avatar.png" />
+            <AvatarFallback>
+              {(formData?.username && formData.username.length > 0) ? formData.username[0].toUpperCase() : "U"}
+            </AvatarFallback>
 
-            </Avatar>
-            <div className="grid grid-cols-2 gap-4 flex-1">
+          </Avatar>
+          <div className="grid grid-cols-2 gap-4 flex-1">
 
-          <div>
-            <Label>Name</Label>
-            <Input value={formData.username} readOnly={isEdit} />
-          </div>
-
-          <div>
-            <Label>Email</Label>
-            <Input value={formData.email} readOnly={isEdit} />
-          </div>
-
-          <div>
-            <Label>Phone</Label>
-            <Input value={formData.phone} readOnly={isEdit} />
-          </div>
-
-          <div>
-            <Label>Location</Label>
-            <Input value={formData.location} readOnly={isEdit} />
-          </div>
-
-          {/* ================= ROLE (RADIO) ================= */}
-          <div>
-            <Label>Role</Label>
-            <div className="flex gap-6 mt-2">
-              <Label className="flex items-center gap-2">
-                <Input
-                  type="radio"
-                  name="role"
-                  checked={formData.role === "CUSTOMER"}
-                  readOnly={isEdit}
-                />
-                Customer
-              </Label>
-
-              <Label className="flex items-center gap-2">
-                <Input
-                  type="radio"
-                  name="role"
-                  checked={formData.role === "ADMIN"}
-                  readOnly={isEdit}
-                />
-                Admin
-              </Label>
+            <div>
+              <Label>Name</Label>
+              <Input value={formData.username} readOnly={isEdit} />
             </div>
-          </div>
 
-          {/* ================= GENDER (RADIO) ================= */}
-          <div>
-            <Label>Gender</Label>
-            <div className="flex gap-6 mt-2">
-              <Label className="flex items-center gap-2">
-                <Input
-                  type="radio"
-                  name="gender"
-                  checked={formData.gender === "MALE"}
-                  readOnly={isEdit}
-                />
-                Male
-              </Label>
-
-              <Label className="flex items-center gap-2">
-                <Input
-                  type="radio"
-                  name="gender"
-                  checked={formData.gender === "FEMALE"}
-                  readOnly={isEdit}
-                />
-                Female
-              </Label>
-
-              <Label className="flex items-center gap-2">
-                <Input
-                  type="radio"
-                  name="gender"
-                  checked={formData.gender === "OTHER"}
-                  readOnly={isEdit}
-                />
-                Other
-              </Label>
+            <div>
+              <Label>Email</Label>
+              <Input value={formData.email} readOnly={isEdit} />
             </div>
-          </div>
 
-          <div>
-            <Label>Date of Birth</Label>
-            <Input type="date" value={formData.dob} readOnly={isEdit} />
-          </div>
+            <div>
+              <Label>Phone</Label>
+              <Input value={formData.phone} readOnly={isEdit} />
+            </div>
 
-          {/* ================= PASSWORD SECTION ================= */}
+            <div>
+              <Label>Location</Label>
+              <Input value={formData.location} readOnly={isEdit} />
+            </div>
+
+            {/* ================= ROLE (RADIO) ================= */}
+            <div>
+              <Label>Role</Label>
+              <div className="flex gap-6 mt-2">
+                <Label className="flex items-center gap-2">
+                  <Input
+                    type="radio"
+                    name="role"
+                    checked={formData.role === "CUSTOMER"}
+                    readOnly={isEdit}
+                  />
+                  Customer
+                </Label>
+
+                <Label className="flex items-center gap-2">
+                  <Input
+                    type="radio"
+                    name="role"
+                    checked={formData.role === "ADMIN"}
+                    readOnly={isEdit}
+                  />
+                  Admin
+                </Label>
+              </div>
+            </div>
+
+            {/* ================= GENDER (RADIO) ================= */}
+            <div>
+              <Label>Gender</Label>
+              <div className="flex gap-6 mt-2">
+                <Label className="flex items-center gap-2">
+                  <Input
+                    type="radio"
+                    name="gender"
+                    checked={formData.gender === "MALE"}
+                    readOnly={isEdit}
+                  />
+                  Male
+                </Label>
+
+                <Label className="flex items-center gap-2">
+                  <Input
+                    type="radio"
+                    name="gender"
+                    checked={formData.gender === "FEMALE"}
+                    readOnly={isEdit}
+                  />
+                  Female
+                </Label>
+
+                <Label className="flex items-center gap-2">
+                  <Input
+                    type="radio"
+                    name="gender"
+                    checked={formData.gender === "OTHER"}
+                    readOnly={isEdit}
+                  />
+                  Other
+                </Label>
+              </div>
+            </div>
+
+            <div>
+              <Label>Date of Birth</Label>
+              <Input type="date" value={formData.dob} readOnly={isEdit} />
+            </div>
+
+            {/* ================= PASSWORD SECTION ================= */}
             <div className="col-span-2 mt-4">
-                <Label className="font-semibold">Change Password</Label>
-                <div className="grid grid-cols-1 gap-4 mt-2">
-                    <Input
-                      type="password"
-                      name="currentPassword"
-                      placeholder="Current Password"
-                      value={(isEdit)?formData.password : passwordData.currentPassword}
-                      onChange={handlePasswordChange}
-                      readOnly={isEdit}
-                    />
+              <Label className="font-semibold">Change Password</Label>
+              <form id="password-form" onSubmit={handlePasswordSubmit} className="grid grid-cols-1 gap-4 mt-2">
+                <Input
+                  type="password"
+                  name="currentPassword"
+                  value={passwordData.currentPassword}
+                  onChange={handlePasswordChange}
+                  readOnly={!isPasswordEdit}
+                  autoComplete="current-password"
+                />
 
-        <Input
-          type="password"
-          name="newPassword"
-          placeholder="New Password"
-          value={passwordData.newPassword}
-          onChange={handlePasswordChange}
-          readOnly={isEdit}
-        />
 
-        <Input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          value={passwordData.confirmPassword}
-          onChange={handlePasswordChange}
-          readOnly={isEdit}
-        />
+                <Input
+                  type="password"
+                  name="newPassword"
+                  placeholder="New Password"
+                  value={passwordData.newPassword}
+                  onChange={handlePasswordChange}
+                  readOnly={!isPasswordEdit}
+                  autoComplete="new-password"
+                />
 
-        {passwordError && (
-          <p className="text-red-600 text-sm">{passwordError}</p>
-        )}
+                <Input
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
+                  value={passwordData.confirmPassword}
+                  onChange={handlePasswordChange}
+                  readOnly={!isPasswordEdit}
+                  autoComplete="new-password"
+                />
 
-                </div>
+                {passwordError && (
+                  <p className="text-red-600 text-sm">{passwordError}</p>
+                )}
+
+              </form>
             </div>
-          {/* ================= ACTION BUTTONS ================= */}
-          <div className="col-span-2 flex gap-4 mt-4">
-            {(isEdit)? <Button className="bg-grey-700 hover:bg-grey-900 text-black" onClick={() => handleEditUser()}>Update Profile</Button> : <Button className="bg-grey-700 hover:bg-grey-900 text-black" onClick={() => handlePasswordSubmit()}>Save</Button>}
-            <Button className="bg-red-600 hover:bg-red-700 text-white" onClick={() => handleDeleteUser(formData.id)}>
-              Delete Profile
-            </Button>
+            {/* ================= ACTION BUTTONS ================= */}
+            <div className="col-span-2 flex gap-4 mt-4">
+              <Button onClick={() => setIsEdit(!isEdit)}>
+                {isEdit ? "Edit Profile" : "Save Profile"}
+              </Button>
+                <Button onClick={() => handleLogout()} className="bg-red-600 hover:bg-red-700 text-white"> Logout</Button>
+              <Button
+                type="submit"
+                form="password-form"
+                disabled={!isPasswordEdit}
+              >
+                Update Password
+              </Button>
+              <Button className="bg-red-600 hover:bg-red-700 text-white" onClick={() => handleDeleteUser(formData.id)}>
+                Delete Profile
+              </Button>
+            </div>
+
           </div>
 
-        </div>
+        </CardContent>
+      </Card>
 
-                </CardContent>
-              </Card>
-
-            </div>
+    </div>
   );
 }

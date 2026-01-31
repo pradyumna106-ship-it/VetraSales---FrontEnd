@@ -15,7 +15,7 @@ export function Hero({ onShopNow,onLearnMore }) {
             <div className="flex gap-4">
               <Button
                 onClick={onShopNow}
-                className="bg-white text-purple-600 px-8 py-3 rounded-full hover:bg-gray-100 transition-colors"
+                className="bg-white text-[#8A7432] px-8 py-3 rounded-full hover:bg-gray-100 transition-colors"
               >
                 Shop Now
               </Button>

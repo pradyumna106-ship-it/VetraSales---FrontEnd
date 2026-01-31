@@ -30,32 +30,35 @@ export default function SignInPage() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    localStorage.setItem('username', formData.username);
-    const payload = {
-      username: formData.username,
-      password: formData.password
-    };
-    try {
-      const response = await signIn(payload);
-      const role = response.toLowerCase(); // admin / customer
-      console.log("role: ",role)
-
-      // ✅ role-based routing
-      if (role === "admin") {
-        navigate("/admin_page");
-      } else if (role === "customer") {
-        navigate("/customer_page");
-      }
-    } catch (err) {
-      setError(
-        err.response?.data?.message || "Invalid username or password"
-      );
-    } finally {
-      setLoading(false);
-    }
+  e.preventDefault();
+  setLoading(true);
+  localStorage.setItem('username', formData.username);
+  
+  const payload = {
+    username: formData.username,
+    password: formData.password
   };
+  
+  try {
+    const result = await signIn(payload);  // Full response data
+    
+    // ✅ Get role from result (not response)
+    const role = result.role.toLowerCase();  // "admin" or "customer"
+    console.log("role:", role);
+    
+    // ✅ Role-based routing
+    if (role === "admin") {
+      navigate("/admin_page");
+    } else if (role === "customer") {
+      navigate("/customer_page");
+    }
+  } catch (err) {
+    setError(err.response?.data?.message || "Invalid username or password");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
           <div className="min-h-screen bg-gray-100 flex items-center justify-center">

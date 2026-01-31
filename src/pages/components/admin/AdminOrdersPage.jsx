@@ -16,48 +16,58 @@ import { Button } from "../ui/button";
 import { getAllOrders } from "../../services/orderService";
 import { useState, useEffect } from "react";
 import { cancelOrder } from "../../services/orderService";
+import { exportToCSV } from "../../../utils/exportUtils";
 export function AdminOrdersPage({ onUpdateStatus }) {
   const [orders, setOrders] = useState([]);
-   useEffect(() => {
-      const loadEmployees = async () => {
-          const res = await getAllOrders();
-          setOrders(res.data); // ✅
-        };
-        loadEmployees();
-    },[]);
+  useEffect(() => {
+    const loadEmployees = async () => {
+      const res = await getAllOrders();
+      setOrders(res.data); // ✅
+    };
+    loadEmployees();
+  }, []);
 
-    const handlePlaceOrder = (orderId) => {
-      const loadPlaceOrder = async (orderId) => {
-        const res = await onUpdateStatus(orderId,"PLACED");
-        console.log(res);
-      }
-      try {
-        loadPlaceOrder(orderId);
-      } catch (error) {
-        console.error(error);
-      }
+  const handlePlaceOrder = (orderId) => {
+    const loadPlaceOrder = async (orderId) => {
+      const res = await onUpdateStatus(orderId, "PLACED");
+      console.log(res);
     }
-    const handleCancelOrder = (orderId) => {
-      const loadCancelOrder = async (orderId) => {
-        const res = await cancelOrder(orderId) ;
-        console.log(res);
-      }
-      try {
-        loadCancelOrder(orderId);
-      } catch (error) {
-        console.error(error)
-      }
+    try {
+      loadPlaceOrder(orderId);
+    } catch (error) {
+      console.error(error);
     }
-    const handleDeliverOrder = (orderId) => {
-      onUpdateStatus(orderId, "DELIVERED")
+  }
+  const handleCancelOrder = (orderId) => {
+    const loadCancelOrder = async (orderId) => {
+      const res = await cancelOrder(orderId);
+      console.log(res);
     }
-    const handleShipOrder = (orderId) => {
-      onUpdateStatus(orderId, "SHIPPED")
+    try {
+      loadCancelOrder(orderId);
+    } catch (error) {
+      console.error(error)
     }
+  }
+  const handleDeliverOrder = (orderId) => {
+    onUpdateStatus(orderId, "DELIVERED")
+  }
+  const handleShipOrder = (orderId) => {
+    onUpdateStatus(orderId, "SHIPPED")
+  }
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Orders Management</CardTitle>
+        <Button
+          variant="outline"
+          onClick={() => {
+            const deliveredOrders = orders.filter(o => o.status === "DELIVERED");
+            exportToCSV(deliveredOrders, "delivered_orders.csv");
+          }}
+        >
+          Export Delivered Orders
+        </Button>
       </CardHeader>
 
       <CardContent>
@@ -118,11 +128,11 @@ export function AdminOrdersPage({ onUpdateStatus }) {
                 </TableCell>
 
                 <TableCell className="flex gap-2">
-                    <OrderActions
+                  <OrderActions
                     onPlace={() => handlePlaceOrder(order.id)}
                     onDeliver={() => handleDeliverOrder(order.id)}
                     onShip={() => handleShipOrder(order.id)}
-                    />
+                  />
 
                   <Button
                     size="sm"

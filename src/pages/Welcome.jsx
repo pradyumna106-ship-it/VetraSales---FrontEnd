@@ -1,7 +1,6 @@
 import React,{ useState,useEffect } from "react";
 import { Button } from "./components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "./services/authenticator";
 import { Zero } from "./components/Zero";
 import { useRef } from "react";
 import { Toaster } from 'sonner';
@@ -14,15 +13,11 @@ export default function Welcome() {
     const res = await loginUser()
     console.log(res)
   }
-  const handlelogin = async() => {
+  const handlelogin = () => {
     navigate('/sign_in_page')
-    const res = await loadAuthenticate()
-    console.log(res);
   }
-  const handleSingup = async() => {
+  const handleSingup = () => {
     navigate('/sign_up_page')
-    const res = await loadAuthenticate()
-    console.log(res);
   }
   /* 🔹 WELCOME SCREEN */
   return (

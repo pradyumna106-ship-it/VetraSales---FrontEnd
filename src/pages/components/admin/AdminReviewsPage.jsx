@@ -4,25 +4,26 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { allReviews } from "../../services/reviewService";
+import { exportToCSV } from "../../../utils/exportUtils";
 /* MOCK REVIEWS DATA (Replace with API later) */
 
 
 export function AdminReviewsPage({ onBack }) {
-    const [reviews, setReviews] = useState([]);
-    const [search, setSearch] = useState("");
-    useEffect(() => {
-  const loadReview = async () => {
-    try {
-      const data = await allReviews();
-      setReviews(Array.isArray(data) ? data : []);
-    } catch (err) {
-      console.error("Failed to load reviews", err);
-      setReviews([]);
-    }
-  };
-  loadReview();
-}, []);
-    const toggleStatus = (id) => {
+  const [reviews, setReviews] = useState([]);
+  const [search, setSearch] = useState("");
+  useEffect(() => {
+    const loadReview = async () => {
+      try {
+        const data = await allReviews();
+        setReviews(Array.isArray(data) ? data : []);
+      } catch (err) {
+        console.error("Failed to load reviews", err);
+        setReviews([]);
+      }
+    };
+    loadReview();
+  }, []);
+  const toggleStatus = (id) => {
     setReviews((prev) =>
       prev.map((r) =>
         r.id === id
@@ -33,9 +34,9 @@ export function AdminReviewsPage({ onBack }) {
   };
 
   const filteredReviews = (reviews || []).filter((r) =>
-  (r.productName ?? "").toLowerCase().includes(search.toLowerCase()) ||
-  (r.customerName ?? "").toLowerCase().includes(search.toLowerCase())
-);
+    (r.productName ?? "").toLowerCase().includes(search.toLowerCase()) ||
+    (r.customerName ?? "").toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="space-y-6">
@@ -43,9 +44,17 @@ export function AdminReviewsPage({ onBack }) {
       {/* HEADER */}
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">Customer Reviews</h2>
-        <Button variant="outline" onClick={onBack}>
-          Back
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={() => exportToCSV(reviews, "product_reviews.csv")}
+          >
+            Export Reviews
+          </Button>
+          <Button variant="outline" onClick={onBack}>
+            Back
+          </Button>
+        </div>
       </div>
 
       {/* SEARCH */}
@@ -77,11 +86,10 @@ export function AdminReviewsPage({ onBack }) {
               </div>
 
               <span
-                className={`text-xs px-2 py-1 rounded ${
-                  review.status === "approved"
-                    ? "bg-green-100 text-green-700"
-                    : "bg-red-100 text-red-700"
-                }`}
+                className={`text-xs px-2 py-1 rounded ${review.status === "approved"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-700"
+                  }`}
               >
                 {review.status.toUpperCase()}
               </span>
