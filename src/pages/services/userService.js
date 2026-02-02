@@ -83,19 +83,13 @@ export const signUp = async (user) => {
 
 export const signIn = async (login) => {
   try {
-    const res = await axios.post(`${BASE_URL}/signIn`, login, {
-      headers: { "Content-Type": "application/json" }
-    });
-
+    const res = await axios.post(`${BASE_URL}/signIn`, login, { headers: { "Content-Type": "application/json" }});
     console.log("Full response:", res.data);
-
     // ✅ Use RES not response
     const token = res.data.jwtToken;
     console.log("token received:", token);
-
     // ✅ Save token
     localStorage.setItem("token", token);
-
     // ✅ Return full response data
     return res.data;  // Contains jwtToken, role, username
   } catch (error) {
