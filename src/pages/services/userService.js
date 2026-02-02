@@ -74,7 +74,7 @@ export const deleteUser = (id) => {
 
 export const signUp = async (user) => {
   try {
-    const res =  axios.post(`${BASE_URL}/signUp`, user, { headers: { "Content-Type": 'application/json' }});
+    const res =  await axios.post(`${BASE_URL}/signUp`, user, { headers: { "Content-Type": 'application/json' }});
     return res;
   } catch(error) {
     console.error(error);
