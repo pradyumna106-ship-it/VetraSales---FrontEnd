@@ -3,12 +3,19 @@ import axios from "axios";
 const BASE_URL = "https://vetrasales-backend-production.up.railway.app" + "/api/user";
 
 const getHeaders = () => {
-  const token = localStorage.getItem('token');
-  return {
-    "Content-Type": 'application/json',
-    "Authorization": `Bearer ${token}`
+  const token = localStorage.getItem("token");
+
+  const headers = {
+    "Content-Type": "application/json"
   };
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  return headers;
 };
+
 
 export const getAllUser = async () => {
   try {

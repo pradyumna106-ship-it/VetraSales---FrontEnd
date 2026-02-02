@@ -2,12 +2,23 @@ import axios from "axios";
 
 const BASE_URL = "https://vetrasales-backend-production.up.railway.app"+"/api/review";
 
-const token = localStorage.getItem('token')
-const header = {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}
+const getHeaders = () => {
+    const token = localStorage.getItem("token");
+
+    const headers = {
+        "Content-Type": "application/json"
+    };
+
+    if (token) {
+        headers.Authorization = `Bearer ${token}`;
+    }
+
+    return headers;
+};
 export const listOfReview = async (productId) => { 
     try {const response = await axios.get(`${BASE_URL}/listOfReview`,{
     params: { productId },
-    headers: { "Content-Type": 'application/json', "Authorization": `Bearer ${token}` }
+    headers: getHeaders() 
 });
     return response.data;} catch (error) {
         console.error("Error fetching products:", error)
@@ -15,18 +26,18 @@ export const listOfReview = async (productId) => {
 };
 
 export const customerReview = async (username) => { 
-    try {const response = await axios.get(`${BASE_URL}/customerReviews`,{params: { username }},{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
+    try {const response = await axios.get(`${BASE_URL}/customerReviews`,{params: { username }},{headers: getHeaders() });
     return response;
     } catch (error) {
         console.error("Error fetching products:", error)
     }
 };
-export const deleteReview = (reviewId,username,admin) => axios.delete(`${BASE_URL}/deleteReview`,{reviewId,username,admin},{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
+export const deleteReview = (reviewId,username,admin) => axios.delete(`${BASE_URL}/deleteReview`,{reviewId,username,admin},{headers: getHeaders() });
 export const deleteAllReviews = () => axios.delete(`${BASE_URL}/deleteAllReviews`,{headers: { "Content-Type": "application/json" }});
-export const deleteReviewsByProduct = (productId) => axios.delete(`${BASE_URL}/deleteReviewsByProduct`,{params:{productId}},{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
+export const deleteReviewsByProduct = (productId) => axios.delete(`${BASE_URL}/deleteReviewsByProduct`,{params:{productId}},{headers: getHeaders() });
 export const allReviews =  async () => {
     try {
-        const res = await axios.get(`${BASE_URL}/allReviews`,{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
+        const res = await axios.get(`${BASE_URL}/allReviews`,{headers: getHeaders() });
         console.log("API response:", res.data); // 👈 DEBUG
         return res.data;
     } catch (error) {
@@ -37,7 +48,7 @@ export const allReviews =  async () => {
 
 export const getRating = async (productId) => {
   try {
-    const res = await axios.get(`${BASE_URL}/getRating`,{params:{productId}},{headers: {"Content-Type":'application/json' ,"Authorization":`Bearer ${token}`}});
+    const res = await axios.get(`${BASE_URL}/getRating`,{params:{productId}},{headers: getHeaders() });
     console.log("API response:", res.data); // 👈 DEBUG
     return res.data;
   } catch (error) {
