@@ -68,7 +68,7 @@ export function ProductCard({ product, onViewDetails }) {
           <Button
             onClick={handleAddToCart}
             disabled={!product.inStock}
-            className="bg-[#D9C88A] text-white p-2 rounded-lg hover: bg-[#beb078] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+            className="bg-[#D9C88A] text-white p-2 rounded-lg hover: bg-[#6e5e1f] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
             <ShoppingCart className="w-5 h-5" />
           </Button>

@@ -1,35 +1,45 @@
 export const exportToCSV = (data, filename) => {
-    if (!data || !data.length) {
-        alert("No data to export");
-        return;
-    }
+  if (!data || !data.length) {
+    alert("No data to export");
+    return;
+  }
 
-    // Get headers from the first object keys
-    const headers = Object.keys(data[0]);
+  const headers = Object.keys(data[0]);
 
-    // Create CSV rows
-    const csvRows = [
-        headers.join(","), // Header row
-        ...data.map(row =>
-            headers.map(header => {
-                const value = row[header];
-                // Handle strings with commas or quotes
-                const escapedValue = ('' + (value ?? '')).replace(/"/g, '""');
-                return `"${escapedValue}"`;
-            }).join(",")
-        )
-    ];
+  const csvRows = [
+    headers.join(","),
 
-    const csvContent = csvRows.join("\n");
+    ...data.map(row =>
+      headers.map(header => {
+        let value = row[header];
 
-    // Create a blob and trigger download
-    const blob = new Blob([csvContent], { type: "text/csv" });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.setAttribute("hidden", "");
-    a.setAttribute("href", url);
-    a.setAttribute("download", filename);
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+        // ✅ Handle items array
+        if (header === "items" && Array.isArray(value)) {
+          value = value
+            .map(item =>
+              `${item.productName} (Qty:${item.quantity}, Price:${item.price})`
+            )
+            .join(" | ");
+        }
+
+        // Fallback for objects
+        if (typeof value === "object" && value !== null) {
+          value = JSON.stringify(value);
+        }
+
+        const escapedValue = ('' + (value ?? '')).replace(/"/g, '""');
+        return `"${escapedValue}"`;
+      }).join(",")
+    )
+  ];
+
+  const blob = new Blob([csvRows.join("\n")], { type: "text/csv" });
+  const url = window.URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+
+  window.URL.revokeObjectURL(url);
 };
