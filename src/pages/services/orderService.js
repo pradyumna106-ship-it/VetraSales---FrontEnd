@@ -23,15 +23,15 @@ export const placeOrder = (orderData) => {
   }
 }
 
-export const getOrdersByUserId = async (userId) => {
-  try {
-     const res = axios.get(`${API}/delivered`,{params:{username}},{headers: getHeaders() });
-     return res.data;
-  } catch(error){
-    console.error(error);
-  }
-}
-  axios.get(`${API}/user/userId/${userId}`,{headers: getHeaders() });
+// export const getOrdersByUserId = async (userId) => {
+//   try {
+//      const res = axios.get(`${API}/user/userId/${userId}`,{headers: getHeaders() });
+//      return res.data;
+//   } catch(error){
+//     console.error(error);
+//   }
+// }
+  
 
 export const getOrdersByUsername = async (username) => {
   try {
