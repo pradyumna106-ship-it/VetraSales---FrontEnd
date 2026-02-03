@@ -86,7 +86,7 @@ export function OrderConfirmationPage({ onNavigate }) {
             </div>
             <div className="flex justify-between text-xl pt-2 border-t">
               <span>Total</span>
-              <span className="text-[#D9C88A]-600">
+              <span className="text-[#D9C88A]">
                 $
                 {(
                   getCartTotal() +
@@ -99,9 +99,9 @@ export function OrderConfirmationPage({ onNavigate }) {
         </div>
 
         {/* Next Steps */}
-        <div className="bg-[#D9C88A]-50 rounded-xl p-6 mb-8">
+        <div className="bg-[#D9C88A] rounded-xl p-6 mb-8">
           <div className="flex items-start gap-3">
-            <Package size={24} className="text-[#D9C88A] flex-shrink-0 mt-1" />
+            <Package size={24} className="text-[#D9C88A] shrink-0 mt-1" />
             <div>
               <h3 className="text-lg mb-2">What's Next?</h3>
               <ul className="space-y-2 text-gray-700">
