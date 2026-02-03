@@ -148,7 +148,7 @@ export function ProductDetailPage({ product, onBack, onViewReviews }) {
             </div>
 
             <div className="flex items-start gap-3">
-              <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+              <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center shrink-0 mt-1">
                 <span className="text-green-600 text-sm">✓</span>
               </div>
               <div>
@@ -160,7 +160,7 @@ export function ProductDetailPage({ product, onBack, onViewReviews }) {
             </div>
 
             <div className="flex items-start gap-3">
-              <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+              <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center shrink-0 mt-1">
                 <span className="text-green-600 text-sm">✓</span>
               </div>
               <div>

@@ -12,9 +12,7 @@ export const makePayment = async (totalAmount, onNavigate,request,phone,email) =
     }
 
     // ✅ Create Razorpay order
-    const { data: order } = await axios.post(
-      "/create-order",
-      null,
+    const { data: order } = await axios.get("/create-order",
       { params: { amount: amountInPaise } }
     );
 
