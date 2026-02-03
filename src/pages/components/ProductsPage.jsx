@@ -2,24 +2,18 @@ import { useState, useMemo } from 'react';
 import { SlidersHorizontal } from 'lucide-react';
 import { ProductCard } from './ProductCard';
 import { Input } from './ui/input';
-import {Label}  from './ui/label';
-export function ProductsPage({ initialCategory, onViewProduct,products,categories }) {
+import { Label } from './ui/label';
+export function ProductsPage({ initialCategory, onViewProduct, products, categories }) {
   const [selectedCategory, setSelectedCategory] = useState(initialCategory || 'all');
   const [sortBy, setSortBy] = useState('name');
-  const [priceRange, setPriceRange] = useState([0, 200]);
-      
+
+
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = products;
     // Filter by category
     if (selectedCategory !== 'all') {
       filtered = filtered.filter((p) => p.category.toLowerCase() === selectedCategory);
     }
-
-    // Filter by price range
-    filtered = filtered.filter(
-      (p) => p.price >= priceRange[0] && p.price <= priceRange[1]
-
-    );
 
     // Sort
     const sorted = [...filtered].sort((a, b) => {
@@ -37,10 +31,10 @@ export function ProductsPage({ initialCategory, onViewProduct,products,categorie
     });
 
     return sorted;
-  }, [selectedCategory, sortBy, priceRange]);
+  }, [selectedCategory, sortBy, products]);
 
   return (
-  <div className="mx-auto px-4 py-8">
+    <div className="mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="text-4xl mb-2">Shop All Products</h1>
         <p className="text-gray-600">
@@ -61,27 +55,27 @@ export function ProductsPage({ initialCategory, onViewProduct,products,categorie
               <h3 className="mb-3">Category</h3>
               <div className="space-y-2">
                 <Label className="flex items-center gap-3 w-full p-2 rounded-lg hover:bg-gray-100 cursor-pointer">
-                  <Input type="radio" value="all" checked={selectedCategory === 'all'}  onChange={e => setSelectedCategory(e.target.value)} className="h-4 w-4"/>
-          All Products
-        </Label>
+                  <Input type="radio" value="all" checked={selectedCategory === 'all'} onChange={e => setSelectedCategory(e.target.value)} className="h-4 w-4" />
+                  All Products
+                </Label>
 
-        {categories.map((category) => (
-  <Label
-    key={category.slug}
-    className="flex items-center gap-3 w-full p-2 rounded-lg hover:bg-gray-100 cursor-pointer"
-  >
-    <Input
-      type="radio"
-      value={category.slug}
-      checked={selectedCategory === category.slug}
-      onChange={(e) => setSelectedCategory(e.target.value)}
-      className="h-4 w-4"
-    />
-    <span className="leading-none">{category.name}</span>
-  </Label>
-))}
+                {categories.map((category) => (
+                  <Label
+                    key={category.slug}
+                    className="flex items-center gap-3 w-full p-2 rounded-lg hover:bg-gray-100 cursor-pointer"
+                  >
+                    <Input
+                      type="radio"
+                      value={category.slug}
+                      checked={selectedCategory === category.slug}
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                      className="h-4 w-4"
+                    />
+                    <span className="leading-none">{category.name}</span>
+                  </Label>
+                ))}
 
-      </div>
+              </div>
             </div>
           </div>
         </aside>
