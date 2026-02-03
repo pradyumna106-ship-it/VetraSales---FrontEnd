@@ -14,27 +14,85 @@ const getHeaders = () => {
 
   return headers;
 };
-export const placeOrder = (orderData) => 
-  axios.post(`${API}/create`, orderData,{headers: getHeaders() });
+export const placeOrder = (orderData) => {
+  try {
+    const res = axios.post(`${API}/create`, orderData,{headers: getHeaders() });
+    return res.data;
+  } catch(error) {
+    console.error(error);
+  }
+}
 
-export const getOrdersByUserId = (userId) =>
+export const getOrdersByUserId = async (userId) => {
+  try {
+     const res = axios.get(`${API}/delivered`,{params:{username}},{headers: getHeaders() });
+     return res.data;
+  } catch(error){
+    console.error(error);
+  }
+}
   axios.get(`${API}/user/userId/${userId}`,{headers: getHeaders() });
 
-export const getOrdersByUsername = (username) =>
-  axios.get(`${API}/delivered`,{params:{username}},{headers: getHeaders() });
+export const getOrdersByUsername = async (username) => {
+  try {
+    const res = await axios.get(`${API}/delivered`,{params:{username}},{headers: getHeaders() });
+    return res.data;
+  } catch(error) {
+    console.error(error);
+  }
+}
+  
 
-export const cancelOrder = (orderId) =>
-  axios.put(`${API}/${orderId}/cancel`,{headers: getHeaders() });
+export const cancelOrder = async (orderId) =>
+  { 
+    try {
+      const res = await axios.put(`${API}/${orderId}/cancel`,{headers: getHeaders() });
+      return res.data;
+    } catch (error) {
+      console.error(error)
+    }
+     
+  }
 
-export const updateOrderStatus = (orderId, status) =>
-  axios.put(`${API}/${orderId}/status?status=${status}`,{headers: getHeaders() });
+export const updateOrderStatus = (orderId, status) => {
+  try {
+    const res = axios.put(`${API}/${orderId}/status?status=${status}`,{headers: getHeaders() });
+    return res.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+  
 
-export const getAllOrders = () => axios.get(API,{headers: getHeaders() });
+export const getAllOrders = async () => {
+  try {
+    const res = await axios.get(API,{headers: getHeaders() });
+    return res.data;
+  } catch(error) {
+    console.error(error);
+  }
+}
 
-export const getOrderById = (orderId) =>
-  axios.get(`${API}/byId?orderId=${orderId}`,{headers: getHeaders() });
+export const getOrderById = async (orderId) =>{
+  try {
+    const res = await axios.get(`${API}/byId?orderId=${orderId}`,{headers: getHeaders() });
+    return res.data;
+  } catch(error) {
+    console.error(error);
+    
+  }
+}
+  
 
-export const getSummary = (username) => axios.get(`${API}/getSummary`,{params:{username}},{headers: getHeaders() });
+export const getSummary = async (username) => {
+  try {
+    const res = await axios.get(`${API}/getSummary`,{params:{username}},{headers: getHeaders() });
+    return res.data;
+  } catch(error) {
+    console.error(error);
+    
+  }
+}
 
 
 
