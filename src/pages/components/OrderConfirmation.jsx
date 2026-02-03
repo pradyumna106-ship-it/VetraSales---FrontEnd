@@ -60,7 +60,7 @@ export function OrderConfirmationPage({ onNavigate }) {
                     <p className="mb-1">{item.name}</p>
                     <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
                   </div>
-                  <p className="text-[#D9C88A]-600">
+                  <p className="text-[#D9C88A]">
                     ${(item.price * item.quantity).toFixed(2)}
                   </p>
                 </div>
@@ -101,7 +101,7 @@ export function OrderConfirmationPage({ onNavigate }) {
         {/* Next Steps */}
         <div className="bg-[#D9C88A]-50 rounded-xl p-6 mb-8">
           <div className="flex items-start gap-3">
-            <Package size={24} className="text-[#D9C88A]-600 flex-shrink-0 mt-1" />
+            <Package size={24} className="text-[#D9C88A] flex-shrink-0 mt-1" />
             <div>
               <h3 className="text-lg mb-2">What's Next?</h3>
               <ul className="space-y-2 text-gray-700">
@@ -124,7 +124,7 @@ export function OrderConfirmationPage({ onNavigate }) {
           </Button>
           <Button
             onClick={handleContinueShopping}
-            className="flex-1 bg-[#D9C88A]-600 text-white py-4 rounded-xl hover:bg-[#D9C88A]-700 transition-colors"
+            className="flex-1 bg-[#D9C88A] text-white py-4 rounded-xl hover:bg-[#D9C88A] transition-colors"
           >
             Continue Shopping
           </Button>

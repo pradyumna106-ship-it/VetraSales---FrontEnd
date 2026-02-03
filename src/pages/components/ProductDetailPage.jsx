@@ -122,7 +122,7 @@ export function ProductDetailPage({ product, onBack, onViewReviews }) {
               disabled={!product.inStock}
               className="flex-1 bg-[#D9C88A] text-white py-4 rounded-xl hover:bg-[#beb078] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-lg"
             >
-              <ShoppingCart className="w-5 h-5" />
+              <ShoppingCart className="w-5 h-5 bg-[#725c00]" />
               <span>Add to Cart</span>
             </Button>
             <Button className="w-14 h-14 border border-gray-300 rounded-xl flex items-center justify-center hover:bg-gray-100 transition-colors" onClick={() => toggleFavourite(product)}>

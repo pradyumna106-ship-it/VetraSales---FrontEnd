@@ -54,8 +54,8 @@ export function ProductCard({ product, onViewDetails }) {
             <Star
               key={index}
               className={`w-4 h-4 ${index < rating
-                  ? "fill-yellow-400 text-yellow-400"
-                  : "text-gray-300"
+                ? "fill-yellow-400 text-yellow-400"
+                : "text-gray-300"
                 }`}
             />
           ))}
@@ -68,7 +68,7 @@ export function ProductCard({ product, onViewDetails }) {
           <Button
             onClick={handleAddToCart}
             disabled={!product.inStock}
-            className="bg-[#D9C88A] text-white p-2 rounded-lg hover:bg-[#beb078] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+            className="bg-[#D9C88A] text-white p-2 rounded-lg hover: bg-[#beb078] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
           >
             <ShoppingCart className="w-5 h-5" />
           </Button>
