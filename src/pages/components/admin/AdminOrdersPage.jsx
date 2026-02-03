@@ -22,7 +22,7 @@ export function AdminOrdersPage({ onUpdateStatus }) {
   useEffect(() => {
     const loadEmployees = async () => {
       const res = await getAllOrders();
-      setOrders(res.data); // ✅
+      setOrders(res|| []); // ✅
     };
     loadEmployees();
   }, []);
