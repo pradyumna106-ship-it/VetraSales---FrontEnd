@@ -10,7 +10,7 @@ export function FavouritePage({ onViewProduct, onBack }) {
         <h2 className="text-2xl font-semibold">Your Favourites ❤️</h2>
         <Button
           onClick={onBack}
-          className="text-[#D9C88A]-600 hover:underline"
+          className="text-[#D9C88A] hover:underline"
         >
           Back
         </Button>

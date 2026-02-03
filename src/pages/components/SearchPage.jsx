@@ -23,7 +23,7 @@ export function SearchPage({ products, onViewProduct, onBack }) {
 
         <Button
           onClick={onBack}
-          className="text-[#D9C88A]-600 hover:underline whitespace-nowrap"
+          className="text-[#D9C88A] hover:underline whitespace-nowrap"
         >
           Back
         </Button>
