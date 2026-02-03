@@ -48,7 +48,7 @@ export const allReviews =  async () => {
 
 export const getRating = async (productId) => {
   try {
-    const res = await axios.get(`${BASE_URL}/getRating`,{params:{productId}},{headers: getHeaders() });
+    const res = await axios.get(`${BASE_URL}/getRating`,{params: {productId},headers: getHeaders() });
     console.log("API response:", res.data); // 👈 DEBUG
     return res.data;
   } catch (error) {

@@ -17,8 +17,8 @@ export default function ProductReviews({ productId,onBack,username }) {
   // Dummy reviews (replace with API later)
   const [reviews, setReviews] = useState([]);
   useEffect(() => {
-  if (productId) loadReviews(productId);
-}, [productId]);
+    if (productId) loadReviews(productId);
+  }, [productId]);
 
   
   const handleSubmit = async () => {
