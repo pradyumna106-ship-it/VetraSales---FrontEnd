@@ -31,7 +31,7 @@ export function AdminOrdersPage({ onUpdateStatus }) {
     const loadPlaceOrder = async (orderId) => {
       const res = await onUpdateStatus(orderId, "PLACED");
       console.log(res);
-    }
+      }
     try {
       loadPlaceOrder(orderId);
     } catch (error) {
@@ -50,10 +50,27 @@ export function AdminOrdersPage({ onUpdateStatus }) {
     }
   }
   const handleDeliverOrder = (orderId) => {
-    onUpdateStatus(orderId, "DELIVERED")
+    const loadPlaceOrder = async (orderId) => {
+      const res = await onUpdateStatus(orderId, "DELIVERED");
+      console.log(res);
+    }
+    try {
+      loadPlaceOrder(orderId);
+    } catch (error) {
+      console.error(error);
+    }
   }
   const handleShipOrder = (orderId) => {
-    onUpdateStatus(orderId, "SHIPPED")
+    const loadPlaceOrder = async (orderId) => {
+      const res = await onUpdateStatus(orderId, "SHIPPED");
+      console.log(res);
+    }
+    try {
+      loadPlaceOrder(orderId);
+    } catch (error) {
+      console.error(error);
+    }
+    
   }
   return (
     <Card>
@@ -94,9 +111,9 @@ export function AdminOrdersPage({ onUpdateStatus }) {
 
                 <TableCell>
                   <div className="flex flex-col">
-                    <span>{order.address}</span>
+                    <span>{order.username}</span>
                     <span className="text-sm text-muted-foreground">
-                      {order.address}
+                      {order.username}
                     </span>
                   </div>
                 </TableCell>
