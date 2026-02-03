@@ -56,7 +56,7 @@ export const cancelOrder = async (orderId) =>
 
 export const updateOrderStatus = (orderId, status) => {
   try {
-    const res = axios.put(`${API}/${orderId}/status?status=${status}`,{headers: getHeaders() });
+    const res = axios.put(`${API}/${orderId}/status`,{params:{status}},{headers: getHeaders() });
     return res.data;
   } catch (error) {
     console.error(error);
