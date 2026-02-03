@@ -111,7 +111,6 @@ export function AdminOrdersPage({ onUpdateStatus }) {
 
                 <TableCell>
                   <div className="flex flex-col">
-                    <span>{order.username}</span>
                     <span className="text-sm text-muted-foreground">
                       {order.username}
                     </span>
@@ -125,7 +124,7 @@ export function AdminOrdersPage({ onUpdateStatus }) {
                 <TableCell>
                   <span
                     className={
-                      order.status === "Paid"
+                      order.status === "PAID"
                         ? "text-green-600"
                         : "text-red-600"
                     }
