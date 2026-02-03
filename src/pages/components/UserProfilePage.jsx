@@ -26,11 +26,11 @@ import { updateUser } from "../services/userService";
 import { deleteUser } from "../services/userService";
 import { toggleStatus } from "../services/userService";
 /* Default user data (NO API) */
-
+import { useNavigate } from "react-router-dom";
 export function UserProfile({ username }) {
   const [recentActivity, setRecentActivity] = useState([]);
   const [isPasswordEdit, setIsPasswordEdit] = useState(false);
-
+  const onNav = useNavigate();
   useEffect(() => {
     setRecentActivity([
       {

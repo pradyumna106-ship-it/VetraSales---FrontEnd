@@ -1,11 +1,11 @@
 import { ShoppingCart, Search, Heart, User } from 'lucide-react';
 import { useCart } from '../context/CardContext';
 import { Button,buttonVariants } from './ui/button';
-import { useNavigate } from 'react-router-dom';
+
 export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, role, onScroll}) {
   const { getCartCount } = useCart();
   const cartCount = getCartCount();
-  const onNav = useNavigate();
+  
   
 
   return (
