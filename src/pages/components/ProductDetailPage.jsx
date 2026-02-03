@@ -4,25 +4,25 @@ import { useCart } from '../context/CardContext';
 import { ImageWithFallback } from './figma/ImageWithFallback';
 import { toast } from 'sonner';
 import { useFavourite } from '../context/FavouriteContext';
-import { Button,buttonVariants } from './ui/button';
+import { Button, buttonVariants } from './ui/button';
 import { getRating } from '../services/reviewService';
 
-export function ProductDetailPage({ product, onBack,onViewReviews }) {
+export function ProductDetailPage({ product, onBack, onViewReviews }) {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
   const { toggleFavourite, isFavourite } = useFavourite();
   const fav = isFavourite(product.id);
-  const [rating,setRating] = useState(0);
+  const [rating, setRating] = useState(0);
 
   const loadRating = async (productId) => {
-      try {
-          const res = await getRating(productId);
-          setRating(res || 0);
-      } catch (error) {
-        console.error(error)
-      }
+    try {
+      const res = await getRating(productId);
+      setRating(res || 0);
+    } catch (error) {
+      console.error(error)
     }
-    loadRating(product.id)
+  }
+  loadRating(product.id)
   const handleAddToCart = () => {
     for (let index = 0; index < quantity; index++) {
       addToCart(product);
@@ -69,16 +69,16 @@ export function ProductDetailPage({ product, onBack,onViewReviews }) {
         {/* Product Info */}
         <div className="flex flex-col">
           <div className="mb-4">
-            <span className="inline-block bg-[#D9C88A]-100 text-[#D9C88A]-600 px-3 py-1 rounded-full text-sm mb-4">
+            <span className="inline-block bg-[#fcf8e8] text-[#D9C88A] px-3 py-1 rounded-full text-sm mb-4">
               {product.category}
             </span>
             <h1 className="text-4xl mb-4">{product.name}</h1>
-            
+
             {/* Rating */}
             <div className="flex items-center gap-2 mb-6">
               <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, index) => (
-                  <Star key={index}  className={`w-5 h-5 ${  index < Math.floor(rating)  ? 'fill-yellow-400 text-yellow-400'  : 'text-gray-300' }`}/>
+                  <Star key={index} className={`w-5 h-5 ${index < Math.floor(rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
                 ))}
               </div>
               <span className="text-gray-600">
@@ -87,7 +87,7 @@ export function ProductDetailPage({ product, onBack,onViewReviews }) {
             </div>
           </div>
 
-          <div className="text-4xl text-[#D9C88A]-600 mb-6">
+          <div className="text-4xl text-[#D9C88A] mb-6">
             ${product.price}
           </div>
 
@@ -120,13 +120,13 @@ export function ProductDetailPage({ product, onBack,onViewReviews }) {
             <Button
               onClick={() => handleAddToCart()}
               disabled={!product.inStock}
-              className="flex-1 bg-[#D9C88A]-600 text-white py-4 rounded-xl hover:bg-[#D9C88A]-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-lg"
+              className="flex-1 bg-[#D9C88A] text-white py-4 rounded-xl hover:bg-[#beb078] transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-lg"
             >
               <ShoppingCart className="w-5 h-5" />
               <span>Add to Cart</span>
             </Button>
             <Button className="w-14 h-14 border border-gray-300 rounded-xl flex items-center justify-center hover:bg-gray-100 transition-colors" onClick={() => toggleFavourite(product)}>
-              <Heart className={`w-6 h-6 transition-colors ${ fav ? 'fill-red-500 text-red-500' : 'text-gray-500'  }`}/>
+              <Heart className={`w-6 h-6 transition-colors ${fav ? 'fill-red-500 text-red-500' : 'text-gray-500'}`} />
             </Button>
             <Button onClick={() => onViewReviews()} variant="outline">
               View Reviews
@@ -146,7 +146,7 @@ export function ProductDetailPage({ product, onBack,onViewReviews }) {
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-start gap-3">
               <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                 <span className="text-green-600 text-sm">✓</span>
@@ -158,7 +158,7 @@ export function ProductDetailPage({ product, onBack,onViewReviews }) {
                 </p>
               </div>
             </div>
-            
+
             <div className="flex items-start gap-3">
               <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
                 <span className="text-green-600 text-sm">✓</span>
