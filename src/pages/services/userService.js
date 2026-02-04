@@ -87,9 +87,11 @@ export const signIn = async (login) => {
     console.log("Full response:", res.data);
     // ✅ Use RES not response
     const token = res.data.jwtToken;
+    const location = res.data.location;
     console.log("token received:", token);
     // ✅ Save token
     localStorage.setItem("token", token);
+    localStorage.setItem("location", location);
     // ✅ Return full response data
     return res.data;  // Contains jwtToken, role, username
   } catch (error) {
