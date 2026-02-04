@@ -30,7 +30,7 @@ export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, ro
 
           {/* ================= CUSTOMER NAV ================= */}
           {role === 'customer' && (
-            <>
+            <div>
               <nav className="hidden md:flex items-center gap-6">
                 <Button
                   onClick={() => onNavigate('home')}
@@ -68,12 +68,13 @@ export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, ro
                   <User className="w-5 h-5" />
                 </Button>
               </div>
-            </>
+            </div>
           )}
 
           {/* ================= ADMIN NAV ================= */}
             {role === 'admin' && (
-              <nav className="hidden md:flex items-center gap-6">
+              <div className='justify-center'>
+                <nav className="hidden md:flex item-center gap-6">
                 <Button onClick={() => onNavigate("dashboard")} className={currentPage === 'dashboard' ? 'text-[#8A7432]' : 'hover:text-[#D9C88A]'}>Dashboard</Button>
                 <Button onClick={() => onNavigate("reviews")} className={currentPage === "reviews" ? 'text-[#8A7432]' : 'hover:text-[#D9C88A]'}>Customer Reviews</Button>
                 <Button onClick={() => onNavigate("orders")} className={currentPage === "orders" ? 'text-[#8A7432]' : 'hover:text-[#D9C88A]'}>Orders</Button>
@@ -86,6 +87,7 @@ export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, ro
                 </Button>
                 
               </nav>
+              </div>
           )}
 
         </div>
