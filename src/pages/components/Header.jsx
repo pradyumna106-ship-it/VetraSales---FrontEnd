@@ -31,7 +31,7 @@ export function Header({ onCartClick, onNavigate, onSearchClick, currentPage, ro
           {/* ================= CUSTOMER NAV ================= */}
           {role === 'customer' && (
             <div>
-              <nav className="hidden md:flex items-center gap-6">
+              <nav className="flex items-center justify-between px-6 h-16">
                 <Button
                   onClick={() => onNavigate('home')}
                   className={currentPage === 'home' ? 'text-[#8A7432]' : 'hover:text-[#D9C88A]'}

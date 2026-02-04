@@ -1,6 +1,7 @@
 @import "tailwindcss/preflight";
 @import "tailwindcss/utilities";
 
+
 /* Your custom font */
 @font-face {
   font-family: "Beauty Sense Demo";
